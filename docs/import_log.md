@@ -36,3 +36,14 @@ This file tracks each managed-repo import/update step.
 - README updates:
   - root `README.md` marks `dex-retargeting` as imported
   - `projects/dex-retargeting/README.md` records upstream origin, base commit, local diffs, and excluded paths
+
+### Step 4
+
+- Commit message: `import: add Isaac-GR00T working snapshot`
+- Scope:
+  - import a trimmed local `Isaac-GR00T` working tree into `projects/Isaac-GR00T`
+  - preserve the local `pyproject.toml` modification
+  - exclude workstation-only heavy artifacts including `.venv/`, demo data, media, large deployment wheels, and checked-out submodule payloads
+- README updates:
+  - root `README.md` marks `Isaac-GR00T` as imported
+  - `projects/Isaac-GR00T/README.md` records upstream origin, base commit, local diffs, excluded paths, and the trimmed-import caveat

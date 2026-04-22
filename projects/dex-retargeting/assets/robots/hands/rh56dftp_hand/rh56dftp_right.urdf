@@ -1,0 +1,304 @@
+<?xml version="1.0" encoding="utf-8"?>
+<robot name="rh56dftp_right">
+  <link name="base"/>
+
+  <joint name="base_joint" type="fixed">
+    <parent link="base"/>
+    <child link="base_link"/>
+    <origin xyz="0 0 0" rpy="3.1415926 -1.5707963 1.5"/>
+  </joint>
+
+  <link name="base_link">
+    <visual>
+      <geometry>
+        <mesh filename="../inspire_hand/FTP_urdf_right 2024-10-25/urdf_right 10.28/urdf_right/meshes/base_link.STL"/>
+      </geometry>
+    </visual>
+    <collision>
+      <geometry>
+        <mesh filename="../inspire_hand/FTP_urdf_right 2024-10-25/urdf_right 10.28/urdf_right/meshes/base_link.STL"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <link name="right_thumb_1">
+    <visual>
+      <geometry>
+        <mesh filename="../inspire_hand/FTP_urdf_right 2024-10-25/urdf_right 10.28/urdf_right/meshes/right_thumb_1.STL"/>
+      </geometry>
+    </visual>
+    <collision>
+      <geometry>
+        <mesh filename="../inspire_hand/FTP_urdf_right 2024-10-25/urdf_right 10.28/urdf_right/meshes/right_thumb_1.STL"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="right_thumb_1_joint" type="revolute">
+    <parent link="base_link"/>
+    <child link="right_thumb_1"/>
+    <origin xyz="-0.035227 -0.0908 -0.041956" rpy="0 0 0"/>
+    <axis xyz="0 0 -1"/>
+    <limit lower="0" upper="1.7" effort="1" velocity="100"/>
+  </joint>
+
+  <link name="right_thumb_2">
+    <visual>
+      <geometry>
+        <mesh filename="../inspire_hand/FTP_urdf_right 2024-10-25/urdf_right 10.28/urdf_right/meshes/right_thumb_2.STL"/>
+      </geometry>
+    </visual>
+    <collision>
+      <geometry>
+        <mesh filename="../inspire_hand/FTP_urdf_right 2024-10-25/urdf_right 10.28/urdf_right/meshes/right_thumb_2.STL"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="right_thumb_2_joint" type="revolute">
+    <parent link="right_thumb_1"/>
+    <child link="right_thumb_2"/>
+    <origin xyz="-0.0063016 0.011924 0.003" rpy="1.5708 0 2.7925"/>
+    <axis xyz="0 0 1"/>
+    <limit lower="0.035" upper="0.90" effort="1" velocity="100"/>
+  </joint>
+
+  <link name="right_thumb_3">
+    <visual>
+      <geometry>
+        <mesh filename="../inspire_hand/FTP_urdf_right 2024-10-25/urdf_right 10.28/urdf_right/meshes/right_thumb_3.STL"/>
+      </geometry>
+    </visual>
+    <collision>
+      <geometry>
+        <mesh filename="../inspire_hand/FTP_urdf_right 2024-10-25/urdf_right 10.28/urdf_right/meshes/right_thumb_3.STL"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="right_thumb_3_joint" type="revolute">
+    <parent link="right_thumb_2"/>
+    <child link="right_thumb_3"/>
+    <origin xyz="0.038292 0.014535 -0.0015" rpy="0 0 0"/>
+    <axis xyz="0 0 1"/>
+    <limit lower="0" upper="3.14" effort="1" velocity="100"/>
+    <mimic joint="right_thumb_2_joint" multiplier="0.40" offset="0"/>
+  </joint>
+
+  <link name="right_thumb_4">
+    <visual>
+      <geometry>
+        <mesh filename="../inspire_hand/FTP_urdf_right 2024-10-25/urdf_right 10.28/urdf_right/meshes/right_thumb_4.STL"/>
+      </geometry>
+    </visual>
+    <collision>
+      <geometry>
+        <mesh filename="../inspire_hand/FTP_urdf_right 2024-10-25/urdf_right 10.28/urdf_right/meshes/right_thumb_4.STL"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="right_thumb_4_joint" type="revolute">
+    <parent link="right_thumb_3"/>
+    <child link="right_thumb_4"/>
+    <origin xyz="0.018189 0.012576 -0.0002" rpy="0 0 0"/>
+    <axis xyz="0 0 1"/>
+    <limit lower="0" upper="3.14" effort="1" velocity="100"/>
+    <mimic joint="right_thumb_2_joint" multiplier="0.60" offset="0"/>
+  </joint>
+
+  <link name="right_index_1">
+    <visual>
+      <geometry>
+        <mesh filename="../inspire_hand/FTP_urdf_right 2024-10-25/urdf_right 10.28/urdf_right/meshes/right_index_1.STL"/>
+      </geometry>
+    </visual>
+    <collision>
+      <geometry>
+        <mesh filename="../inspire_hand/FTP_urdf_right 2024-10-25/urdf_right 10.28/urdf_right/meshes/right_index_1.STL"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="right_index_1_joint" type="revolute">
+    <parent link="base_link"/>
+    <child link="right_index_1"/>
+    <origin xyz="-0.047006 -0.11125 0.045444" rpy="1.6057 0 -1.5708"/>
+    <axis xyz="0 0 1"/>
+    <limit lower="0" upper="1.6" effort="1" velocity="100"/>
+  </joint>
+
+  <link name="right_index_2">
+    <visual>
+      <geometry>
+        <mesh filename="../inspire_hand/FTP_urdf_right 2024-10-25/urdf_right 10.28/urdf_right/meshes/right_index_2.STL"/>
+      </geometry>
+    </visual>
+    <collision>
+      <geometry>
+        <mesh filename="../inspire_hand/FTP_urdf_right 2024-10-25/urdf_right 10.28/urdf_right/meshes/right_index_2.STL"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="right_index_2_joint" type="revolute">
+    <parent link="right_index_1"/>
+    <child link="right_index_2"/>
+    <origin xyz="-0.0016312 0.032734 -0.00055" rpy="0 0 0"/>
+    <axis xyz="0 0 1"/>
+    <limit lower="0" upper="1.6" effort="1" velocity="100"/>
+    <mimic joint="right_index_1_joint" multiplier="1.05" offset="0"/>
+  </joint>
+
+  <link name="right_middle_1">
+    <visual>
+      <geometry>
+        <mesh filename="../inspire_hand/FTP_urdf_right 2024-10-25/urdf_right 10.28/urdf_right/meshes/right_middle_1.STL"/>
+      </geometry>
+    </visual>
+    <collision>
+      <geometry>
+        <mesh filename="../inspire_hand/FTP_urdf_right 2024-10-25/urdf_right 10.28/urdf_right/meshes/right_middle_1.STL"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="right_middle_1_joint" type="revolute">
+    <parent link="base_link"/>
+    <child link="right_middle_1"/>
+    <origin xyz="-0.025427 -0.11125 0.046044" rpy="1.5708 0 -1.5708"/>
+    <axis xyz="0 0 1"/>
+    <limit lower="0" upper="1.6" effort="1" velocity="100"/>
+  </joint>
+
+  <link name="right_middle_2">
+    <visual>
+      <geometry>
+        <mesh filename="../inspire_hand/FTP_urdf_right 2024-10-25/urdf_right 10.28/urdf_right/meshes/right_middle_2.STL"/>
+      </geometry>
+    </visual>
+    <collision>
+      <geometry>
+        <mesh filename="../inspire_hand/FTP_urdf_right 2024-10-25/urdf_right 10.28/urdf_right/meshes/right_middle_2.STL"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="right_middle_2_joint" type="revolute">
+    <parent link="right_middle_1"/>
+    <child link="right_middle_2"/>
+    <origin xyz="-0.0028436 0.032651 -0.00055" rpy="0 0 0"/>
+    <axis xyz="0 0 1"/>
+    <limit lower="0" upper="1.6" effort="1" velocity="100"/>
+    <mimic joint="right_middle_1_joint" multiplier="1.05" offset="0"/>
+  </joint>
+
+  <link name="right_ring_1">
+    <visual>
+      <geometry>
+        <mesh filename="../inspire_hand/FTP_urdf_right 2024-10-25/urdf_right 10.28/urdf_right/meshes/right_ring_1.STL"/>
+      </geometry>
+    </visual>
+    <collision>
+      <geometry>
+        <mesh filename="../inspire_hand/FTP_urdf_right 2024-10-25/urdf_right 10.28/urdf_right/meshes/right_ring_1.STL"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="right_ring_1_joint" type="revolute">
+    <parent link="base_link"/>
+    <child link="right_ring_1"/>
+    <origin xyz="-0.0037966 -0.11125 0.045878" rpy="1.5184 0 -1.5708"/>
+    <axis xyz="0 0 1"/>
+    <limit lower="0" upper="1.6" effort="1" velocity="100"/>
+  </joint>
+
+  <link name="right_ring_2">
+    <visual>
+      <geometry>
+        <mesh filename="../inspire_hand/FTP_urdf_right 2024-10-25/urdf_right 10.28/urdf_right/meshes/right_ring_2.STL"/>
+      </geometry>
+    </visual>
+    <collision>
+      <geometry>
+        <mesh filename="../inspire_hand/FTP_urdf_right 2024-10-25/urdf_right 10.28/urdf_right/meshes/right_ring_2.STL"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="right_ring_2_joint" type="revolute">
+    <parent link="right_ring_1"/>
+    <child link="right_ring_2"/>
+    <origin xyz="-0.0031431 0.032624 -0.00055" rpy="0 0 0"/>
+    <axis xyz="0 0 1"/>
+    <limit lower="0" upper="1.6" effort="1" velocity="100"/>
+    <mimic joint="right_ring_1_joint" multiplier="1.05" offset="0"/>
+  </joint>
+
+  <link name="right_little_1">
+    <visual>
+      <geometry>
+        <mesh filename="../inspire_hand/FTP_urdf_right 2024-10-25/urdf_right 10.28/urdf_right/meshes/right_little_1.STL"/>
+      </geometry>
+    </visual>
+    <collision>
+      <geometry>
+        <mesh filename="../inspire_hand/FTP_urdf_right 2024-10-25/urdf_right 10.28/urdf_right/meshes/right_little_1.STL"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="right_little_1_joint" type="revolute">
+    <parent link="base_link"/>
+    <child link="right_little_1"/>
+    <origin xyz="0.017589 -0.11125 0.042696" rpy="1.4661 0 -1.5708"/>
+    <axis xyz="0 0 1"/>
+    <limit lower="0" upper="1.6" effort="1" velocity="100"/>
+  </joint>
+
+  <link name="right_little_2">
+    <visual>
+      <geometry>
+        <mesh filename="../inspire_hand/FTP_urdf_right 2024-10-25/urdf_right 10.28/urdf_right/meshes/right_little_2.STL"/>
+      </geometry>
+    </visual>
+    <collision>
+      <geometry>
+        <mesh filename="../inspire_hand/FTP_urdf_right 2024-10-25/urdf_right 10.28/urdf_right/meshes/right_little_2.STL"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="right_little_2_joint" type="revolute">
+    <parent link="right_little_1"/>
+    <child link="right_little_2"/>
+    <origin xyz="-0.005182 0.032363 -0.00055" rpy="0 0 1.5708"/>
+    <axis xyz="0 0 1"/>
+    <limit lower="0" upper="1.6" effort="1" velocity="100"/>
+    <mimic joint="right_little_1_joint" multiplier="1.05" offset="0"/>
+  </joint>
+
+  <link name="thumb_tip"/>
+  <joint name="thumb_tip_joint" type="fixed">
+    <parent link="right_thumb_4"/>
+    <child link="thumb_tip"/>
+    <origin xyz="0.0272 0.0210 -0.0147" rpy="0 0 0"/>
+  </joint>
+
+  <link name="index_tip"/>
+  <joint name="index_tip_joint" type="fixed">
+    <parent link="right_index_2"/>
+    <child link="index_tip"/>
+    <origin xyz="0.0008 0.0514 -0.0122" rpy="0 0 0"/>
+  </joint>
+
+  <link name="middle_tip"/>
+  <joint name="middle_tip_joint" type="fixed">
+    <parent link="right_middle_2"/>
+    <child link="middle_tip"/>
+    <origin xyz="0.0002 0.0549 -0.0122" rpy="0 0 0"/>
+  </joint>
+
+  <link name="ring_tip"/>
+  <joint name="ring_tip_joint" type="fixed">
+    <parent link="right_ring_2"/>
+    <child link="ring_tip"/>
+    <origin xyz="0.0013 0.0514 -0.0122" rpy="0 0 0"/>
+  </joint>
+
+  <link name="pinky_tip"/>
+  <joint name="pinky_tip_joint" type="fixed">
+    <parent link="right_little_2"/>
+    <child link="pinky_tip"/>
+    <origin xyz="0.0409 -0.0094 -0.0122" rpy="0 0 0"/>
+  </joint>
+</robot>

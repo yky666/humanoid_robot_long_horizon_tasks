@@ -25,3 +25,14 @@ This file tracks each managed-repo import/update step.
 - README updates:
   - root `README.md` marks `A1` as imported
   - `projects/A1/README.md` records upstream origin, base commit, local diffs, and excluded paths
+
+### Step 3
+
+- Commit message: `import: add dex-retargeting working snapshot`
+- Scope:
+  - import the current local `dex-retargeting` working tree into `projects/dex-retargeting`
+  - preserve local teleoperation and hand-specific customizations from the workstation
+  - exclude local build and environment artifacts only
+- README updates:
+  - root `README.md` marks `dex-retargeting` as imported
+  - `projects/dex-retargeting/README.md` records upstream origin, base commit, local diffs, and excluded paths

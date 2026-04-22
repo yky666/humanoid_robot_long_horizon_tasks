@@ -43,7 +43,7 @@ in one place so later updates do not drift across multiple local folders.
 
 | Project | Upstream | Local Status |
 |---|---|---|
-| `A1` | `https://github.com/ATeam-Research/A1.git` | Pending import of current working snapshot |
+| `A1` | `https://github.com/ATeam-Research/A1.git` | Imported from local working snapshot on 2026-04-22 |
 | `dex-retargeting` | `https://github.com/dexsuite/dex-retargeting.git` | Pending import of current working snapshot |
 | `Isaac-GR00T` | `https://github.com/NVIDIA/Isaac-GR00T` | Pending import of current working snapshot |
 

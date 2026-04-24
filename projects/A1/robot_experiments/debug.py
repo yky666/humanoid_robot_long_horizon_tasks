@@ -48,6 +48,12 @@ class GenerateConfig:
     dataset_path: str = "data/vlabench"
     url: str = "http://localhost:8000"
     n_episode: int = 50
+    fixed_action_dim: int = 32
+    chunk_size: int = 50
+    use_proprio: bool = True
+    use_wrist_image: bool = True
+    seed: int = 42
+    output_json: Optional[str] = None
 
 
 class DummyPolicy:
@@ -120,10 +126,13 @@ class DummyPolicy:
 
 @draccus.wrap()
 def main(cfg: GenerateConfig) -> None:
+    rng = np.random.RandomState(cfg.seed)
     dataset = LeRobotDatasetWrapper(
         dataset_path=cfg.dataset_path,
-        fixed_action_dim = 32,
-        chunk_size = 50,
+        fixed_action_dim=cfg.fixed_action_dim,
+        chunk_size=cfg.chunk_size,
+        use_proprio=cfg.use_proprio,
+        use_wrist_image=cfg.use_wrist_image,
     )
     policy = DummyPolicy(base_url=cfg.url)
 
@@ -131,22 +140,56 @@ def main(cfg: GenerateConfig) -> None:
     logger.info(f"Debug inference started: num_samples={num_samples}, dataset_path={cfg.dataset_path}")
     avg_l1_loss = 0
     avg_mse_loss = 0
-    for i in range(num_samples):
-        idx = np.random.randint(0, len(dataset))
-        item = dataset.get(i, np.random)
+    replace = num_samples > len(dataset)
+    sampled_indices = rng.choice(len(dataset), size=num_samples, replace=replace)
+    per_sample_metrics = []
+    for i, idx in enumerate(sampled_indices):
+        idx = int(idx)
+        item = dataset.get(idx, rng)
         # # 设置打印位数
         # np.set_printoptions(precision=16)
         # print(item['proprio'])
         logger.info(f"sample={i} idx={idx} question={item['question']}")
-        gt_action = item['action']
-        actions = policy.run_policy(item)
+        gt_action = np.asarray(item['action'], dtype=np.float32)
+        actions = np.asarray(policy.run_policy(item), dtype=np.float32)
+        if actions.shape != gt_action.shape:
+            raise ValueError(
+                f"Predicted action shape {actions.shape} does not match ground truth {gt_action.shape}"
+            )
         mse = np.mean(np.square(actions - gt_action))
         l1 = np.mean(np.abs(actions - gt_action))
         avg_l1_loss += l1
         avg_mse_loss += mse
+        per_sample_metrics.append(
+            {
+                "sample_index": i,
+                "dataset_index": idx,
+                "question": item["question"],
+                "mse": float(mse),
+                "l1": float(l1),
+            }
+        )
         logger.info(f"sample={i} mse={mse} l1={l1}")
-    print('num_samples',num_samples)
-    print('avg_l1_loss',avg_l1_loss/num_samples)
-    print('avg_mse_loss',avg_mse_loss/num_samples)
+    summary = {
+        "dataset_path": cfg.dataset_path,
+        "url": cfg.url,
+        "num_samples": num_samples,
+        "fixed_action_dim": cfg.fixed_action_dim,
+        "chunk_size": cfg.chunk_size,
+        "use_proprio": cfg.use_proprio,
+        "use_wrist_image": cfg.use_wrist_image,
+        "seed": cfg.seed,
+        "avg_l1_loss": float(avg_l1_loss / num_samples),
+        "avg_mse_loss": float(avg_mse_loss / num_samples),
+        "samples": per_sample_metrics,
+    }
+    if cfg.output_json:
+        output_path = Path(cfg.output_json)
+        output_path.parent.mkdir(parents=True, exist_ok=True)
+        output_path.write_text(json.dumps(summary, indent=2), encoding="utf-8")
+        logger.info(f"Saved debug evaluation summary to {output_path}")
+    print('num_samples', num_samples)
+    print('avg_l1_loss', summary['avg_l1_loss'])
+    print('avg_mse_loss', summary['avg_mse_loss'])
 if __name__ == "__main__":
     main()

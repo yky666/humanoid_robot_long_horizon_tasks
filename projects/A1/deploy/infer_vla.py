@@ -223,6 +223,7 @@ def run_inference(model: Molmo,
 
     
     with torch.inference_mode():
+        model_dtype = next(model.parameters()).dtype
         # Prepare inputs for the model
         images = input_data['images']  # b, n, c, h, w
         prompt = input_data['instruction']
@@ -233,9 +234,9 @@ def run_inference(model: Molmo,
         if not no_norm:
             proprio_norm_stats = norm_stats["state"] ## 
             proprio = normalize_proprio(proprio, proprio_norm_stats, normalization_type)
-        proprio = torch.tensor(proprio, dtype=torch.float32).to(device).unsqueeze(0)  # 添加batch维度
-        proprio = proprio.unsqueeze(1)  # 添加时间步维度，变为 (batch_size, 1, proprio_dim)
-        proprio = proprio.cpu().numpy()  # 转换为numpy数组
+        # Match the training dataset wrapper shape: (1, proprio_dim).
+        proprio = torch.as_tensor(proprio, dtype=torch.float32, device=device).unsqueeze(0)
+        proprio = proprio.cpu().numpy()
         
 
         # 使用与训练时相同的预处理器
@@ -248,7 +249,11 @@ def run_inference(model: Molmo,
         )
         # 构建输入数据 - 模拟训练时的数据格式
         action_len = proprio.shape[-1]
-        proprio = np.pad(proprio, ((0, 0), (0, 0), (0, model.config.fixed_action_dim - proprio.shape[-1])), mode='constant')
+        proprio = np.pad(
+            proprio,
+            ((0, 0), (0, model.config.fixed_action_dim - proprio.shape[-1])),
+            mode='constant',
+        )
         dummy_action = np.zeros((model.config.num_actions_chunk, model.config.fixed_action_dim), dtype=np.float32)  # dummy action for inference
         action_pad_mask = np.zeros((model.config.num_actions_chunk, model.config.fixed_action_dim), dtype=bool)
         input_data_model = {
@@ -287,6 +292,8 @@ def run_inference(model: Molmo,
         for key in batch_data:
             if isinstance(batch_data[key], torch.Tensor):
                 batch_data[key] = batch_data[key].to(device)
+                if torch.is_floating_point(batch_data[key]):
+                    batch_data[key] = batch_data[key].to(dtype=model_dtype)
 
         # 准备模型输入
         model_inputs = {
@@ -303,7 +310,9 @@ def run_inference(model: Molmo,
             "output_hidden_states": False,
         }
 
-        normalized_actions  = model.predict_actions(**model_inputs)
+        autocast_enabled = device.type == "cuda" and model_dtype in (torch.float16, torch.bfloat16)
+        with torch.autocast(device_type=device.type, dtype=model_dtype, enabled=autocast_enabled):
+            normalized_actions = model.predict_actions(**model_inputs)
         
         normalized_actions = normalized_actions.to(torch.float32)  # 确保是float32格式
         normalized_actions = normalized_actions.cpu().numpy()

@@ -12,15 +12,209 @@ This folder is the managed snapshot of the local `A1` workspace on this machine.
 
 ## Local Changes Included In This Snapshot
 
+- Added managed `a1/data/` code required by the local training and evaluation entrypoints
 - Modified `deploy/api_server.py`
 - Modified `deploy/deploy.sh`
-- Added `scripts/convert_g1_to_lerobot.py`
+- Modified `deploy/infer_vla.py`
+- Modified `robot_experiments/debug.py`
+- Added `configs/datasets/g1_episode_0013.yaml`
+- Added `configs/experiments/g1_episode_0013_finetune.yaml`
+- Added and updated `scripts/convert_g1_to_lerobot.py`
 
 ## Excluded From Version Control
 
 - `model/` because it contains local model weights and checkpoints
 - local runtime outputs such as `outputs/`, `runs/`, and `wandb/`
 - local environments such as `.venv/`
+
+## Managed G1 Workflow On `sys01`
+
+This managed snapshot now includes a runnable G1 teleoperation conversion, smoke finetune,
+and offline action-error evaluation workflow for:
+
+- source episode: `/home/sys01/yangky/test/A1/data/episode_0013`
+- converted dataset: `/home/sys01/yangky/test/A1/data/g1_episode_0013_lerobot`
+- task text: `pick up the water bottle and place it to the right.`
+
+### Environment
+
+Use the managed repo as the working directory and reuse the original workstation data/model paths:
+
+```bash
+source /home/sys01/miniconda3/etc/profile.d/conda.sh
+conda activate a1
+cd /home/sys01/yangky/test/humanoid_robot_long_horizon_tasks/projects/A1
+
+export DATA_DIR=/home/sys01/yangky/test/A1/data
+export HF_HOME=/home/sys01/yangky/.cache/huggingface
+export PYTHONPATH=/home/sys01/yangky/test/humanoid_robot_long_horizon_tasks/projects/A1
+```
+
+### 1. Convert G1 Teleoperation Data
+
+The converter expects a fresh `--dst` path.
+
+```bash
+python scripts/convert_g1_to_lerobot.py \
+  --src /home/sys01/yangky/test/A1/data/episode_0013 \
+  --dst /home/sys01/yangky/test/A1/data/g1_episode_0013_lerobot \
+  --repo-id g1_episode_0013_lerobot \
+  --robot-type unitree_g1 \
+  --fps 30 \
+  --camera-keys color_0 \
+  --state-groups left_arm,right_arm,left_ee \
+  --action-groups left_arm,right_arm,left_ee \
+  --state-field qpos \
+  --action-field qpos \
+  --action-source actions \
+  --task-override "pick up the water bottle and place it to the right."
+```
+
+Current managed assumptions:
+
+- `color_0 -> image`
+- `state = left_arm + right_arm + left_ee`, total `16D`
+- `actions = left_arm + right_arm + left_ee`, total `16D`
+- `right_ee` and `body` are not included in the current managed dataset because this episode uses them as empty or placeholder signals
+
+### 2. Managed Dataset Config
+
+The managed finetune config is:
+
+- dataset config: `configs/datasets/g1_episode_0013.yaml`
+- experiment config: `configs/experiments/g1_episode_0013_finetune.yaml`
+
+Important constraint:
+
+- the converted G1 dataset is `16D`, but the local A1 pretrained checkpoint still expects `fixed_action_dim=32` and `num_actions_chunk=50`
+- the managed wrapper pads `state` and `actions` to `32D` at train and deploy time to match the checkpoint
+- use `normalization_type: bounds` for this dataset; `bounds_q99` is not available from the current LeRobot stats produced here
+
+### 3. Smoke Finetune On Dual RTX 4090
+
+Local pretrained checkpoint used in this workflow:
+
+- `/home/sys01/yangky/test/A1/model/a1-pretrain/latest-unsharded`
+
+Working 1-step smoke finetune command:
+
+```bash
+export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
+
+CUDA_VISIBLE_DEVICES=0,1 torchrun --standalone --nnodes=1 --nproc_per_node=2 \
+  -m launch_scripts.train_vla qwen2_7b \
+  --checkpoint /home/sys01/yangky/test/A1/model/a1-pretrain/latest-unsharded \
+  --vla_config_path g1_episode_0013_finetune.yaml \
+  --dataset g1_episode_0013_train \
+  --global_batch_size 2 \
+  --device_train_microbatch_size 1 \
+  --train_steps 1 \
+  --save_interval 1 \
+  --save_interval_unsharded 1 \
+  --wandb_debug \
+  --num_workers 0 \
+  --log_interval 1 \
+  --max_crops 1 \
+  save_folder=/home/sys01/yangky/test/humanoid_robot_long_horizon_tasks/projects/A1/outputs/g1_episode_0013_smoke_1step
+```
+
+Artifacts produced by the successful 1-step smoke run:
+
+- `outputs/g1_episode_0013_smoke_1step/step1/`
+- `outputs/g1_episode_0013_smoke_1step/step1-unsharded/`
+- `outputs/g1_episode_0013_smoke_1step/step1-action-head/`
+
+Longer 20-step smoke command used for capacity probing:
+
+```bash
+export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
+
+CUDA_VISIBLE_DEVICES=0,1 torchrun --standalone --nnodes=1 --nproc_per_node=2 \
+  -m launch_scripts.train_vla qwen2_7b \
+  --checkpoint /home/sys01/yangky/test/A1/model/a1-pretrain/latest-unsharded \
+  --vla_config_path g1_episode_0013_finetune.yaml \
+  --dataset g1_episode_0013_train \
+  --global_batch_size 2 \
+  --device_train_microbatch_size 1 \
+  --train_steps 20 \
+  --save_interval 10 \
+  --save_interval_unsharded 10 \
+  --wandb_debug \
+  --num_workers 0 \
+  --log_interval 1 \
+  --max_crops 1 \
+  save_folder=/home/sys01/yangky/test/humanoid_robot_long_horizon_tasks/projects/A1/outputs/g1_episode_0013_smoke_2gpu_bounds_cachefix
+```
+
+Observed behavior on this workstation:
+
+- dual `RTX 4090` is enough to complete model init, FSDP wrapping, and step `1`
+- the `20-step` smoke run still OOMs on step `2` backward with the local 7B checkpoint
+- if you want more than a smoke finetune on this machine, the next things to try are more aggressive activation/memory tuning, a smaller checkpoint, or multi-node / higher-memory GPUs
+
+### 4. Offline Debug Evaluation
+
+The managed deployment path was patched so local debug evaluation can run on a single 24 GB GPU:
+
+- deployment now follows `config.model.use_proprio` for inference instead of only `config.data.use_proprio`
+- deployment disables `float32_attention` for the single-GPU bf16 server path
+- deployment wraps prediction in CUDA autocast and aligns floating inputs to model dtype
+
+Start the pretrained server:
+
+```bash
+CUDA_VISIBLE_DEVICES=1 bash deploy/deploy.sh \
+  --weight /home/sys01/yangky/test/A1/model/a1-pretrain/latest-unsharded \
+  --port 18000
+```
+
+Start the 1-step finetuned server:
+
+```bash
+CUDA_VISIBLE_DEVICES=1 bash deploy/deploy.sh \
+  --weight /home/sys01/yangky/test/humanoid_robot_long_horizon_tasks/projects/A1/outputs/g1_episode_0013_smoke_1step/step1-unsharded \
+  --port 18000
+```
+
+Run the offline debug comparison against whichever server is active:
+
+```bash
+python -m robot_experiments.debug \
+  --dataset_path /home/sys01/yangky/test/A1/data/g1_episode_0013_lerobot \
+  --url http://127.0.0.1:18000 \
+  --n_episode 20 \
+  --fixed_action_dim 16 \
+  --chunk_size 50 \
+  --output_json /home/sys01/yangky/test/humanoid_robot_long_horizon_tasks/projects/A1/outputs/g1_episode_0013_eval.json
+```
+
+Notes for the debug command:
+
+- keep `fixed_action_dim=16` so the debug wrapper compares the model output against the raw `16D` G1 action labels
+- the deployment path returns raw actions for this comparison, so the default `deploy.sh` mode without `--norm` is the intended setting here
+- the 20-sample comparison is deterministic because `robot_experiments/debug.py` now uses a fixed seed by default
+
+Managed evaluation summaries already produced:
+
+- pretrained smoke: `outputs/g1_episode_0013_pretrain_eval_smoke.json`
+- 1-step finetune smoke: `outputs/g1_episode_0013_step1_eval_smoke.json`
+- pretrained 20-sample eval: `outputs/g1_episode_0013_pretrain_eval_20.json`
+- 1-step finetune 20-sample eval: `outputs/g1_episode_0013_step1_eval_20.json`
+
+Current measured action-error comparison:
+
+- `3` samples:
+  - pretrained: `avg_l1=0.4433`, `avg_mse=0.4687`
+  - 1-step finetune: `avg_l1=0.4254`, `avg_mse=0.4196`
+- `20` samples:
+  - pretrained: `avg_l1=0.4519`, `avg_mse=0.4916`
+  - 1-step finetune: `avg_l1=0.4376`, `avg_mse=0.4500`
+
+Interpretation:
+
+- even a single optimization step on this episode already reduced offline action error on the fixed debug sample set
+- this is still only a smoke result, not a reliable policy-quality conclusion for deployment
+- before trusting real-robot behavior, expand to more episodes, add held-out evaluation, and run closed-loop tests in simulation or on a guarded robot setup
 
 ---
 

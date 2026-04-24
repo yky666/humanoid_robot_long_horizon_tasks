@@ -21,6 +21,15 @@ import contextlib
 from a1.vla.util import make_att_2d_masks, prepare_attention_bias_4d
 
 
+def _ensure_qwen2_cache(past_key_values):
+    """Accept either a legacy layer-wise KV list or a newer HF Cache object."""
+    if past_key_values is None or hasattr(past_key_values, "get_seq_length"):
+        return past_key_values
+    if hasattr(DynamicCache, "from_legacy_cache"):
+        return DynamicCache.from_legacy_cache(past_key_values)
+    return DynamicCache(ddp_cache_data=past_key_values)
+
+
 
 class FlowMatchingActionHead(nn.Module):
     """
@@ -172,9 +181,7 @@ class FlowMatchingActionHead(nn.Module):
         
         # Compatible with new HF cache: Gemma expects Cache object (with get_seq_length)
         # If legacy list[(k,v), ...] is passed, convert to DynamicCache
-        pkv_for_qwen2 = past_key_values
-        if past_key_values is not None and not hasattr(past_key_values, "get_seq_length"):
-            pkv_for_qwen2 = DynamicCache.from_legacy_cache(past_key_values)
+        pkv_for_qwen2 = _ensure_qwen2_cache(past_key_values)
         
         # Dynamically set qwen2 model inference layers for early exit training
         self.qwen2.model.config.num_hidden_layers = len(past_key_values)
@@ -247,9 +254,7 @@ class FlowMatchingActionHead(nn.Module):
         
         # Compatible with new HF cache: Gemma expects Cache object (with get_seq_length)
         # If legacy list[(k,v), ...] is passed, convert to DynamicCache
-        pkv_for_qwen2 = past_key_values
-        if past_key_values is not None and not hasattr(past_key_values, "get_seq_length"):
-            pkv_for_qwen2 = DynamicCache.from_legacy_cache(past_key_values)
+        pkv_for_qwen2 = _ensure_qwen2_cache(past_key_values)
         # Dynamically set qwen2 model inference layers for early exit training
         self.qwen2.model.config.num_hidden_layers = len(past_key_values)
 

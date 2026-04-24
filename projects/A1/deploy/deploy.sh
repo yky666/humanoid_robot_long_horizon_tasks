@@ -17,9 +17,10 @@ fi
 checkpoint_dir=""
 PORT=""
 norm_stats_json_path=""
+normalization_type="bounds"
 USE_NORM=0   # Whether to use normalization consistent with training (0: disabled, 1: enabled)
 
-# Parse parameters like --weight --port --norm --norm_stats_json_path
+# Parse parameters like --weight --port --norm --norm_stats_json_path --normalization_type
 while [ $# -gt 0 ]; do
   case "$1" in
     --weight)
@@ -38,6 +39,10 @@ while [ $# -gt 0 ]; do
       norm_stats_json_path="$2"
       shift 2
       ;;
+    --normalization_type)
+      normalization_type="$2"
+      shift 2
+      ;;
     --*)
       echo "Unknown option: $1" >&2
       exit 1
@@ -50,7 +55,7 @@ while [ $# -gt 0 ]; do
 done
 
 if [ -z "$checkpoint_dir" ]; then
-  echo "Usage: $0 --weight <path> [--port <port>] [--norm_stats_json_path <path>]" >&2
+  echo "Usage: $0 --weight <path> [--port <port>] [--norm] [--norm_stats_json_path <path>] [--normalization_type <bounds|bounds_q99|normal>]" >&2
   exit 1
 fi
 
@@ -84,27 +89,31 @@ fi
 
 echo "Starting API server on port $PORT"
 if [ "$USE_NORM" -eq 1 ]; then
-  # Normalized inference: auto-derive norm_stats_json_path from checkpoint_dir/norm_stat.json or checkpoint_dir/../norm_stat.json
-  # and pass to api_server.py; no longer pass --no_norm.
-  cand1="${checkpoint_dir}/norm_stat.json"
-  cand2="$(dirname "$checkpoint_dir")/norm_stat.json"
-  if [ -f "$cand1" ]; then
-    norm_stats_json_path="$cand1"
-  elif [ -f "$cand2" ]; then
-    norm_stats_json_path="$cand2"
-  else
-    echo "[norm] Error: norm_stat.json not found" >&2
-    echo "  Tried path 1: $cand1" >&2
-    echo "  Tried path 2: $cand2" >&2
-    echo "  Please confirm that norm_stat.json was generated under save_folder during training" >&2
-    exit 1
+  # Normalized inference: honor an explicit norm stats path first, otherwise try the
+  # historical checkpoint-local lookup for backwards compatibility.
+  if [ -z "$norm_stats_json_path" ]; then
+    cand1="${checkpoint_dir}/norm_stat.json"
+    cand2="$(dirname "$checkpoint_dir")/norm_stat.json"
+    if [ -f "$cand1" ]; then
+      norm_stats_json_path="$cand1"
+    elif [ -f "$cand2" ]; then
+      norm_stats_json_path="$cand2"
+    else
+      echo "[norm] Error: no norm stats file was found" >&2
+      echo "  Tried explicit path: <not provided>" >&2
+      echo "  Tried path 1: $cand1" >&2
+      echo "  Tried path 2: $cand2" >&2
+      echo "  Pass --norm_stats_json_path explicitly when evaluating custom datasets." >&2
+      exit 1
+    fi
   fi
 
   echo "[norm] Using norm_stats_json_path: $norm_stats_json_path"
+  echo "[norm] Using normalization_type: $normalization_type"
   python deploy/api_server.py \
     --checkpoint "$checkpoint_dir" \
     --norm_stats_json_path "$norm_stats_json_path" \
-    --normalization_type bounds \
+    --normalization_type "$normalization_type" \
     --host 0.0.0.0 \
     --port "$PORT"
 else
@@ -113,7 +122,7 @@ else
   python deploy/api_server.py \
     --checkpoint "$checkpoint_dir" \
     --norm_stats_json_path "$norm_stats_json_path" \
-    --normalization_type bounds \
+    --normalization_type "$normalization_type" \
     --host 0.0.0.0 \
     --port "$PORT" \
     --no_norm

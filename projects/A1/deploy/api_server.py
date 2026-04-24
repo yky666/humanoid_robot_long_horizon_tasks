@@ -141,11 +141,17 @@ def load_vla_model(checkpoint_path: str, fsdp: bool = False,seed=6198) -> tuple:
         config_path = checkpoint_path_obj / "config.yaml"
         assert config_path.exists(), "config.yaml not found"
         config = TrainConfig.load(config_path, validate_paths=False)
-        use_proprio = config.data.use_proprio
-        use_wrist_image = config.data.use_wrist_image
         sequence_length = config.data.sequence_length
 
         model_cfg = config.model
+        # For inference, follow the model capability flags first. Some checkpoints
+        # were trained with a dataset config that leaves these disabled even though
+        # the action head still expects proprio inputs at inference time.
+        use_proprio = getattr(model_cfg, "use_proprio", config.data.use_proprio)
+        use_wrist_image = getattr(model_cfg, "use_wrist_image", config.data.use_wrist_image)
+        # Deployment keeps the model in bf16 on a single 24 GB card. Keep attention
+        # in the same dtype to avoid float32 q/k vs bf16 v mismatches at inference.
+        model_cfg.float32_attention = False
         
         # 去掉原来路径pretrained_image_encoders和pretrained_llms之前的部分，改成环境变量
         

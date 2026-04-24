@@ -136,6 +136,15 @@ def parse_args() -> argparse.Namespace:
         help="Which text field to use as the task/instruction.",
     )
     parser.add_argument(
+        "--task-override",
+        type=str,
+        default=None,
+        help=(
+            "Optional explicit task text to write into the converted dataset. "
+            "When provided, this overrides the instruction extracted from data.json."
+        ),
+    )
+    parser.add_argument(
         "--max-episodes",
         type=int,
         default=None,
@@ -428,6 +437,7 @@ def scan_source_episodes(
     action_field: str,
     action_source: str,
     instruction_source: str,
+    task_override: str | None,
 ) -> tuple[list[EpisodeInfo], list[str], dict[str, tuple[int, int]], int, int, list[str], list[str]]:
     episodes: list[EpisodeInfo] = []
     discovered_camera_keys: set[str] = set()
@@ -450,7 +460,11 @@ def scan_source_episodes(
         image_width = int(image_info["width"]) if "width" in image_info else None
         image_height = int(image_info["height"]) if "height" in image_info else None
         fps = float(image_info.get("fps", 30.0))
-        task = get_instruction(record, instruction_source, fallback=episode_root.name)
+        task = (
+            task_override.strip()
+            if isinstance(task_override, str) and task_override.strip()
+            else get_instruction(record, instruction_source, fallback=episode_root.name)
+        )
 
         first_state = frame_state_vector(frames[0], state_groups, state_field)
         first_action = frame_action_vector(
@@ -577,6 +591,7 @@ def convert_dataset(args: argparse.Namespace) -> None:
             action_field=args.action_field,
             action_source=args.action_source,
             instruction_source=args.instruction_source,
+            task_override=args.task_override,
         )
     )
     dataset_fps = coerce_dataset_fps((episode.fps for episode in episodes), args.fps)
@@ -594,12 +609,12 @@ def convert_dataset(args: argparse.Namespace) -> None:
             "names": ["height", "width", "channels"],
         }
     features["state"] = {
-        "dtype": "float",
+        "dtype": "float32",
         "shape": (state_dim,),
         "names": state_names,
     }
     features["actions"] = {
-        "dtype": "float",
+        "dtype": "float32",
         "shape": (action_dim,),
         "names": action_names,
     }
@@ -757,6 +772,7 @@ def convert_dataset(args: argparse.Namespace) -> None:
         "action_field": args.action_field,
         "action_source": args.action_source,
         "instruction_source": args.instruction_source,
+        "task_override": args.task_override,
         "camera_name_map": camera_name_map,
         "feature_image_sizes": {
             key: {"height": hw[0], "width": hw[1]} for key, hw in feature_image_sizes.items()

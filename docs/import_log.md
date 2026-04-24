@@ -47,3 +47,22 @@ This file tracks each managed-repo import/update step.
 - README updates:
   - root `README.md` marks `Isaac-GR00T` as imported
   - `projects/Isaac-GR00T/README.md` records upstream origin, base commit, local diffs, excluded paths, and the trimmed-import caveat
+
+## 2026-04-24
+
+### Step 5
+
+- Commit message: `a1: add managed g1 smoke finetune workflow`
+- Scope:
+  - sync the missing managed `projects/A1/a1/data/` code required by the local A1 train and eval entrypoints
+  - add managed G1 dataset and experiment configs for `episode_0013`
+  - update the G1 converter, deploy server, deploy inference path, and offline debug evaluator to support this workstation workflow
+  - run a dual-4090 smoke finetune on the local A1 7B checkpoint and save a 1-step checkpoint
+  - run offline pretrained-vs-finetuned action-error evaluation on the converted G1 dataset
+- README updates:
+  - `projects/A1/README.md` now records the exact conversion, smoke finetune, and offline evaluation commands for `episode_0013`
+  - root `README.md` marks `A1` as having a managed G1 workflow update on 2026-04-24
+- Key observed results:
+  - the 20-step dual-4090 smoke finetune still OOMs on step 2 backward with the local 7B checkpoint
+  - the 1-step dual-4090 smoke finetune completes and saves `step1`, `step1-unsharded`, and `step1-action-head`
+  - on the same 20 debug samples, offline action error improved from `avg_l1=0.4519`, `avg_mse=0.4916` to `avg_l1=0.4376`, `avg_mse=0.4500` after the 1-step smoke finetune

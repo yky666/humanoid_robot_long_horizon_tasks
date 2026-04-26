@@ -95,3 +95,18 @@ This file tracks each managed-repo import/update step.
   - the original managed 7B path completed `5/5` training steps and saved `step5`, `step5-unsharded`, and `step5-action-head`
   - on the same fixed 20 debug samples, offline action error reached `avg_l1=0.4310`, `avg_mse=0.4478`
   - resized-action-head experiments are now load-compatible, but they still are not the recommended first choice on dual `RTX 4090` because FSDP wrap-time OOM remains possible before training starts
+
+### Step 8
+
+- Commit message: `a1: add staged g1 run inspection workflow`
+- Scope:
+  - inspect the live `50000-step` dual-4090 G1 run and confirm it is not stuck before training, but instead is progressing slowly with expensive full-checkpoint saves
+  - patch `launch_scripts/train_vla.py` to expose a separate `--save_interval_action_head` control so long runs can save lighter action-head checkpoints more often than full model checkpoints
+  - add `projects/A1/scripts/inspect_training_run.py` to parse the local WandB `output.log`, summarize progress and ETA, export CSV and JSON summaries, and render local training curves without depending on the online WandB UI
+  - document a staged path from same-episode overfit to multi-episode finetune and finally guarded G1 real-robot validation
+- README updates:
+  - `projects/A1/README.md` now documents why the current `50000-step` run looks slow, the estimated runtime implications, the new local run-inspection command, the new `--save_interval_action_head` flag, and the recommended staged real-robot finetune path
+- Key observed results:
+  - the current `50000-step` run reached `step100`, logged `train/ActionNoiseL2Loss=0.8041`, and successfully saved `step100`, `step100-unsharded`, and `step100-action-head`
+  - the apparent "hang" was mainly caused by `log_interval=100` plus heavy checkpoint I/O, not by a pre-training crash
+  - at the observed speed on this workstation, a single-episode `50000-step` run is a roughly `10` day path and is not the recommended first route to a meaningful G1 deployment result

@@ -92,6 +92,12 @@ if __name__ == "__main__":
         parser.add_argument("--freeze_steps", default=0, type=int, help="Freeze steps for VLA learning rate scheduler")
         parser.add_argument("--save_interval", default=500, type=int, help="Interval (in steps) to save checkpoints")
         parser.add_argument("--save_interval_unsharded", default=500, type=int, help="Interval (in steps) to save unsharded checkpoints")
+        parser.add_argument(
+            "--save_interval_action_head",
+            default=None,
+            type=int,
+            help="Optional interval (in steps) to save action-head-only checkpoints. Defaults to --save_interval_unsharded when omitted.",
+        )
 
         parser.add_argument("--ft_connector", default=False, action="store_true")
         parser.add_argument("--ft_llm", default=False, action="store_true")
@@ -157,6 +163,14 @@ if __name__ == "__main__":
 
 
         args, other_args = parser.parse_known_args()
+
+        save_interval_action_head = (
+            args.save_interval_unsharded
+            if args.save_interval_action_head is None
+            else args.save_interval_action_head
+        )
+        if save_interval_action_head <= 0:
+            save_interval_action_head = None
         
         tmp_rng = random.Random()
         tmp_rng.seed(int(os.urandom(4).hex(), 16))
@@ -424,7 +438,7 @@ if __name__ == "__main__":
             # save_interval_unsharded="${max_duration}",
             save_interval_unsharded=args.save_interval_unsharded,
             save_num_unsharded_checkpoints_to_keep = 1,
-            save_interval_action_head = args.save_interval_unsharded, # only save the action head checkpoints
+            save_interval_action_head = save_interval_action_head,
             save_num_action_head_checkpoints_to_keep = 2,
             global_train_batch_size=global_batch_size,
             device_eval_batch_size=args.device_eval_batch_size,

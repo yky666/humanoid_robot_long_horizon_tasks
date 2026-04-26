@@ -218,6 +218,169 @@ What did not work as a first-choice workaround on this workstation:
 - but on dual `RTX 4090`, those resized-action-head experiments still hit FSDP wrap-time OOM before training starts
 - so the recommended managed path remains: keep the original checkpoint shape and change only the training memory settings
 
+### 3C. What The Current 50000-Step Run Is Actually Doing
+
+The active long run on this workstation is:
+
+- run dir: `outputs/g1_episode_0013_multistep_original_test_v1_50000_steps`
+- command shape: `train_steps=50000`, `log_interval=100`, `save_interval=100`, `save_interval_unsharded=100`
+
+Important clarification:
+
+- this run did not freeze before training
+- it reached `step=100`
+- it logged `train/ActionNoiseL2Loss=0.8041`
+- it saved `step100`, `step100-unsharded`, and `step100-action-head`
+
+Why it looked stuck:
+
+- with `log_interval=100`, the first train metric does not appear until `step 100`
+- on this machine, `100` steps took about `29.5` minutes
+- the first checkpoint cycle then spent about another `2.2` minutes saving artifacts
+- at the current observed speed, a `50000-step` run is roughly a `10` day job even before network hiccups or manual interruptions
+
+Why this is not the best first path to a real-robot result:
+
+- the dataset is still only one episode, so `50000` steps mostly buys deeper same-episode overfit rather than better task generalization
+- saving full checkpoints every `100` steps is extremely expensive on disk and time
+- the current `step100` save already produced about `34 GB` sharded + `32 GB` unsharded + `1.7 GB` action-head artifacts
+
+Recommended long-run monitoring command:
+
+```bash
+python scripts/inspect_training_run.py \
+  --run-dir /home/sys01/yangky/test/humanoid_robot_long_horizon_tasks/projects/A1/outputs/g1_episode_0013_multistep_original_test_v1_50000_steps \
+  --json-out /home/sys01/yangky/test/humanoid_robot_long_horizon_tasks/projects/A1/outputs/g1_episode_0013_multistep_original_test_v1_50000_steps/summary.json \
+  --csv-out /home/sys01/yangky/test/humanoid_robot_long_horizon_tasks/projects/A1/outputs/g1_episode_0013_multistep_original_test_v1_50000_steps/metrics.csv \
+  --plot-out /home/sys01/yangky/test/humanoid_robot_long_horizon_tasks/projects/A1/outputs/g1_episode_0013_multistep_original_test_v1_50000_steps/training_curve.svg
+```
+
+This helper reads the local `output.log` directly, so it still works when WandB only
+shows system metrics or is temporarily desynced.
+
+### 3D. Recommended Evolution Route Toward G1 Real-Robot Validation
+
+The most reliable progression on this workstation is staged, not one giant `50000-step`
+run on a single episode.
+
+#### Stage A. Same-Episode Overfit Check
+
+Goal:
+
+- verify that the training path is stable
+- verify that offline action error continues to go down on the same episode
+- select a checkpoint family that is worth carrying forward
+
+Recommended command:
+
+```bash
+export DATA_DIR=/home/sys01/yangky/test/A1/data
+export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
+export WANDB_API_KEY=...
+
+CUDA_VISIBLE_DEVICES=0,1 torchrun --standalone --nnodes=1 --nproc_per_node=2 \
+  -m launch_scripts.train_vla qwen2_7b \
+  --checkpoint /home/sys01/yangky/test/A1/model/a1-pretrain/latest-unsharded \
+  --vla_config_path g1_episode_0013_finetune.yaml \
+  --dataset g1_episode_0013_train \
+  --global_batch_size 2 \
+  --device_train_microbatch_size 1 \
+  --train_steps 300 \
+  --save_interval 300 \
+  --save_interval_unsharded 300 \
+  --save_interval_action_head 100 \
+  --wandb_entity kaiyuanyang666-sun-yat \
+  --wandb_project a1-vla-camd \
+  --wandb_run_name g1-episode0013-stageA-overfit300 \
+  --num_workers 0 \
+  --log_interval 10 \
+  --max_crops 1 \
+  --seq_len 512 \
+  --fsdp_precision pure \
+  --disable_float32_attention \
+  save_folder=/home/sys01/yangky/test/humanoid_robot_long_horizon_tasks/projects/A1/outputs/g1_episode_0013_stageA_overfit300
+```
+
+Why this is the recommended first stage:
+
+- `log_interval=10` surfaces train metrics in the first few minutes instead of after half an hour
+- full checkpoints only happen at the end of the stage
+- action-head-only checkpoints can still be saved more frequently if you want a lighter resume point
+
+#### Stage B. Same-Task Multi-Episode Finetune
+
+Only after Stage A is stable:
+
+- add more G1 teleoperation episodes for the same bottle-pick-and-place task
+- include variation in bottle pose, start pose, and right-side placement target
+- hold out a few episodes for offline evaluation instead of training on everything
+
+Suggested first multi-episode target:
+
+- `5-20` episodes of the same task family
+- `1000-3000` finetune steps before reassessing
+
+Recommended resume pattern once more data exists:
+
+```bash
+export DATA_DIR=/home/sys01/yangky/test/A1/data
+export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
+export WANDB_API_KEY=...
+
+CUDA_VISIBLE_DEVICES=0,1 torchrun --standalone --nnodes=1 --nproc_per_node=2 \
+  -m launch_scripts.train_vla qwen2_7b \
+  --checkpoint /home/sys01/yangky/test/humanoid_robot_long_horizon_tasks/projects/A1/outputs/g1_episode_0013_stageA_overfit300/step300-unsharded \
+  --vla_config_path g1_episode_0013_finetune.yaml \
+  --dataset g1_episode_0013_train \
+  --global_batch_size 2 \
+  --device_train_microbatch_size 1 \
+  --train_steps 1000 \
+  --save_interval 1000 \
+  --save_interval_unsharded 1000 \
+  --save_interval_action_head 200 \
+  --wandb_entity kaiyuanyang666-sun-yat \
+  --wandb_project a1-vla-camd \
+  --wandb_run_name g1-episode0013-stageB-resume1000 \
+  --num_workers 0 \
+  --log_interval 10 \
+  --max_crops 1 \
+  --seq_len 512 \
+  --fsdp_precision pure \
+  --disable_float32_attention \
+  save_folder=/home/sys01/yangky/test/humanoid_robot_long_horizon_tasks/projects/A1/outputs/g1_episode_0013_stageB_resume1000
+```
+
+#### Stage C. Offline Selection Before Robot Deployment
+
+Before touching the real robot, compare checkpoints with:
+
+- terminal loss trends
+- offline action error on held-out G1 logs
+- per-sample failure patterns from the eval JSON
+
+Do not pick the checkpoint only by "trained the longest". Pick the checkpoint that:
+
+- keeps action loss stable
+- lowers held-out `avg_l1` and `avg_mse`
+- does not show obvious late-stage degradation on the same held-out subset
+
+#### Stage D. Guarded Real-Robot Validation
+
+Only after offline selection:
+
+- start with low-speed, guarded execution
+- clamp action magnitude and joint deltas
+- keep an operator on e-stop
+- first validate short horizon fragments before full pick-and-place
+- record every rollout back into the managed dataset for the next finetune cycle
+
+The practical rule on this machine is:
+
+- first prove stable overfit
+- then prove held-out offline improvement
+- then do guarded robot validation
+- only after that does larger-scale data collection become the best use of time
+
 ### 4. Offline Debug Evaluation
 
 The managed deployment path was patched so local debug evaluation can run on a single 24 GB GPU:
@@ -401,6 +564,18 @@ Relevant code paths:
 - [launch_scripts/train_vla.py](/home/sys01/yangky/test/humanoid_robot_long_horizon_tasks/projects/A1/launch_scripts/train_vla.py)
 - [scripts/train_for_action.py](/home/sys01/yangky/test/humanoid_robot_long_horizon_tasks/projects/A1/scripts/train_for_action.py)
 - [a1/train.py](/home/sys01/yangky/test/humanoid_robot_long_horizon_tasks/projects/A1/a1/train.py)
+
+Local fallback when WandB is incomplete:
+
+```bash
+python scripts/inspect_training_run.py \
+  --run-dir /home/sys01/yangky/test/humanoid_robot_long_horizon_tasks/projects/A1/outputs/g1_episode_0013_multistep_original_test_v1_50000_steps \
+  --plot-out /home/sys01/yangky/test/humanoid_robot_long_horizon_tasks/projects/A1/outputs/g1_episode_0013_multistep_original_test_v1_50000_steps/training_curve.svg
+```
+
+This is especially useful for the current `50000-step` run because the local WandB
+internal log already showed transient `EOF` retries against `api.wandb.ai`, while the
+training `output.log` still contains the authoritative step metrics.
 
 #### C. Offline Action Error
 

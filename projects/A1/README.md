@@ -216,6 +216,168 @@ Interpretation:
 - this is still only a smoke result, not a reliable policy-quality conclusion for deployment
 - before trusting real-robot behavior, expand to more episodes, add held-out evaluation, and run closed-loop tests in simulation or on a guarded robot setup
 
+### 5. Can We Keep Training On The Current Single Episode?
+
+Yes.
+
+You do not need new teleoperation data just to continue optimizing on the current
+`episode_0013`. The current single episode is already useful for:
+
+- validating that the data conversion is correct
+- checking whether the model can overfit the task
+- checking whether offline action error continues to go down
+
+But the limitation is equally important:
+
+- one episode is enough for smoke finetune and overfit checks
+- one episode is not enough to claim generalization
+- lower loss or lower offline action error on this same episode only proves the training path works
+
+The current managed resume point is:
+
+- `outputs/g1_episode_0013_smoke_1step/step1-unsharded`
+
+Recommended manual continuation command on this workstation:
+
+```bash
+export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
+
+CUDA_VISIBLE_DEVICES=0,1 torchrun --standalone --nnodes=1 --nproc_per_node=2 \
+  -m launch_scripts.train_vla qwen2_7b \
+  --checkpoint /home/sys01/yangky/test/humanoid_robot_long_horizon_tasks/projects/A1/outputs/g1_episode_0013_smoke_1step/step1-unsharded \
+  --vla_config_path g1_episode_0013_finetune.yaml \
+  --dataset g1_episode_0013_train \
+  --global_batch_size 2 \
+  --device_train_microbatch_size 1 \
+  --train_steps 1 \
+  --save_interval 1 \
+  --save_interval_unsharded 1 \
+  --wandb_debug \
+  --num_workers 0 \
+  --log_interval 1 \
+  --max_crops 1 \
+  save_folder=/home/sys01/yangky/test/humanoid_robot_long_horizon_tasks/projects/A1/outputs/g1_episode_0013_smoke_resume
+```
+
+This is best understood as a same-episode continuation run for overfit analysis, not
+as a robust policy-validation run.
+
+### 6. How To Inspect Training Quality
+
+There are three practical signals in the current managed workflow.
+
+#### A. Console Loss
+
+The training loop prints step-level metrics directly to the terminal. For the current G1
+smoke path, the main metric is:
+
+- `train/ActionNoiseL2Loss`
+
+Example from the successful smoke run:
+
+```text
+[step=1/1]
+    train/ActionNoiseL2Loss=0.4660
+```
+
+#### B. Loss Curves With WandB
+
+The current smoke commands use `--wandb_debug`, which disables online wandb logging.
+
+If you want a loss curve, remove `--wandb_debug`, export a valid API key, and set your
+entity/project explicitly:
+
+```bash
+export WANDB_API_KEY=...
+```
+
+Add these flags to the training command:
+
+```bash
+--wandb_entity <your_entity> \
+--wandb_project a1-vla-camd \
+--wandb_run_name g1-episode0013
+```
+
+Relevant code paths:
+
+- [launch_scripts/train_vla.py](/home/sys01/yangky/test/humanoid_robot_long_horizon_tasks/projects/A1/launch_scripts/train_vla.py)
+- [scripts/train_for_action.py](/home/sys01/yangky/test/humanoid_robot_long_horizon_tasks/projects/A1/scripts/train_for_action.py)
+- [a1/train.py](/home/sys01/yangky/test/humanoid_robot_long_horizon_tasks/projects/A1/a1/train.py)
+
+#### C. Offline Action Error
+
+This is currently the most useful effect metric for your G1 data, because it directly
+compares predicted actions against the recorded teleoperation labels.
+
+Pretrained baseline on 20 fixed samples:
+
+```bash
+CUDA_VISIBLE_DEVICES=1 bash deploy/deploy.sh \
+  --weight /home/sys01/yangky/test/A1/model/a1-pretrain/latest-unsharded \
+  --port 18000
+
+python -m robot_experiments.debug \
+  --dataset_path /home/sys01/yangky/test/A1/data/g1_episode_0013_lerobot \
+  --url http://127.0.0.1:18000 \
+  --n_episode 20 \
+  --fixed_action_dim 16 \
+  --chunk_size 50 \
+  --output_json /home/sys01/yangky/test/humanoid_robot_long_horizon_tasks/projects/A1/outputs/g1_episode_0013_pretrain_eval_20.json
+```
+
+Finetuned checkpoint on the same 20 fixed samples:
+
+```bash
+CUDA_VISIBLE_DEVICES=1 bash deploy/deploy.sh \
+  --weight /home/sys01/yangky/test/humanoid_robot_long_horizon_tasks/projects/A1/outputs/g1_episode_0013_smoke_1step/step1-unsharded \
+  --port 18000
+
+python -m robot_experiments.debug \
+  --dataset_path /home/sys01/yangky/test/A1/data/g1_episode_0013_lerobot \
+  --url http://127.0.0.1:18000 \
+  --n_episode 20 \
+  --fixed_action_dim 16 \
+  --chunk_size 50 \
+  --output_json /home/sys01/yangky/test/humanoid_robot_long_horizon_tasks/projects/A1/outputs/g1_episode_0013_step1_eval_20.json
+```
+
+Current measured result on this workstation:
+
+- pretrained: `avg_l1=0.4519`, `avg_mse=0.4916`
+- 1-step finetune: `avg_l1=0.4376`, `avg_mse=0.4500`
+
+So on the current single episode:
+
+- `avg_l1` improved by about `0.0143`
+- `avg_mse` improved by about `0.0416`
+
+### 7. Is There Visual Simulation Right Now?
+
+Not for this managed G1 episode workflow yet.
+
+What exists today:
+
+- supervised finetune on converted G1 teleoperation data
+- offline action-error evaluation against recorded action labels
+
+What does not exist yet in this managed path:
+
+- a ready-made G1 simulator rollout loop for this bottle pick-and-place task
+- automatic rollout video generation directly from the G1 dataset alone
+
+So the reliable effect checks right now are:
+
+- watch `train/ActionNoiseL2Loss`
+- compare `avg_l1` and `avg_mse` with `robot_experiments.debug`
+- compare the saved evaluation JSON summaries across checkpoints
+
+If you want visual simulation next, the next engineering step is to connect the
+finetuned policy to either:
+
+- a G1-compatible simulator task wrapper
+- or a guarded real-robot replay / validation pipeline
+
 ---
 
 # 🤖 A1: A Fully Transparent Open-Source, Adaptive and Efficient Truncated Vision-Language-Action Model

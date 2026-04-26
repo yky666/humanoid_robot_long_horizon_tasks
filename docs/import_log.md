@@ -66,3 +66,16 @@ This file tracks each managed-repo import/update step.
   - the 20-step dual-4090 smoke finetune still OOMs on step 2 backward with the local 7B checkpoint
   - the 1-step dual-4090 smoke finetune completes and saves `step1`, `step1-unsharded`, and `step1-action-head`
   - on the same 20 debug samples, offline action error improved from `avg_l1=0.4519`, `avg_mse=0.4916` to `avg_l1=0.4376`, `avg_mse=0.4500` after the 1-step smoke finetune
+
+## 2026-04-26
+
+### Step 6
+
+- Commit message: `a1: document g1 continuation and training inspection`
+- Scope:
+  - clarify that the current single G1 episode can still be used for continued same-episode finetuning
+  - document the exact manual continuation command from the saved `step1-unsharded` checkpoint
+  - document how to inspect training quality through terminal loss, optional WandB curves, and offline action-error evaluation
+  - document the current limitation that this managed workflow does not yet provide a ready-made G1 visual simulation or rollout video path
+- README updates:
+  - `projects/A1/README.md` now includes a dedicated section on continuing finetune with the current dataset and a dedicated section on how to inspect training results and limitations

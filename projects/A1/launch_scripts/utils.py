@@ -12,6 +12,13 @@ from a1.config import EvaluatorConfig, ModelConfig, VisionBackboneConfig, \
     TokenizerConfig, LayerNormType, AttentionType
 
 
+def _default_hf_cache_dir() -> str:
+    hf_home = os.getenv("HF_HOME")
+    if hf_home:
+        return hf_home
+    return str(Path.home() / ".cache" / "huggingface")
+
+
 DEBUG_MODEL = ModelConfig(
     d_model=128,
     n_heads=2,
@@ -28,7 +35,7 @@ DEBUG_MODEL = ModelConfig(
     crop_mode="resize",
     tokenizer=TokenizerConfig(
         identifier="Qwen/Qwen2-7B",
-        tokenizer_dir=os.getenv("HF_HOME")  ##
+        tokenizer_dir=_default_hf_cache_dir()
     ),
 )
 
@@ -489,7 +496,7 @@ QWEN3_8B = ModelConfig(
     # --- Tokenizer ---
     tokenizer=TokenizerConfig(
         identifier="Qwen/Qwen3-8B", 
-        tokenizer_dir=os.path.join( os.getenv("HF_HOME"))  ##
+        tokenizer_dir=_default_hf_cache_dir()
     ),
     
     image_pooling_2d="attention_meanq",
@@ -537,7 +544,7 @@ QWEN3_4B = ModelConfig(
     # --- Tokenizer ---
     tokenizer=TokenizerConfig(
         identifier="Qwen/Qwen3-4B", 
-        tokenizer_dir=os.getenv("HF_HOME")  ##
+        tokenizer_dir=_default_hf_cache_dir()
     ),
     
     image_pooling_2d="attention_meanq",
@@ -587,7 +594,7 @@ QWEN3_1_7B = ModelConfig(
     # --- Tokenizer ---
     tokenizer=TokenizerConfig(
         identifier="Qwen/Qwen3-1.7B", 
-        tokenizer_dir=os.getenv("HF_HOME")  ##
+        tokenizer_dir=_default_hf_cache_dir()
     ),
     
     image_pooling_2d="attention_meanq",

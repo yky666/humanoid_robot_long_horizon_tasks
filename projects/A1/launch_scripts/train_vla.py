@@ -123,6 +123,18 @@ if __name__ == "__main__":
         # KV 头数：若为 -1，则默认对齐主 VLM 的 n_kv_heads（若为 None 则回退到 n_heads）
         parser.add_argument("--action_head_flow_matching_kv_heads", default=-1, type=int)
         parser.add_argument("--action_head_flow_matching_pvf_function", default="2d_attn_mask", type=str, choices=["2d_attn_mask", "4d_attn_mask"])
+        parser.add_argument(
+            "--fsdp_precision",
+            default=FSDPPrecision.mixed.value,
+            choices=[precision.value for precision in FSDPPrecision],
+            help="FSDP parameter / buffer precision policy. 'mixed' is a safer memory-saving default for multi-step finetuning.",
+        )
+        parser.add_argument(
+            "--disable_float32_attention",
+            default=False,
+            action="store_true",
+            help="Disable float32 attention casts inside the model to reduce memory usage during finetuning.",
+        )
 
         parser.add_argument("--use_proprio",default=True,type=bool)
         parser.add_argument("--use_wrist_image",default=True,type=bool,help="Whether to use wrist image in the dataset")
@@ -248,6 +260,7 @@ if __name__ == "__main__":
                     action_head_flow_matching_intermediate_size = args.action_head_flow_matching_intermediate_size,
                     action_head_flow_matching_kv_heads = fm_kv_heads,
                     action_head_flow_matching_pvf_function = args.action_head_flow_matching_pvf_function,
+                    float32_attention=not args.disable_float32_attention,
                 )
             else:
                 vit_layers = [-2, -9] if args.vision_backbone == "openai" else [-3, -9]
@@ -298,6 +311,7 @@ if __name__ == "__main__":
                     action_head_flow_matching_intermediate_size = args.action_head_flow_matching_intermediate_size,
                     action_head_flow_matching_kv_heads = fm_kv_heads,
                     action_head_flow_matching_pvf_function = args.action_head_flow_matching_pvf_function,
+                    float32_attention=not args.disable_float32_attention,
                 )
                 
 
@@ -394,7 +408,7 @@ if __name__ == "__main__":
                 use_orig_params=True,
                 wrapping_strategy=FSDPWrapStrategy.by_block_and_size,
                 # wrapping_strategy=FSDPWrapStrategy.by_block,
-                precision=FSDPPrecision.float
+                precision=FSDPPrecision(args.fsdp_precision)
                 # precision=FSDPPrecision.mixed
             ),
             load_path=args.load_path,

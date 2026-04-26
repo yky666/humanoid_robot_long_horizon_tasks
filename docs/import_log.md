@@ -79,3 +79,19 @@ This file tracks each managed-repo import/update step.
   - document the current limitation that this managed workflow does not yet provide a ready-made G1 visual simulation or rollout video path
 - README updates:
   - `projects/A1/README.md` now includes a dedicated section on continuing finetune with the current dataset and a dedicated section on how to inspect training results and limitations
+
+### Step 7
+
+- Commit message: `a1: stabilize dual-4090 multistep finetune`
+- Scope:
+  - patch `launch_scripts/utils.py` so managed CLI startup no longer crashes when `HF_HOME` is unset
+  - patch `launch_scripts/train_vla.py` to expose `--fsdp_precision` and `--disable_float32_attention` as explicit manual controls
+  - patch `scripts/train_for_action.py` to support filtered checkpoint loading when experimental action-head shapes do not match the pretrained checkpoint exactly
+  - verify that the original 7B checkpoint architecture can complete a managed `5-step` dual-4090 finetune when using `--fsdp_precision pure`, `--disable_float32_attention`, and `--seq_len 512`
+  - run offline debug evaluation for the new `step5-unsharded` checkpoint on the same fixed 20-sample G1 subset
+- README updates:
+  - `projects/A1/README.md` now records the exact dual-4090 multi-step finetune command, the shell-formatting caveat for multi-line commands, the new CLI memory flags, and the `step5` offline evaluation result
+- Key observed results:
+  - the original managed 7B path completed `5/5` training steps and saved `step5`, `step5-unsharded`, and `step5-action-head`
+  - on the same fixed 20 debug samples, offline action error reached `avg_l1=0.4310`, `avg_mse=0.4478`
+  - resized-action-head experiments are now load-compatible, but they still are not the recommended first choice on dual `RTX 4090` because FSDP wrap-time OOM remains possible before training starts

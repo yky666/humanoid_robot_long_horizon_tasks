@@ -50,6 +50,13 @@ export HF_HOME=/home/sys01/yangky/.cache/huggingface
 export PYTHONPATH=/home/sys01/yangky/test/humanoid_robot_long_horizon_tasks/projects/A1
 ```
 
+Shell note:
+
+- when using multi-line bash commands, each trailing `\` must be the very last character on the line
+- do not leave spaces after `\`, or the next line will be executed as a new shell command
+- `DATA_DIR` is required by the A1 data loaders
+- `HF_HOME` is recommended, but the managed training entrypoint now falls back to `~/.cache/huggingface` if it is unset
+
 ### 1. Convert G1 Teleoperation Data
 
 The converter expects a fresh `--dst` path.
@@ -152,6 +159,65 @@ Observed behavior on this workstation:
 - the `20-step` smoke run still OOMs on step `2` backward with the local 7B checkpoint
 - if you want more than a smoke finetune on this machine, the next things to try are more aggressive activation/memory tuning, a smaller checkpoint, or multi-node / higher-memory GPUs
 
+Managed code fixes added after this first smoke pass:
+
+- `launch_scripts/train_vla.py` now supports `--fsdp_precision` and `--disable_float32_attention`
+- `launch_scripts/utils.py` no longer crashes when `HF_HOME` is unset during CLI startup
+- `scripts/train_for_action.py` now supports filtered checkpoint loading, so compatible backbone weights can still be reused if you experiment with a resized action head
+
+### 3B. Working Multi-Step Finetune On Dual RTX 4090
+
+The most reliable managed command on this workstation keeps the original checkpoint
+architecture and only changes the memory behavior:
+
+```bash
+export DATA_DIR=/home/sys01/yangky/test/A1/data
+export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
+
+CUDA_VISIBLE_DEVICES=0,1 torchrun --standalone --nnodes=1 --nproc_per_node=2 \
+  -m launch_scripts.train_vla qwen2_7b \
+  --checkpoint /home/sys01/yangky/test/A1/model/a1-pretrain/latest-unsharded \
+  --vla_config_path g1_episode_0013_finetune.yaml \
+  --dataset g1_episode_0013_train \
+  --global_batch_size 2 \
+  --device_train_microbatch_size 1 \
+  --train_steps 5 \
+  --save_interval 5 \
+  --save_interval_unsharded 5 \
+  --wandb_debug \
+  --num_workers 0 \
+  --log_interval 1 \
+  --max_crops 1 \
+  --seq_len 512 \
+  --fsdp_precision pure \
+  --disable_float32_attention \
+  save_folder=/home/sys01/yangky/test/humanoid_robot_long_horizon_tasks/projects/A1/outputs/g1_episode_0013_multistep_original_test_v1
+```
+
+Artifacts produced by the successful 5-step run:
+
+- `outputs/g1_episode_0013_multistep_original_test_v1/step5/`
+- `outputs/g1_episode_0013_multistep_original_test_v1/step5-unsharded/`
+- `outputs/g1_episode_0013_multistep_original_test_v1/step5-action-head/`
+
+Observed behavior of this managed multi-step path:
+
+- the original 7B checkpoint architecture still fits on dual `RTX 4090` when using `--fsdp_precision pure`, `--disable_float32_attention`, and `--seq_len 512`
+- the run completed `5/5` training steps and saved all checkpoint variants successfully
+- peak GPU memory after FSDP wrapping was about `19.6 GB`
+- step losses observed in this 5-step run:
+  - `step 1`: `train/ActionNoiseL2Loss=0.6249`
+  - `step 2`: `train/ActionNoiseL2Loss=0.4178`
+  - `step 3`: `train/ActionNoiseL2Loss=1.5530`
+  - `step 4`: `train/ActionNoiseL2Loss=3.2430`
+  - `step 5`: `train/ActionNoiseL2Loss=2.1280`
+
+What did not work as a first-choice workaround on this workstation:
+
+- shrinking the flow-matching action head and partially loading the checkpoint is technically supported now
+- but on dual `RTX 4090`, those resized-action-head experiments still hit FSDP wrap-time OOM before training starts
+- so the recommended managed path remains: keep the original checkpoint shape and change only the training memory settings
+
 ### 4. Offline Debug Evaluation
 
 The managed deployment path was patched so local debug evaluation can run on a single 24 GB GPU:
@@ -200,6 +266,7 @@ Managed evaluation summaries already produced:
 - 1-step finetune smoke: `outputs/g1_episode_0013_step1_eval_smoke.json`
 - pretrained 20-sample eval: `outputs/g1_episode_0013_pretrain_eval_20.json`
 - 1-step finetune 20-sample eval: `outputs/g1_episode_0013_step1_eval_20.json`
+- 5-step finetune 20-sample eval: `outputs/g1_episode_0013_step5_eval_20.json`
 
 Current measured action-error comparison:
 
@@ -209,10 +276,12 @@ Current measured action-error comparison:
 - `20` samples:
   - pretrained: `avg_l1=0.4519`, `avg_mse=0.4916`
   - 1-step finetune: `avg_l1=0.4376`, `avg_mse=0.4500`
+  - 5-step finetune: `avg_l1=0.4310`, `avg_mse=0.4478`
 
 Interpretation:
 
 - even a single optimization step on this episode already reduced offline action error on the fixed debug sample set
+- the verified 5-step run improved the same 20-sample offline metric a bit further compared with the 1-step checkpoint
 - this is still only a smoke result, not a reliable policy-quality conclusion for deployment
 - before trusting real-robot behavior, expand to more episodes, add held-out evaluation, and run closed-loop tests in simulation or on a guarded robot setup
 
@@ -261,6 +330,34 @@ CUDA_VISIBLE_DEVICES=0,1 torchrun --standalone --nnodes=1 --nproc_per_node=2 \
 
 This is best understood as a same-episode continuation run for overfit analysis, not
 as a robust policy-validation run.
+
+If you want a continuation command that is more likely to survive for multiple steps on
+dual `RTX 4090`, use the same save folder pattern but keep the memory-saving flags from
+section `3B`:
+
+```bash
+export DATA_DIR=/home/sys01/yangky/test/A1/data
+export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
+
+CUDA_VISIBLE_DEVICES=0,1 torchrun --standalone --nnodes=1 --nproc_per_node=2 \
+  -m launch_scripts.train_vla qwen2_7b \
+  --checkpoint /home/sys01/yangky/test/humanoid_robot_long_horizon_tasks/projects/A1/outputs/g1_episode_0013_multistep_original_test_v1/step5-unsharded \
+  --vla_config_path g1_episode_0013_finetune.yaml \
+  --dataset g1_episode_0013_train \
+  --global_batch_size 2 \
+  --device_train_microbatch_size 1 \
+  --train_steps 5 \
+  --save_interval 5 \
+  --save_interval_unsharded 5 \
+  --wandb_debug \
+  --num_workers 0 \
+  --log_interval 1 \
+  --max_crops 1 \
+  --seq_len 512 \
+  --fsdp_precision pure \
+  --disable_float32_attention \
+  save_folder=/home/sys01/yangky/test/humanoid_robot_long_horizon_tasks/projects/A1/outputs/g1_episode_0013_multistep_original_resume
+```
 
 ### 6. How To Inspect Training Quality
 

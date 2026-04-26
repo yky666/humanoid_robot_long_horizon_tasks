@@ -63,6 +63,53 @@ log = logging.getLogger(__name__)
 # # 将处理器添加到记录器
 # log.addHandler(ch)
 
+
+def _filter_state_dict_for_model(model: torch.nn.Module, state_dict: dict[str, torch.Tensor]):
+    model_state = model.state_dict()
+    filtered: dict[str, torch.Tensor] = {}
+    unexpected: list[str] = []
+    skipped_shape: list[tuple[str, tuple[int, ...], tuple[int, ...]]] = []
+
+    for key, value in state_dict.items():
+        if key not in model_state:
+            unexpected.append(key)
+            continue
+        if tuple(model_state[key].shape) != tuple(value.shape):
+            skipped_shape.append((key, tuple(value.shape), tuple(model_state[key].shape)))
+            continue
+        filtered[key] = value
+
+    missing = [key for key in model_state.keys() if key not in filtered]
+    return filtered, missing, unexpected, skipped_shape
+
+
+def _load_compatible_state_dict(model: torch.nn.Module, state_dict: dict[str, torch.Tensor], log_prefix: str) -> None:
+    to_load = state_dict
+    if hasattr(model, "_make_state_dict_compatible"):
+        to_load, _ = model._make_state_dict_compatible(state_dict)
+
+    filtered, missing, unexpected, skipped_shape = _filter_state_dict_for_model(model, to_load)
+    log.info(
+        "%s compatible load summary: keep=%d missing=%d unexpected=%d skipped_shape=%d",
+        log_prefix,
+        len(filtered),
+        len(missing),
+        len(unexpected),
+        len(skipped_shape),
+    )
+    if skipped_shape:
+        preview = ", ".join(
+            f"{name}: ckpt{src_shape}->model{dst_shape}"
+            for name, src_shape, dst_shape in skipped_shape[:8]
+        )
+        log.info("%s skipped shape-mismatched keys: %s", log_prefix, preview)
+
+    missing_keys, unexpected_keys = model.load_state_dict(filtered, strict=False)
+    if missing_keys:
+        log.info("%s missing keys after filtered load: %s", log_prefix, missing_keys[:20])
+    if unexpected_keys:
+        log.info("%s unexpected keys after filtered load: %s", log_prefix, unexpected_keys[:20])
+
 def main(cfg: TrainConfig) -> None:
     
     if cfg.run_name is None:
@@ -189,15 +236,7 @@ def main(cfg: TrainConfig) -> None:
         if get_global_rank() == 0:
             log.info(f'***** Pre-FSDP unsharded load from: {state_dict_path}')
             state_dict = torch.load(state_dict_path, map_location="cpu")
-            # 兼容/筛选键名后加载；放宽 strict
-            to_load, _ = olmo_model._make_state_dict_compatible(state_dict)
-            # 仅加载交集键，避免不同命名空间导致报错
-            # model_keys = set(olmo_model.state_dict().keys())
-            # filtered = {k: v for k, v in to_load.items() if k in model_keys}
-            # missing_cnt = len([k for k in model_keys if k not in to_load])
-            # unexpected_cnt = len([k for k in to_load.keys() if k not in model_keys])
-            # log.info(f"Pre-FSDP filtered load: keep={len(filtered)} missing={missing_cnt} unexpected={unexpected_cnt}")
-            olmo_model.load_state_dict(to_load, strict=True)
+            _load_compatible_state_dict(olmo_model, state_dict, "Pre-FSDP unsharded")
         # 同步所有 rank 再继续
         barrier()
 
@@ -272,9 +311,7 @@ def main(cfg: TrainConfig) -> None:
                 olmo_model.to_empty(device="cpu")
             if cfg.initial_model_checkpoint:
                 state_dict = torch.load(join(cfg.initial_model_checkpoint, "model.pt"), map_location="cpu")
-                missing, unexpected = olmo_model.load_state_dict(state_dict, strict=False)
-                log.info(f"missing keys: {missing}")
-                log.info(f"unexpected keys: {unexpected}")
+                _load_compatible_state_dict(olmo_model, state_dict, "Initial checkpoint")
                 del state_dict
             else:
                 olmo_model.reset_with_pretrained_weights(False)

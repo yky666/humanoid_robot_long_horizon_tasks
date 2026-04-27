@@ -128,3 +128,18 @@ This file tracks each managed-repo import/update step.
   - on the same fixed 20-sample subset, `step900` reached `avg_l1=0.4329`, `avg_mse=0.3130`
   - compared with `step5`, `step900` produced nearly unchanged mean `L1` but much lower mean `MSE`
   - the `step900` improvement is not uniform across all samples, so it should be treated as evidence of stronger overfit on some cases rather than as a clean deployment-ready win
+
+### Step 10
+
+- Commit message: `a1: record 200-sample eval comparison`
+- Scope:
+  - launch temporary single-GPU inference servers for `step5-unsharded` and `step900-unsharded`
+  - run larger fixed-seed offline debug evaluations with `200` samples for both checkpoints
+  - compare the larger-sample results against the earlier `20`-sample conclusion to check whether the apparent `MSE`-only improvement persists
+- README updates:
+  - `projects/A1/README.md` now records the new `step5` and `step900` `200`-sample evaluation artifacts and explains the larger-sample interpretation
+- Key observed results:
+  - on `200` fixed samples, `step900` beat `step5` on the mean of both metrics: `avg_l1=0.3824` vs `0.4541`, and `avg_mse=0.2579` vs `0.4808`
+  - the earlier `20`-sample ambiguity did not hold up under a larger sample count; the long-run checkpoint is better on average by both metrics
+  - however, `step900` is still not a majority winner sample-by-sample: it beat `step5` on `95/200` samples by `L1` and `100/200` samples by `MSE`
+  - this suggests the long-run checkpoint is improving average quality through larger wins on some cases rather than through uniformly better behavior on most individual examples

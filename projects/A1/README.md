@@ -438,6 +438,8 @@ Managed evaluation summaries already produced:
 - 1-step finetune 20-sample eval: `outputs/g1_episode_0013_step1_eval_20.json`
 - 5-step finetune 20-sample eval: `outputs/g1_episode_0013_step5_eval_20.json`
 - latest retained long-run checkpoint 20-sample eval: `outputs/g1_episode_0013_step900_eval_20.json`
+- 5-step finetune 200-sample eval: `outputs/g1_episode_0013_step5_eval_200.json`
+- latest retained long-run checkpoint 200-sample eval: `outputs/g1_episode_0013_step900_eval_200.json`
 
 Current measured action-error comparison:
 
@@ -449,6 +451,9 @@ Current measured action-error comparison:
   - 1-step finetune: `avg_l1=0.4376`, `avg_mse=0.4500`
   - 5-step finetune: `avg_l1=0.4310`, `avg_mse=0.4478`
   - latest retained long-run checkpoint `step900`: `avg_l1=0.4329`, `avg_mse=0.3130`
+- `200` samples on the same fixed-seed protocol:
+  - 5-step finetune: `avg_l1=0.4541`, `avg_mse=0.4808`
+  - latest retained long-run checkpoint `step900`: `avg_l1=0.3824`, `avg_mse=0.2579`
 
 Interpretation:
 
@@ -458,6 +463,10 @@ Interpretation:
 - compared with `step5`, `step900` changed from `avg_l1=0.4310`, `avg_mse=0.4478` to `avg_l1=0.4329`, `avg_mse=0.3130`
 - this is not a clean monotonic win across every sample; on the fixed 20-sample subset, only some samples improved and a few large wins dominate the mean `MSE`
 - on this fixed subset, `step900` beat `step5` on `9/20` samples by `MSE` and `8/20` samples by `L1`, which is another sign that the later checkpoint is redistributing error rather than uniformly improving everything
+- once the sample count was increased to `200`, the earlier small-sample ambiguity mostly disappeared: `step900` beat `step5` on the mean of both metrics
+- the `200`-sample comparison moved from `step5` `avg_l1=0.4541`, `avg_mse=0.4808` to `step900` `avg_l1=0.3824`, `avg_mse=0.2579`
+- but even there, `step900` is still not a majority winner on every sample: it beat `step5` on `95/200` samples by `L1` and `100/200` samples by `MSE`
+- that means the later checkpoint wins mainly because its improvements are much larger when they happen, not because it is uniformly better on most individual samples
 - this is still only a smoke result, not a reliable policy-quality conclusion for deployment
 - before trusting real-robot behavior, expand to more episodes, add held-out evaluation, and run closed-loop tests in simulation or on a guarded robot setup
 

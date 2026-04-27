@@ -43,7 +43,7 @@ in one place so later updates do not drift across multiple local folders.
 
 | Project | Upstream | Local Status |
 |---|---|---|
-| `A1` | `https://github.com/ATeam-Research/A1.git` | Imported from local working snapshot on 2026-04-22; managed G1 conversion + smoke finetune workflow added on 2026-04-24; staged G1 run inspection and real-robot finetune notes added on 2026-04-26; latest long-run eval comparison added on 2026-04-27 |
+| `A1` | `https://github.com/ATeam-Research/A1.git` | Imported from local working snapshot on 2026-04-22; managed G1 conversion + smoke finetune workflow added on 2026-04-24; staged G1 run inspection and real-robot finetune notes added on 2026-04-26; latest long-run and 200-sample eval comparisons added on 2026-04-27 |
 | `dex-retargeting` | `https://github.com/dexsuite/dex-retargeting.git` | Imported from local working snapshot on 2026-04-22 |
 | `Isaac-GR00T` | `https://github.com/NVIDIA/Isaac-GR00T` | Imported as a trimmed working snapshot on 2026-04-22 |
 

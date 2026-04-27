@@ -245,6 +245,13 @@ Why this is not the best first path to a real-robot result:
 - saving full checkpoints every `100` steps is extremely expensive on disk and time
 - the current `step100` save already produced about `34 GB` sharded + `32 GB` unsharded + `1.7 GB` action-head artifacts
 
+Follow-up observation on `2026-04-27`:
+
+- because `save_num_checkpoints_to_keep=1`, the earlier `step100` checkpoint was automatically rotated out
+- the same long run later advanced to `step900`
+- the latest saved unsharded checkpoint is now `outputs/g1_episode_0013_multistep_original_test_v1_50000_steps/step900-unsharded`
+- if you want to evaluate "the current long run", use the latest retained checkpoint rather than the original `step100`
+
 Recommended long-run monitoring command:
 
 ```bash
@@ -430,6 +437,7 @@ Managed evaluation summaries already produced:
 - pretrained 20-sample eval: `outputs/g1_episode_0013_pretrain_eval_20.json`
 - 1-step finetune 20-sample eval: `outputs/g1_episode_0013_step1_eval_20.json`
 - 5-step finetune 20-sample eval: `outputs/g1_episode_0013_step5_eval_20.json`
+- latest retained long-run checkpoint 20-sample eval: `outputs/g1_episode_0013_step900_eval_20.json`
 
 Current measured action-error comparison:
 
@@ -440,11 +448,16 @@ Current measured action-error comparison:
   - pretrained: `avg_l1=0.4519`, `avg_mse=0.4916`
   - 1-step finetune: `avg_l1=0.4376`, `avg_mse=0.4500`
   - 5-step finetune: `avg_l1=0.4310`, `avg_mse=0.4478`
+  - latest retained long-run checkpoint `step900`: `avg_l1=0.4329`, `avg_mse=0.3130`
 
 Interpretation:
 
 - even a single optimization step on this episode already reduced offline action error on the fixed debug sample set
 - the verified 5-step run improved the same 20-sample offline metric a bit further compared with the 1-step checkpoint
+- the later `step900` checkpoint kept the mean `L1` near the `step5` result, but drove mean `MSE` much lower on the same 20-sample subset
+- compared with `step5`, `step900` changed from `avg_l1=0.4310`, `avg_mse=0.4478` to `avg_l1=0.4329`, `avg_mse=0.3130`
+- this is not a clean monotonic win across every sample; on the fixed 20-sample subset, only some samples improved and a few large wins dominate the mean `MSE`
+- on this fixed subset, `step900` beat `step5` on `9/20` samples by `MSE` and `8/20` samples by `L1`, which is another sign that the later checkpoint is redistributing error rather than uniformly improving everything
 - this is still only a smoke result, not a reliable policy-quality conclusion for deployment
 - before trusting real-robot behavior, expand to more episodes, add held-out evaluation, and run closed-loop tests in simulation or on a guarded robot setup
 

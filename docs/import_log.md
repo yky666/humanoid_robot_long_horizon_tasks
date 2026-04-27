@@ -110,3 +110,21 @@ This file tracks each managed-repo import/update step.
   - the current `50000-step` run reached `step100`, logged `train/ActionNoiseL2Loss=0.8041`, and successfully saved `step100`, `step100-unsharded`, and `step100-action-head`
   - the apparent "hang" was mainly caused by `log_interval=100` plus heavy checkpoint I/O, not by a pre-training crash
   - at the observed speed on this workstation, a single-episode `50000-step` run is a roughly `10` day path and is not the recommended first route to a meaningful G1 deployment result
+
+## 2026-04-27
+
+### Step 9
+
+- Commit message: `a1: record latest long-run eval comparison`
+- Scope:
+  - re-inspect the long-running single-episode G1 finetune and confirm the retained latest checkpoint had advanced from the original `step100` state to `step900`
+  - launch a temporary single-GPU inference server for `step900-unsharded`
+  - run the same fixed 20-sample offline debug evaluation used for the earlier pretrained and `step5` comparisons
+  - document the resulting `step900` metrics and the interpretation caveat that average improvement is not uniform sample-by-sample
+- README updates:
+  - `projects/A1/README.md` now records that `step100` was rotated out by checkpoint retention, points to the retained `step900-unsharded` checkpoint, and adds the `step900` offline comparison result
+- Key observed results:
+  - the retained latest checkpoint from the long run is `step900-unsharded`
+  - on the same fixed 20-sample subset, `step900` reached `avg_l1=0.4329`, `avg_mse=0.3130`
+  - compared with `step5`, `step900` produced nearly unchanged mean `L1` but much lower mean `MSE`
+  - the `step900` improvement is not uniform across all samples, so it should be treated as evidence of stronger overfit on some cases rather than as a clean deployment-ready win

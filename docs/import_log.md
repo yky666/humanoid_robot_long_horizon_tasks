@@ -141,5 +141,25 @@ This file tracks each managed-repo import/update step.
 - Key observed results:
   - on `200` fixed samples, `step900` beat `step5` on the mean of both metrics: `avg_l1=0.3824` vs `0.4541`, and `avg_mse=0.2579` vs `0.4808`
   - the earlier `20`-sample ambiguity did not hold up under a larger sample count; the long-run checkpoint is better on average by both metrics
-  - however, `step900` is still not a majority winner sample-by-sample: it beat `step5` on `95/200` samples by `L1` and `100/200` samples by `MSE`
-  - this suggests the long-run checkpoint is improving average quality through larger wins on some cases rather than through uniformly better behavior on most individual examples
+- however, `step900` is still not a majority winner sample-by-sample: it beat `step5` on `95/200` samples by `L1` and `100/200` samples by `MSE`
+- this suggests the long-run checkpoint is improving average quality through larger wins on some cases rather than through uniformly better behavior on most individual examples
+
+## 2026-04-28
+
+### Step 11
+
+- Commit message: `a1: record pretrain 200-sample baseline and phase analysis`
+- Scope:
+  - launch a temporary single-GPU inference server for the original pretrained checkpoint and run the same fixed-seed `200`-sample offline evaluation used for the `step5` and `step900` checkpoints
+  - add a reusable `scripts/analyze_eval_deltas.py` helper for pairwise checkpoint comparison, per-phase aggregation, and top improved / degraded sample extraction
+  - compare `pretrain -> step5`, `step5 -> step900`, and `pretrain -> step900` on exactly the same `200` sampled frames
+  - inspect the strongest `step900` improvements and degradations against raw episode frames to connect metric shifts to concrete task stages
+- README updates:
+  - `projects/A1/README.md` now records the exact `pretrain` `200`-sample eval command, the pairwise analysis commands, and the stage-level interpretation for `step900`
+  - root `README.md` now marks `A1` as having a `pretrain` `200`-sample baseline and phase analysis update on 2026-04-28
+- Key observed results:
+  - on `200` fixed-seed samples, the pretrained checkpoint reached `avg_l1=0.4747`, `avg_mse=0.5349`
+  - `step5` improves on that baseline modestly, reaching `avg_l1=0.4541`, `avg_mse=0.4808`
+  - `step900` improves on both earlier checkpoints much more strongly on the mean, reaching `avg_l1=0.3824`, `avg_mse=0.2579`
+  - the phase split shows where the gain comes from: `step900` beats `step5` on all `75/75` `grasp_lift` samples, but still loses on most `approach` and `carry_place_right` samples
+  - the largest `step900` wins occur while the bottle is still central and the robot is actively grasping or lifting it, while the largest regressions occur after the bottle has already moved right and the robot is releasing or retreating

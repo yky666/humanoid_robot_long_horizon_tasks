@@ -20,6 +20,7 @@ This folder is the managed snapshot of the local `A1` workspace on this machine.
 - Added `configs/datasets/g1_episode_0013.yaml`
 - Added `configs/experiments/g1_episode_0013_finetune.yaml`
 - Added and updated `scripts/convert_g1_to_lerobot.py`
+- Added `scripts/analyze_eval_deltas.py`
 
 ## Excluded From Version Control
 
@@ -435,11 +436,15 @@ Managed evaluation summaries already produced:
 - pretrained smoke: `outputs/g1_episode_0013_pretrain_eval_smoke.json`
 - 1-step finetune smoke: `outputs/g1_episode_0013_step1_eval_smoke.json`
 - pretrained 20-sample eval: `outputs/g1_episode_0013_pretrain_eval_20.json`
+- pretrained 200-sample eval: `outputs/g1_episode_0013_pretrain_eval_200.json`
 - 1-step finetune 20-sample eval: `outputs/g1_episode_0013_step1_eval_20.json`
 - 5-step finetune 20-sample eval: `outputs/g1_episode_0013_step5_eval_20.json`
 - latest retained long-run checkpoint 20-sample eval: `outputs/g1_episode_0013_step900_eval_20.json`
 - 5-step finetune 200-sample eval: `outputs/g1_episode_0013_step5_eval_200.json`
 - latest retained long-run checkpoint 200-sample eval: `outputs/g1_episode_0013_step900_eval_200.json`
+- pretrain vs 5-step 200-sample pairwise analysis: `outputs/g1_episode_0013_pretrain_vs_step5_200_analysis.json`
+- 5-step vs step900 200-sample pairwise analysis: `outputs/g1_episode_0013_step5_vs_step900_200_analysis.json`
+- pretrain vs step900 200-sample pairwise analysis: `outputs/g1_episode_0013_pretrain_vs_step900_200_analysis.json`
 
 Current measured action-error comparison:
 
@@ -452,8 +457,72 @@ Current measured action-error comparison:
   - 5-step finetune: `avg_l1=0.4310`, `avg_mse=0.4478`
   - latest retained long-run checkpoint `step900`: `avg_l1=0.4329`, `avg_mse=0.3130`
 - `200` samples on the same fixed-seed protocol:
+  - pretrained: `avg_l1=0.4747`, `avg_mse=0.5349`
   - 5-step finetune: `avg_l1=0.4541`, `avg_mse=0.4808`
   - latest retained long-run checkpoint `step900`: `avg_l1=0.3824`, `avg_mse=0.2579`
+
+Concrete 200-sample manual commands already validated on this workstation:
+
+```bash
+CUDA_VISIBLE_DEVICES=1 bash deploy/deploy.sh \
+  --weight /home/sys01/yangky/test/A1/model/a1-pretrain/latest-unsharded \
+  --port 18006
+```
+
+```bash
+python -m robot_experiments.debug \
+  --dataset_path /home/sys01/yangky/test/A1/data/g1_episode_0013_lerobot \
+  --url http://127.0.0.1:18006 \
+  --n_episode 200 \
+  --fixed_action_dim 16 \
+  --chunk_size 50 \
+  --output_json /home/sys01/yangky/test/humanoid_robot_long_horizon_tasks/projects/A1/outputs/g1_episode_0013_pretrain_eval_200.json
+```
+
+Pairwise analysis commands:
+
+```bash
+python scripts/analyze_eval_deltas.py \
+  --baseline outputs/g1_episode_0013_pretrain_eval_200.json \
+  --candidate outputs/g1_episode_0013_step5_eval_200.json \
+  --baseline-name pretrain \
+  --candidate-name step5 \
+  --dataset-length 639 \
+  --raw-episode-dir /home/sys01/yangky/test/A1/data/episode_0013 \
+  --json-out outputs/g1_episode_0013_pretrain_vs_step5_200_analysis.json
+```
+
+```bash
+python scripts/analyze_eval_deltas.py \
+  --baseline outputs/g1_episode_0013_step5_eval_200.json \
+  --candidate outputs/g1_episode_0013_step900_eval_200.json \
+  --baseline-name step5 \
+  --candidate-name step900 \
+  --dataset-length 639 \
+  --raw-episode-dir /home/sys01/yangky/test/A1/data/episode_0013 \
+  --json-out outputs/g1_episode_0013_step5_vs_step900_200_analysis.json
+```
+
+```bash
+python scripts/analyze_eval_deltas.py \
+  --baseline outputs/g1_episode_0013_pretrain_eval_200.json \
+  --candidate outputs/g1_episode_0013_step900_eval_200.json \
+  --baseline-name pretrain \
+  --candidate-name step900 \
+  --dataset-length 639 \
+  --raw-episode-dir /home/sys01/yangky/test/A1/data/episode_0013 \
+  --json-out outputs/g1_episode_0013_pretrain_vs_step900_200_analysis.json
+```
+
+What the pairwise analyzer reports:
+
+- mean `L1` / `MSE` deltas between two checkpoints
+- whether the candidate checkpoint wins more often sample-by-sample
+- phase splits over the single episode:
+  - `approach`
+  - `grasp_lift`
+  - `carry_place_right`
+- top improved and top degraded samples, with raw image paths and motion statistics from the original `data.json`
 
 Interpretation:
 
@@ -464,9 +533,21 @@ Interpretation:
 - this is not a clean monotonic win across every sample; on the fixed 20-sample subset, only some samples improved and a few large wins dominate the mean `MSE`
 - on this fixed subset, `step900` beat `step5` on `9/20` samples by `MSE` and `8/20` samples by `L1`, which is another sign that the later checkpoint is redistributing error rather than uniformly improving everything
 - once the sample count was increased to `200`, the earlier small-sample ambiguity mostly disappeared: `step900` beat `step5` on the mean of both metrics
+- on the same `200` samples, `step5` also beats the pretrained checkpoint on average: from `avg_l1=0.4747`, `avg_mse=0.5349` down to `avg_l1=0.4541`, `avg_mse=0.4808`
+- on the same `200` samples, `step900` beats the pretrained checkpoint by a much larger margin: from `avg_l1=0.4747`, `avg_mse=0.5349` down to `avg_l1=0.3824`, `avg_mse=0.2579`
 - the `200`-sample comparison moved from `step5` `avg_l1=0.4541`, `avg_mse=0.4808` to `step900` `avg_l1=0.3824`, `avg_mse=0.2579`
 - but even there, `step900` is still not a majority winner on every sample: it beat `step5` on `95/200` samples by `L1` and `100/200` samples by `MSE`
 - that means the later checkpoint wins mainly because its improvements are much larger when they happen, not because it is uniformly better on most individual samples
+- the phase breakdown makes that pattern much clearer:
+  - `step900` is decisively better than `step5` throughout `grasp_lift`: all `75/75` middle-phase samples improved on both `L1` and `MSE`
+  - `step900` is worse than `step5` on most `approach` samples: only `7/71` improved on `L1`, and only `10/71` improved on `MSE`
+  - `step900` is also unstable in `carry_place_right`: only `13/54` improved on `L1`, and `15/54` improved on `MSE`
+- the top `step900` improvements cluster around frames such as `248`, `265`, `278`, and `286`, where the bottle is still near the center and the robot is actively securing or lifting it
+- the top `step900` degradations cluster around frames such as `540`, `542`, `545`, and `548`, where the bottle has already moved to the right side and the robot is releasing or retracting after placement
+- the motion statistics reinforce the visual pattern:
+  - the strongest `step900` wins happen when `left_ee_motion_norm` is active and the left hand is still engaged in grasp control
+  - the strongest `step900` failures happen when `left_ee_motion_norm` is `0` and the remaining error is dominated by arm retreat / release behavior near the final placement zone
+- for real-robot deployment, that means `step900` currently looks more promising for stabilizing the grasp-and-lift middle phase than for guaranteeing a clean right-side placement finish
 - this is still only a smoke result, not a reliable policy-quality conclusion for deployment
 - before trusting real-robot behavior, expand to more episodes, add held-out evaluation, and run closed-loop tests in simulation or on a guarded robot setup
 

@@ -168,3 +168,7 @@ offline_open_loop_eval_plots/
 # Generic model/data folders
 /models
 /data
+!/data/
+/data/*
+!/data/g1_episode_0015_psi0_gr00t/
+!/data/g1_episode_0015_psi0_gr00t/**

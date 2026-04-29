@@ -14,11 +14,22 @@ machine.
 ## Local Changes Included In This Snapshot
 
 - Modified `pyproject.toml`
+- Added `scripts/convert_g1_raw_episode_to_gr00t.py` for converting raw Unitree
+  G1 episode dumps into GR00T-flavored LeRobot v2 datasets.
+- Added local converted sample dataset
+  `data/g1_episode_0015_psi0_gr00t/`, generated from
+  `/home/sys01/yangky/test/Isaac-GR00T/data/episode_0015`.
+  This dataset uses the raw `states.psi0` 32-dimensional observation vector,
+  the raw `actions.psi0` 36-dimensional action vector, and includes both
+  `ego_view` and `wrist` camera videos.
 
 ## Excluded From Version Control
 
 - `.venv/` because it is a local environment
 - `demo_data/` because it is sample dataset content
+- most local `data/` content because raw recordings and generated datasets are
+  usually workstation artifacts; `data/g1_episode_0015_psi0_gr00t/` is included
+  intentionally as a compact GR00T/psi0 conversion sample
 - `media/` because it is documentation asset content copied from upstream
 - `external_dependencies/` payloads because these are upstream submodules and not local source changes
 - `scripts/deployment/dgpu/wheels/` and `tensorrt_cu12_libs-10.15.1.29-py2.py3-none-manylinux_2_28_x86_64.whl` because they are bulky deployment wheel artifacts

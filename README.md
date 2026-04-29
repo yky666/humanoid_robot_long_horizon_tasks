@@ -45,7 +45,7 @@ in one place so later updates do not drift across multiple local folders.
 |---|---|---|
 | `A1` | `https://github.com/ATeam-Research/A1.git` | Imported from local working snapshot on 2026-04-22; managed G1 conversion + smoke finetune workflow added on 2026-04-24; staged G1 run inspection and real-robot finetune notes added on 2026-04-26; latest long-run and 200-sample eval comparisons added on 2026-04-27; pretrained 200-sample baseline and phase analysis added on 2026-04-28 |
 | `dex-retargeting` | `https://github.com/dexsuite/dex-retargeting.git` | Imported from local working snapshot on 2026-04-22 |
-| `Isaac-GR00T` | `https://github.com/NVIDIA/Isaac-GR00T` | Imported as a trimmed working snapshot on 2026-04-22 |
+| `Isaac-GR00T` | `https://github.com/NVIDIA/Isaac-GR00T` | Imported as a trimmed working snapshot on 2026-04-22; local G1 psi0 conversion script and compact `episode_0015` GR00T dataset sample added on 2026-04-29 |
 
 ## Current Migration Notes
 

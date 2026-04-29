@@ -163,3 +163,29 @@ This file tracks each managed-repo import/update step.
   - `step900` improves on both earlier checkpoints much more strongly on the mean, reaching `avg_l1=0.3824`, `avg_mse=0.2579`
   - the phase split shows where the gain comes from: `step900` beats `step5` on all `75/75` `grasp_lift` samples, but still loses on most `approach` and `carry_place_right` samples
   - the largest `step900` wins occur while the bottle is still central and the robot is actively grasping or lifting it, while the largest regressions occur after the bottle has already moved right and the robot is releasing or retreating
+
+## 2026-04-29
+
+### Step 12
+
+- Commit message: `gr00t: add g1 psi0 episode conversion sample`
+- Scope:
+  - add `projects/Isaac-GR00T/scripts/convert_g1_raw_episode_to_gr00t.py`
+    for converting raw Unitree G1 episode dumps into GR00T LeRobot v2 format
+  - support both the legacy upper-body vector layout and the newer `psi0`
+    layout exposed by `states.psi0` and `actions.psi0`
+  - support multi-camera color streams, including `color_0 -> ego_view` and
+    `color_1 -> wrist`
+  - add compact converted sample dataset
+    `projects/Isaac-GR00T/data/g1_episode_0015_psi0_gr00t/`
+- README updates:
+  - root `README.md` now marks `Isaac-GR00T` as having the local G1 psi0
+    conversion sample update on 2026-04-29
+  - `projects/Isaac-GR00T/README.md` records the conversion script, included
+    sample dataset, and why this specific generated data artifact is tracked
+- Key observed results:
+  - `episode_0015` converts to `385` frames
+  - `observation.state` has shape `[32]`
+  - `action` has shape `[36]`
+  - the dataset includes `observation.images.ego_view` and
+    `observation.images.wrist`

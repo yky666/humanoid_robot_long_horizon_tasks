@@ -1,0 +1,59 @@
+{
+    "state": {
+        "left_hand": {
+            "start": 0,
+            "end": 7
+        },
+        "right_hand": {
+            "start": 7,
+            "end": 14
+        },
+        "left_arm": {
+            "start": 14,
+            "end": 21
+        },
+        "right_arm": {
+            "start": 21,
+            "end": 28
+        },
+        "body_state": {
+            "start": 28,
+            "end": 32
+        }
+    },
+    "action": {
+        "left_hand": {
+            "start": 0,
+            "end": 7
+        },
+        "right_hand": {
+            "start": 7,
+            "end": 14
+        },
+        "left_arm": {
+            "start": 14,
+            "end": 21
+        },
+        "right_arm": {
+            "start": 21,
+            "end": 28
+        },
+        "body_command": {
+            "start": 28,
+            "end": 36
+        }
+    },
+    "video": {
+        "ego_view": {
+            "original_key": "observation.images.ego_view"
+        },
+        "wrist": {
+            "original_key": "observation.images.wrist"
+        }
+    },
+    "annotation": {
+        "human.task_description": {
+            "original_key": "task_index"
+        }
+    }
+}

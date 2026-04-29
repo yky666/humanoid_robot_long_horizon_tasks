@@ -207,3 +207,18 @@ This file tracks each managed-repo import/update step.
   - `projects/xr_teleoperate` captures the local bridge/replay workflow including `teleop_hand_and_arm_bridge.py`, `replay_episode.py`, `replay_episode_player.py`, and `convert_episode_to_lerobot.py`
   - `projects/teleimager` captures the local image stack updates including `image_client.py`, `image_server.py`, `cam_config_server.yaml`, and `psi0_bridge.py`
   - `projects/xr_teleoperate/teleop/utils/data` was intentionally excluded because it is large local data rather than repository source
+
+### Step 14
+
+- Commit message: `docs: reshape root readme as project homepage`
+- Scope:
+  - rewrite the root `README.md` so it explains the monorepo as one end-to-end humanoid workflow rather than as a simple archive note
+  - add a system map showing how `teleimager`, `xr_teleoperate`, `Isaac-GR00T`, and `A1` connect
+  - clarify the practical role of each managed project, including the supporting role of `dex-retargeting`
+  - align `projects/README.md` with the same workflow-first navigation model
+- README updates:
+  - root `README.md` now serves as a project homepage with a workflow overview, system diagram, project-role explanations, and navigation guidance
+  - `projects/README.md` now mirrors the same upstream-to-downstream flow so new readers can orient quickly
+- Key observed results:
+  - the relationship between online teleoperation, image transport, dataset conversion, and model training is now explicit at the repository entrypoint
+  - new readers can understand where to start depending on whether they are debugging live robot behavior, data conversion, or training

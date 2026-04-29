@@ -222,3 +222,23 @@ This file tracks each managed-repo import/update step.
 - Key observed results:
   - the relationship between online teleoperation, image transport, dataset conversion, and model training is now explicit at the repository entrypoint
   - new readers can understand where to start depending on whether they are debugging live robot behavior, data conversion, or training
+
+### Step 15
+
+- Commit message: `docs: add quick start and workflow sections to root readme`
+- Scope:
+  - extend the root `README.md` with a practical onboarding path for new readers
+  - add `Quick Start`, `Typical Workflows`, `Current Status`, and `Roadmap`
+    sections
+  - keep the homepage framing high-level while making the repository easier to
+    navigate for teleop, dataset, and training tasks
+- README updates:
+  - root `README.md` now includes workflow-oriented entry points for live
+    teleoperation, dataset conversion, and model training
+  - root `README.md` now states the current strengths and limitations of the
+    managed workspace more explicitly
+- Key observed results:
+  - new readers can map themselves to the right subsystem faster without
+    reading the full import history first
+  - the repository entrypoint now behaves more like a project homepage and less
+    like an archive note

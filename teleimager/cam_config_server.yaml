@@ -1,0 +1,63 @@
+# =====================================================
+# Head camera configuration
+# =====================================================
+head_camera:
+  enable_zmq: true
+  zmq_port : 55555
+  enable_webrtc: true
+  webrtc_port : 60001
+  webrtc_codec: h264
+
+  # 【已修改】使用官方专属驱动
+  type: realsense
+
+  # 【已修改】适配 RealSense 的实际输出格式
+# 把原来的 [480, 640] 改成官方推荐的宽屏比例
+  image_shape: [480, 848]
+  # 恢复到原生支持的 30 帧
+  fps: 30
+
+  binocular: false   # <====== 就是缺了这行！把它加在这里！
+  
+  # 【已修改】精准绑定真实序列号
+  #原来是：243722071416
+  #现在尝试外接一个新的realsense camera：317422072416
+  video_id: null
+  serial_number: "243722071416"
+  physical_path: null
+
+# =====================================================
+# Left wrist camera configuration
+# =====================================================
+left_wrist_camera:
+  enable_zmq: true
+  zmq_port : 55557
+  enable_webrtc: true
+  webrtc_port: 60003
+  webrtc_codec: h264
+  type: opencv
+  image_shape: [1080, 1920]
+  binocular: false
+  fps: 30
+  video_id: 5
+  serial_number: null
+  physical_path: null
+
+
+
+# =====================================================
+# Right wrist camera configuration
+# =====================================================
+right_wrist_camera:
+  enable_zmq: false
+  zmq_port : 55556
+  enable_webrtc: false
+  webrtc_port : 60002
+  webrtc_codec: h264
+  type: opencv
+  image_shape: [1080, 1920]
+  binocular: false
+  fps: 30
+  video_id: 2
+  serial_number: null
+  physical_path: null

@@ -1,45 +1,14 @@
 # humanoid_robot_long_horizon_tasks
 
-Unified monorepo for our humanoid long-horizon task stack on this workstation.
-
-This repository is the single version-managed entry point for the active codebases
-we are using together:
-
-- `A1`
-- `dex-retargeting`
-- `Isaac-GR00T`
-
-The goal is to keep code, configuration, integration notes, and migration history
-in one place so later updates do not drift across multiple local folders.
-
-## Repository Policy
-
-- Track source code, configs, scripts, and project documentation.
-- Do not track model weights, local virtual environments, caches, logs, or large
-  generated artifacts.
-- Every structural import or update must include:
-  - a clear git commit message
-  - a matching `README.md` update in the affected project folder
-  - a short entry in `docs/import_log.md`
+Archive repository for the local `xr_teleoperate` and `teleimager` workspaces used in the humanoid long-horizon task setup.
 
 ## Layout
 
-```text
-.
-|-- docs/
-|   |-- import_log.md
-|   `-- repository_workflow.md
-|-- projects/
-|   |-- README.md
-|   |-- A1/
-|   |-- dex-retargeting/
-|   `-- Isaac-GR00T/
-|-- .gitignore
-|-- LICENSE
-`-- README.md
-```
+- `xr_teleoperate/`: archived working tree from `/home/unitree/xr_teleoperate`
+- `teleimager/`: archived working tree from `/home/unitree/teleimager`
+- `ARCHIVE_NOTES.md`: snapshot notes, exclusions, and source pointers
 
-## Managed Projects
+## What Is Included
 
 | Project | Upstream | Local Status |
 |---|---|---|
@@ -47,24 +16,21 @@ in one place so later updates do not drift across multiple local folders.
 | `dex-retargeting` | `https://github.com/dexsuite/dex-retargeting.git` | Imported from local working snapshot on 2026-04-22 |
 | `Isaac-GR00T` | `https://github.com/NVIDIA/Isaac-GR00T` | Imported as a trimmed working snapshot on 2026-04-22; local G1 psi0 conversion script and compact `episode_0015` GR00T dataset sample added on 2026-04-29 |
 
-## Current Migration Notes
+The current archive snapshot also includes:
 
-- This repo started as a minimal placeholder repository.
-- We are converting it into the main workspace management repo for the local
-  humanoid robotics stack.
-- Initial consolidation excludes heavy local-only assets such as:
-  - model checkpoints
-  - local Python environments
-  - cached deployment wheels
-  - sample datasets and generated media unless explicitly needed
+- README files and changelogs
+- local code updates
+- replay and bridge utilities
+- teleimager config and server/client changes
 
-## Workflow
+## What Is Excluded
 
-1. Import one project at a time from the workstation into `projects/`.
-2. Record the upstream source repo and source commit in that project's
-   `README.md`.
-3. Record local deviations from upstream in the same `README.md`.
-4. Commit each import as an isolated step.
-5. Push to `main` only after the corresponding README and import log are updated.
+- large recorded datasets such as `xr_teleoperate/teleop/utils/data`
+- git metadata from the source repositories
+- private certificate material such as `cert.pem` and `key.pem`
+- backup artifacts such as `*.bak`
 
-The detailed workflow is documented in [docs/repository_workflow.md](/home/sys01/yangky/test/humanoid_robot_long_horizon_tasks/docs/repository_workflow.md).
+## Source Repositories
+
+- `xr_teleoperate` upstream: `https://github.com/unitreerobotics/xr_teleoperate.git`
+- `teleimager` upstream: `https://github.com/silencht/teleimager`

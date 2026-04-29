@@ -1,42 +1,6 @@
-# Common Python and editor artifacts
-__pycache__/
-*.py[cod]
-.pytest_cache/
-.mypy_cache/
-.ruff_cache/
-.cache/
-.DS_Store
-.idea/
-.vscode/
-
-# Local environments
-.venv/
-venv/
-
-# Logs and generated outputs
-*.log
-runs/
-outputs/
-wandb/
-
-# Monorepo-wide exclusions for imported projects
-projects/A1/model/
-projects/A1/data/
-projects/A1/outputs/
-projects/A1/runs/
-projects/A1/wandb/
-projects/A1/.venv/
-
-projects/Isaac-GR00T/.venv/
-projects/Isaac-GR00T/tensorrt_cu12_libs-10.15.1.29-py2.py3-none-manylinux_2_28_x86_64.whl
-projects/Isaac-GR00T/scripts/deployment/dgpu/wheels/
-projects/Isaac-GR00T/demo_data/
-projects/Isaac-GR00T/media/
-projects/Isaac-GR00T/outputs/
-projects/Isaac-GR00T/wandb/
-projects/Isaac-GR00T/runs/
-
-projects/dex-retargeting/build/
-projects/dex-retargeting/.venv/
-projects/dex-retargeting/log/
-projects/dex-retargeting/temp/
+xr_teleoperate/teleop/utils/data/
+**/__pycache__/
+*.pyc
+*.bak
+cert.pem
+key.pem

@@ -1,12 +1,17 @@
 # humanoid_robot_long_horizon_tasks
 
-Archive repository for the local `xr_teleoperate` and `teleimager` workspaces used in the humanoid long-horizon task setup.
+Unified monorepo for the humanoid long-horizon task stack on this workstation.
+
+This repository now also archives the local `xr_teleoperate` and `teleimager`
+working trees under the managed `projects/` layout so the teleoperation stack
+is versioned alongside the rest of the workspace.
 
 ## Layout
 
-- `xr_teleoperate/`: archived working tree from `/home/unitree/xr_teleoperate`
-- `teleimager/`: archived working tree from `/home/unitree/teleimager`
+- `projects/xr_teleoperate/`: archived working tree from `/home/unitree/xr_teleoperate`
+- `projects/teleimager/`: archived working tree from `/home/unitree/teleimager`
 - `ARCHIVE_NOTES.md`: snapshot notes, exclusions, and source pointers
+- `docs/`: repository workflow and import log
 
 ## What Is Included
 
@@ -25,12 +30,19 @@ The current archive snapshot also includes:
 
 ## What Is Excluded
 
-- large recorded datasets such as `xr_teleoperate/teleop/utils/data`
+- large recorded datasets such as `projects/xr_teleoperate/teleop/utils/data`
 - git metadata from the source repositories
 - private certificate material such as `cert.pem` and `key.pem`
 - backup artifacts such as `*.bak`
 
-## Source Repositories
+## Managed Projects
 
-- `xr_teleoperate` upstream: `https://github.com/unitreerobotics/xr_teleoperate.git`
-- `teleimager` upstream: `https://github.com/silencht/teleimager`
+| Project | Upstream | Local Status |
+|---|---|---|
+| `A1` | `https://github.com/ATeam-Research/A1.git` | Imported and iterated in prior repository steps |
+| `dex-retargeting` | `https://github.com/dexsuite/dex-retargeting.git` | Imported and iterated in prior repository steps |
+| `Isaac-GR00T` | `https://github.com/NVIDIA/Isaac-GR00T` | Imported and iterated in prior repository steps |
+| `xr_teleoperate` | `https://github.com/unitreerobotics/xr_teleoperate.git` | Archived local working snapshot on 2026-04-29 with bridge, replay, recording, and documentation updates |
+| `teleimager` | `https://github.com/silencht/teleimager` | Archived local working snapshot on 2026-04-29 with image server/client and config updates |
+
+See [projects/README.md](projects/README.md) and [docs/import_log.md](docs/import_log.md) for per-project archive notes.

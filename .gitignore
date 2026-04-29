@@ -1,4 +1,4 @@
-xr_teleoperate/teleop/utils/data/
+projects/xr_teleoperate/teleop/utils/data/
 **/__pycache__/
 *.pyc
 *.bak

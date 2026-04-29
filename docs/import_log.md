@@ -189,3 +189,21 @@ This file tracks each managed-repo import/update step.
   - `action` has shape `[36]`
   - the dataset includes `observation.images.ego_view` and
     `observation.images.wrist`
+
+### Step 13
+
+- Commit message: `archive: add xr_teleoperate and teleimager working snapshots`
+- Scope:
+  - archive the current local `/home/unitree/xr_teleoperate` working tree under `projects/xr_teleoperate`
+  - archive the current local `/home/unitree/teleimager` working tree under `projects/teleimager`
+  - preserve local bridge, replay, recording, image server/client, config, README, and changelog updates
+  - keep the monorepo layout consistent by placing both teleoperation-related codebases under `projects/`
+  - exclude heavy local datasets and sensitive certificate material from version control
+- README updates:
+  - root `README.md` now lists `xr_teleoperate` and `teleimager` as managed archived projects
+  - `projects/README.md` now references the archived teleoperation projects
+  - `projects/xr_teleoperate/README_ARCHIVE.md` and `projects/teleimager/README_ARCHIVE.md` record upstream sources, local scope, and exclusions
+- Key observed results:
+  - `projects/xr_teleoperate` captures the local bridge/replay workflow including `teleop_hand_and_arm_bridge.py`, `replay_episode.py`, `replay_episode_player.py`, and `convert_episode_to_lerobot.py`
+  - `projects/teleimager` captures the local image stack updates including `image_client.py`, `image_server.py`, `cam_config_server.yaml`, and `psi0_bridge.py`
+  - `projects/xr_teleoperate/teleop/utils/data` was intentionally excluded because it is large local data rather than repository source

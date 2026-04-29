@@ -11,3 +11,8 @@ Each project folder should contain:
   - base commit
   - local changes included in the snapshot
   - excluded heavy artifacts
+
+Current locally archived teleoperation projects:
+
+- `projects/xr_teleoperate`
+- `projects/teleimager`

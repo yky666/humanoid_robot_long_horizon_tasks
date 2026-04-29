@@ -7,6 +7,11 @@ This repository is a consolidated archive snapshot prepared from two local worki
 - `/home/unitree/xr_teleoperate`
 - `/home/unitree/teleimager`
 
+They are archived in this repository under:
+
+- `projects/xr_teleoperate`
+- `projects/teleimager`
+
 ## Notable xr_teleoperate Snapshot Contents
 
 - `teleop/teleop_hand_and_arm_bridge.py`
@@ -26,7 +31,7 @@ This repository is a consolidated archive snapshot prepared from two local worki
 
 ## Exclusions Applied During Archival
 
-- `xr_teleoperate/teleop/utils/data`
+- `projects/xr_teleoperate/teleop/utils/data`
 - any `.git/` directories
 - `*.pyc`
 - `__pycache__/`

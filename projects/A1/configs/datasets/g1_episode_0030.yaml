@@ -1,0 +1,17 @@
+# Dataset configuration for G1 teleoperation episode 0030 (bimanual handover task).
+#
+# This expects DATA_DIR to point at the local A1 data directory that contains
+# `g1_episode_0030_lerobot/`.
+
+image_augmentation:
+  enable: false
+  enable_random_erasing: false
+  enable_sharpening: false
+  augmentation_prob: 0.0
+
+lerobot:
+  - path: ${oc.env:DATA_DIR}/g1_episode_0030_lerobot
+    weight: 1.0
+    normalization_type: bounds
+    num_episodes: 1
+    image_augmentation: false

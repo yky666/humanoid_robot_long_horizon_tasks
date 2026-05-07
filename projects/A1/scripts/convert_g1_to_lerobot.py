@@ -156,6 +156,12 @@ def parse_args() -> argparse.Namespace:
         help="Skip frames with malformed state/action/image entries instead of failing fast.",
     )
     parser.add_argument(
+        "--max-frames",
+        type=int,
+        default=None,
+        help="Optional cap on the number of frames per source episode (truncates the tail).",
+    )
+    parser.add_argument(
         "--log-level",
         choices=("DEBUG", "INFO", "WARNING", "ERROR"),
         default="INFO",
@@ -640,6 +646,8 @@ def convert_dataset(args: argparse.Namespace) -> None:
         for episode_idx, episode in enumerate(episodes):
             record = load_json(episode.json_path)
             frames = record.get("data") or []
+            if args.max_frames is not None and args.max_frames > 0:
+                frames = frames[: args.max_frames]
             frames_written = 0
             skipped_frames = 0
 

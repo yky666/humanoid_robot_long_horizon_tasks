@@ -123,6 +123,12 @@ def parse_args() -> argparse.Namespace:
         action="store_true",
         help="Remove the output directory first if it already exists.",
     )
+    parser.add_argument(
+        "--max-frames",
+        type=int,
+        default=None,
+        help="Optional cap on the number of frames per source episode (truncates the tail).",
+    )
     args = parser.parse_args()
     if args.output_dataset_dir is None:
         if not args.dataset_name:
@@ -421,7 +427,7 @@ def build_modality_json(video_keys: list[str], state_format: str) -> dict[str, A
     }
 
 
-def make_video(input_episode_dir: Path, output_mp4: Path, fps: float, color_index: int) -> None:
+def make_video(input_episode_dir: Path, output_mp4: Path, fps: float, color_index: int, total_frames: int | None = None) -> None:
     colors_dir = input_episode_dir / "colors"
     if not colors_dir.exists():
         raise FileNotFoundError(f"Missing colors directory: {colors_dir}")
@@ -434,12 +440,16 @@ def make_video(input_episode_dir: Path, output_mp4: Path, fps: float, color_inde
         str(float(fps)),
         "-i",
         str(colors_dir / f"%06d_color_{color_index}.jpg"),
+    ]
+    if total_frames is not None:
+        cmd.extend(["-vframes", str(total_frames)])
+    cmd.extend([
         "-c:v",
         "libx264",
         "-pix_fmt",
         "yuv420p",
         str(output_mp4),
-    ]
+    ])
     subprocess.run(cmd, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
 
@@ -512,6 +522,8 @@ def convert(args: argparse.Namespace) -> None:
     )
     task_description = infer_task_description(payload, args.task_description)
     fps = float(payload.get("info", {}).get("image", {}).get("fps", 30.0))
+    if args.max_frames is not None and args.max_frames > 0:
+        payload["data"] = payload["data"][: args.max_frames]
     total_frames = len(payload["data"])
     color_indices = discover_color_indices(args.input_episode_dir)
     if not color_indices:
@@ -560,7 +572,7 @@ def convert(args: argparse.Namespace) -> None:
     for color_index, video_key in zip(color_indices, video_keys):
         video_dir = args.output_dataset_dir / "videos" / "chunk-000" / f"observation.images.{video_key}"
         output_mp4 = video_dir / f"episode_{args.episode_index:06d}.mp4"
-        make_video(args.input_episode_dir, output_mp4, fps=fps, color_index=color_index)
+        make_video(args.input_episode_dir, output_mp4, fps=fps, color_index=color_index, total_frames=total_frames)
         video_sizes[video_key] = probe_video_size(output_mp4)
         output_videos.append(output_mp4)
 

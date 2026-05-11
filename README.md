@@ -186,6 +186,9 @@ The repository is already strong in these areas:
 - The image transport stack is archived separately and linked clearly to the
   teleop workflow.
 - Raw-to-LeRobot / GR00T conversion is now represented in the monorepo.
+- The G1 bimanual water-bottle handover task has checked local A1 and GR00T
+  conversions for episodes `0030`, `0031`, `0038`, and `0040`; episode `0036`
+  is excluded because its source `data.json` is truncated.
 - A1-side training and evaluation history is documented with concrete local
   results.
 

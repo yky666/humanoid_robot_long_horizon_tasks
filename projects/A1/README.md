@@ -328,6 +328,25 @@ Suggested first multi-episode target:
 - `5-20` episodes of the same task family
 - `1000-3000` finetune steps before reassessing
 
+Current same-task bimanual handover dataset update on `2026-05-09`:
+
+- task text: `left hand grasps the water bottle, hands it over to the right hand, then the right hand inserts it into the cup.`
+- checked A1 LeRobot episodes:
+  - `g1_episode_0030_lerobot`: `102` frames, `state_dim=26`, `action_dim=26`
+  - `g1_episode_0031_lerobot`: `973` frames, `state_dim=26`, `action_dim=26`
+  - `g1_episode_0038_lerobot`: `647` frames, `state_dim=26`, `action_dim=26`
+  - `g1_episode_0040_lerobot`: `854` frames, `state_dim=26`, `action_dim=26`
+- checked GR00T psi0 episodes:
+  - `g1_episode_0030_psi0_gr00t`: `102` frames, `observation.state=[32]`, `action=[36]`, `3` videos
+  - `g1_episode_0031_psi0_gr00t`: `973` frames, `observation.state=[32]`, `action=[36]`, `3` videos
+  - `g1_episode_0038_psi0_gr00t`: `647` frames, `observation.state=[32]`, `action=[36]`, `3` videos
+  - `g1_episode_0040_psi0_gr00t`: `854` frames, `observation.state=[32]`, `action=[36]`, `3` videos
+- `episode_0036` was not converted or trained because
+  `/home/sys01/yangky/test/A1/data/episode_0036/data.json` is truncated at
+  `786432` bytes and fails JSON parsing near line `35861`.
+- `configs/datasets/g1_bimanual_handover.yaml` trains on the four checked A1
+  LeRobot datasets above.
+
 Recommended resume pattern once more data exists:
 
 ```bash

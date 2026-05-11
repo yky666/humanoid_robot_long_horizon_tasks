@@ -1,0 +1,2 @@
+model_config: models/robochallenge.yaml
+dataset_config: datasets/g1_bimanual_handover.yaml

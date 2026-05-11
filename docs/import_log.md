@@ -242,3 +242,32 @@ This file tracks each managed-repo import/update step.
     reading the full import history first
   - the repository entrypoint now behaves more like a project homepage and less
     like an archive note
+
+## 2026-05-09
+
+### Step 16
+
+- Commit message: `a1: add checked bimanual handover finetune config`
+- Scope:
+  - inspect new local raw episodes `0030`, `0031`, `0036`, `0038`, and `0040`
+    for the task "left hand grasps the water bottle, hands it over to the right
+    hand, then the right hand inserts it into the cup"
+  - verify existing converted A1 LeRobot datasets for episodes `0030`, `0031`,
+    `0038`, and `0040`
+  - verify existing converted GR00T psi0 datasets for episodes `0030`, `0031`,
+    `0038`, and `0040`
+  - add a multi-episode A1 dataset config and experiment config for the checked
+    bimanual handover demonstrations
+- README updates:
+  - root `README.md` records the bimanual handover conversion status and the
+    `0036` source-data issue
+  - `projects/A1/README.md` records checked frame counts, vector dimensions,
+    GR00T video coverage, and the A1 training dataset selection
+- Key observed results:
+  - A1 LeRobot checks passed for `0030`/`0031`/`0038`/`0040` with frame counts
+    `102`/`973`/`647`/`854` and `state_dim=26`, `action_dim=26`
+  - GR00T psi0 checks passed for `0030`/`0031`/`0038`/`0040` with matching frame
+    counts, `observation.state=[32]`, `action=[36]`, and `3` videos each
+  - `episode_0036` is not usable yet: its source `data.json` is exactly
+    `786432` bytes, is truncated mid-frame, and fails JSON parsing near line
+    `35861`

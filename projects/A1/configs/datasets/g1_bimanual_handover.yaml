@@ -1,0 +1,36 @@
+# Dataset configuration for G1 bimanual handover task (episodes 30/31/38/40).
+#
+# Task: left hand grasps the water bottle, hands it over to the right hand,
+# then the right hand inserts it into the cup.
+#
+# This expects DATA_DIR to point at the local A1 data directory that contains
+# `g1_episode_*_lerobot/` directories. Episode 0036 is excluded because its
+# source data.json is truncated and cannot be parsed as a complete episode.
+
+image_augmentation:
+  enable: false
+  enable_random_erasing: false
+  enable_sharpening: false
+  augmentation_prob: 0.0
+
+lerobot:
+  - path: ${oc.env:DATA_DIR}/g1_episode_0030_lerobot
+    weight: 1.0
+    normalization_type: bounds
+    num_episodes: 1
+    image_augmentation: false
+  - path: ${oc.env:DATA_DIR}/g1_episode_0031_lerobot
+    weight: 1.0
+    normalization_type: bounds
+    num_episodes: 1
+    image_augmentation: false
+  - path: ${oc.env:DATA_DIR}/g1_episode_0038_lerobot
+    weight: 1.0
+    normalization_type: bounds
+    num_episodes: 1
+    image_augmentation: false
+  - path: ${oc.env:DATA_DIR}/g1_episode_0040_lerobot
+    weight: 1.0
+    normalization_type: bounds
+    num_episodes: 1
+    image_augmentation: false

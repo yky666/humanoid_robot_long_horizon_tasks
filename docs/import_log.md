@@ -271,3 +271,33 @@ This file tracks each managed-repo import/update step.
   - `episode_0036` is not usable yet: its source `data.json` is exactly
     `786432` bytes, is truncated mid-frame, and fails JSON parsing near line
     `35861`
+
+## 2026-05-11
+
+### Step 17
+
+- Commit message: `a1: document active bimanual handover finetune`
+- Scope:
+  - restore local GPU training access by installing the current-kernel NVIDIA
+    module package `linux-modules-nvidia-580-open-6.17.0-23-generic` and
+    upgrading the matching Ubuntu noble `580.142` driver components
+  - launch A1 finetune on the checked bimanual handover datasets
+    `0030`/`0031`/`0038`/`0040`
+  - keep `episode_0036` excluded because the source `data.json` still fails JSON
+    parsing at byte `786432`
+- README updates:
+  - `projects/A1/README.md` now records the active `2026-05-11` finetune run,
+    command-shape changes, and first observed training metrics
+- Key observed results:
+  - `nvidia-smi` now sees both local `RTX 4090` cards with driver `580.142`
+  - the first online attempt stalled during tokenizer startup; setting
+    `TRANSFORMERS_OFFLINE=1` and `HF_HUB_OFFLINE=1` uses the local Qwen cache
+    and avoids the network wait
+  - `seq_len=512` failed on multi-episode samples with length `980`, so the
+    active run uses `seq_len=1024`
+  - default overlap crop mode failed because three camera streams produced six
+    image entries while the collator limit was two; the active run uses
+    `crop_mode=resize` and `max_crops=3`
+  - active run: `outputs/g1_bimanual_handover_ft1000_20260511_r4`
+  - startup training metrics reached `step 30/1000` with
+    `train/ActionNoiseL2Loss=2.007` and peak GPU memory about `21.1 GB`

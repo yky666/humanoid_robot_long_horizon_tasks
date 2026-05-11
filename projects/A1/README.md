@@ -347,6 +347,27 @@ Current same-task bimanual handover dataset update on `2026-05-09`:
 - `configs/datasets/g1_bimanual_handover.yaml` trains on the four checked A1
   LeRobot datasets above.
 
+Current A1 finetune run started on `2026-05-11`:
+
+- run dir: `outputs/g1_bimanual_handover_ft1000_20260511_r4`
+- W&B run: `g1_bimanual_handover_ft1000_20260511_resize_seq1024`
+- dataset: `g1_bimanual_handover_train`
+- checkpoint: `/home/sys01/yangky/test/A1/model/a1-pretrain/latest-unsharded`
+- stable startup settings:
+  - `seq_len=1024` because the multi-episode samples exceeded the earlier
+    `512` token limit
+  - `crop_mode=resize`, `max_crops=3` because the converted data has three
+    camera streams
+  - `fsdp_precision=pure`, `disable_float32_attention`, `global_batch_size=2`,
+    and `device_train_microbatch_size=1`
+  - `TRANSFORMERS_OFFLINE=1` and `HF_HUB_OFFLINE=1` to avoid tokenizer startup
+    stalls while using the existing local Qwen tokenizer cache
+- observed startup result:
+  - `step 10`: `train/ActionNoiseL2Loss=1.803`
+  - `step 20`: `train/ActionNoiseL2Loss=1.815`
+  - `step 30`: `train/ActionNoiseL2Loss=2.007`
+  - peak GPU memory after training started: about `21.1 GB`
+
 Recommended resume pattern once more data exists:
 
 ```bash

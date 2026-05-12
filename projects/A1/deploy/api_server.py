@@ -59,6 +59,14 @@ use_wrist_image = True
 sequence_length = 768
 no_norm = False
 device = "cuda" if torch.cuda.is_available() else "cpu"
+safety_enable = False
+safety_clip_stats = False
+safety_action_scale = 1.0
+safety_arm_delta_limit = 0.08
+safety_hand_delta_limit = 0.03
+
+ARM_DIMS = list(range(0, 14))
+HAND_DIMS = list(range(14, 26))
 
 # Enable memory efficiency optimizations
 torch.backends.cuda.matmul.allow_tf32 = True
@@ -226,6 +234,53 @@ def resolve_norm_stats(request: InferenceRequest):
             norm_stats_cache[stats_path] = cached
         return cached
     return norm_stats
+
+
+def apply_action_safety_guard(actions, request: InferenceRequest, active_norm_stats):
+    if not safety_enable:
+        return actions
+
+    safe_actions = np.asarray(actions, dtype=np.float32).copy()
+    squeezed = False
+    if safe_actions.ndim == 2:
+        safe_actions = safe_actions[None, ...]
+        squeezed = True
+    if safe_actions.ndim != 3:
+        raise ValueError(f"Safety guard expects actions with 2 or 3 dims, got {safe_actions.shape}")
+
+    if request.proprio_data:
+        current = np.asarray(request.proprio_data[0], dtype=np.float32)
+        current = current[: safe_actions.shape[-1]]
+    else:
+        current = safe_actions[:, 0, :].mean(axis=0)
+
+    if current.shape[0] == safe_actions.shape[-1] and safety_action_scale < 1.0:
+        safe_actions = current[None, None, :] + safety_action_scale * (safe_actions - current[None, None, :])
+
+    if safety_clip_stats and active_norm_stats and "actions" in active_norm_stats:
+        action_stats = active_norm_stats["actions"]
+        if "min" in action_stats and "max" in action_stats:
+            action_min = np.asarray(action_stats["min"], dtype=np.float32)
+            action_max = np.asarray(action_stats["max"], dtype=np.float32)
+            safe_actions = np.clip(safe_actions, action_min[None, None, :], action_max[None, None, :])
+
+    delta_limits = np.full(safe_actions.shape[-1], safety_arm_delta_limit, dtype=np.float32)
+    delta_limits[HAND_DIMS] = safety_hand_delta_limit
+    for batch_idx in range(safe_actions.shape[0]):
+        prev = current.copy() if current.shape[0] == safe_actions.shape[-1] else safe_actions[batch_idx, 0].copy()
+        for step_idx in range(safe_actions.shape[1]):
+            delta = np.clip(safe_actions[batch_idx, step_idx] - prev, -delta_limits, delta_limits)
+            safe_actions[batch_idx, step_idx] = prev + delta
+            prev = safe_actions[batch_idx, step_idx].copy()
+
+    if safety_clip_stats and active_norm_stats and "actions" in active_norm_stats:
+        action_stats = active_norm_stats["actions"]
+        if "min" in action_stats and "max" in action_stats:
+            action_min = np.asarray(action_stats["min"], dtype=np.float32)
+            action_max = np.asarray(action_stats["max"], dtype=np.float32)
+            safe_actions = np.clip(safe_actions, action_min[None, None, :], action_max[None, None, :])
+
+    return safe_actions.squeeze(0) if squeezed else safe_actions
     
 def decode_base64_image(base64_str: str) -> torch.Tensor:
     """Decode base64 string to image tensor"""
@@ -366,6 +421,11 @@ async def run_vla_inference(request: InferenceRequest):
                     use_wrist_image, 
                     no_norm=no_norm
         )
+        results['predicted_actions'] = apply_action_safety_guard(
+            results['predicted_actions'],
+            request,
+            active_norm_stats,
+        )
         print(f"***results['predicted_actions'].shape: {results['predicted_actions'].shape}")
 
         end_time = datetime.now()
@@ -383,6 +443,11 @@ async def run_vla_inference(request: InferenceRequest):
                 "model_config": {
                     "action_head": getattr(model_config, 'action_head', 'unknown'),
                     "use_proprio": getattr(model_config, 'use_proprio', False),
+                    "safety_enable": safety_enable,
+                    "safety_clip_stats": safety_clip_stats,
+                    "safety_action_scale": safety_action_scale,
+                    "safety_arm_delta_limit": safety_arm_delta_limit,
+                    "safety_hand_delta_limit": safety_hand_delta_limit,
                 }
             },
             timestamp=end_time.isoformat()
@@ -455,6 +520,11 @@ def main():
     parser.add_argument("--port", default=6789, type=int, help="Server port")
     parser.add_argument("--reload", action="store_true", help="Enable auto-reload for development")
     parser.add_argument("--workers", default=1, type=int, help="Number of worker processes")
+    parser.add_argument("--safety_enable", action="store_true", help="Enable low-speed action safety guard")
+    parser.add_argument("--safety_clip_stats", action="store_true", help="Clip actions to active dataset stats min/max")
+    parser.add_argument("--safety_action_scale", default=1.0, type=float, help="Scale action displacement from current proprio")
+    parser.add_argument("--safety_arm_delta_limit", default=0.08, type=float, help="Per-step arm delta limit")
+    parser.add_argument("--safety_hand_delta_limit", default=0.03, type=float, help="Per-step hand delta limit")
     
     args = parser.parse_args()
     
@@ -473,6 +543,21 @@ def main():
     
     global no_norm
     no_norm = args.no_norm
+
+    global safety_enable, safety_clip_stats, safety_action_scale, safety_arm_delta_limit, safety_hand_delta_limit
+    safety_enable = args.safety_enable
+    safety_clip_stats = args.safety_clip_stats
+    safety_action_scale = args.safety_action_scale
+    safety_arm_delta_limit = args.safety_arm_delta_limit
+    safety_hand_delta_limit = args.safety_hand_delta_limit
+    if safety_enable:
+        log.info(
+            "Safety guard enabled: clip_stats=%s action_scale=%.3f arm_delta=%.4f hand_delta=%.4f",
+            safety_clip_stats,
+            safety_action_scale,
+            safety_arm_delta_limit,
+            safety_hand_delta_limit,
+        )
     # try:
     load_vla_model(args.checkpoint, args.fsdp, args.seed)
     log.info("Model loaded successfully")

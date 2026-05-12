@@ -299,5 +299,26 @@ This file tracks each managed-repo import/update step.
     image entries while the collator limit was two; the active run uses
     `crop_mode=resize` and `max_crops=3`
   - active run: `outputs/g1_bimanual_handover_ft1000_20260511_r4`
-  - startup training metrics reached `step 30/1000` with
-    `train/ActionNoiseL2Loss=2.007` and peak GPU memory about `21.1 GB`
+  - the run completed `1000/1000` steps at `2026-05-12 05:01:33`
+  - final logged `step 1000` metric:
+    `train/ActionNoiseL2Loss=0.1044`
+  - W&B final summary reports `train/ActionNoiseL2Loss=0.10439` and
+    `System/Peak GPU Memory (MB)=22542.62695`
+  - saved outputs:
+    `step1000`, `step1000-unsharded`, and `step1000-action-head`
+  - W&B run:
+    `https://wandb.ai/kaiyuanyang666-sun-yat/A1_G1_Finetuning/runs/l3x8smp1`
+
+### Step 18
+
+- Commit message: `a1: record completed bimanual handover finetune`
+- Scope:
+  - inspect the completed `g1_bimanual_handover_ft1000_20260511_r4` logs and
+    checkpoint directory
+  - update the managed A1 documentation with the final training result and
+    saved checkpoint names
+- Key observed results:
+  - no A1 training process or tmux session remains active
+  - final checkpoint artifacts are present under
+    `projects/A1/outputs/g1_bimanual_handover_ft1000_20260511_r4/`
+  - output directory size is about `69 GB`

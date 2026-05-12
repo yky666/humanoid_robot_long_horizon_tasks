@@ -432,6 +432,68 @@ Only after offline selection:
 - first validate short horizon fragments before full pick-and-place
 - record every rollout back into the managed dataset for the next finetune cycle
 
+### 4.1 G1 PC2 Client Interface
+
+For real-robot validation, run the heavy A1 model server on the GPU machine and
+run the lightweight client on G1 PC2. The PC2 client aligns with the current
+multi-episode A1 G1 dataset:
+
+- `proprio_data`: `26D = left_arm(7) + right_arm(7) + left_ee(6) + right_ee(6)`
+- action output: first `26D` uses the same layout
+- images: head camera plus optional left/right wrist cameras
+- API endpoint: `POST /inference` with `instruction`, `images`, and `proprio_data`
+
+Start the model server on the GPU machine, replacing the checkpoint path and
+port with the selected deployment checkpoint:
+
+```bash
+cd /home/unitree/humanoid_robot_long_horizon_tasks/projects/A1
+
+CUDA_VISIBLE_DEVICES=0 bash deploy/deploy.sh \
+  --weight /path/to/step1000-unsharded \
+  --port 18000 \
+  --norm \
+  --norm_stats_json_path /path/to/norm_stat.json \
+  --normalization_type bounds
+```
+
+On G1 PC2, first run the client in dry-run mode. This reads DDS lowstate,
+Inspire hand state, and Teleimager frames, then calls the A1 server, but does
+not publish robot commands:
+
+```bash
+cd /home/unitree/humanoid_robot_long_horizon_tasks/projects/A1
+
+python3 scripts/g1_pc2_a1_client.py \
+  --server-url http://<gpu-server-ip>:18000 \
+  --network-interface enP8p1s0 \
+  --img-server-ip 127.0.0.1 \
+  --robot G1_29 \
+  --camera-count 3 \
+  --iterations 5
+```
+
+Only after the dry-run action shape and values look sane, enable guarded
+execution:
+
+```bash
+python3 scripts/g1_pc2_a1_client.py \
+  --server-url http://<gpu-server-ip>:18000 \
+  --network-interface enP8p1s0 \
+  --img-server-ip 127.0.0.1 \
+  --robot G1_29 \
+  --camera-count 3 \
+  --period 0.2 \
+  --arm-delta-limit 0.03 \
+  --hand-delta-limit 0.03 \
+  --action-scale 0.25 \
+  --execute
+```
+
+The PC2 client lives at `scripts/g1_pc2_a1_client.py`. It intentionally defaults
+to dry-run mode; `--execute` is the switch that publishes to the G1 arm controller
+and Inspire hand DDS command topics.
+
 The practical rule on this machine is:
 
 - first prove stable overfit

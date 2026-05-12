@@ -43,6 +43,19 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
+
+def _to_serializable_array(array: np.ndarray) -> list:
+    return np.asarray(array, dtype=np.float32).tolist()
+
+
+def _compute_dim_metrics(pred_action: np.ndarray, gt_action: np.ndarray) -> dict:
+    abs_err = np.abs(pred_action - gt_action)
+    sq_err = np.square(pred_action - gt_action)
+    return {
+        "per_dim_l1": np.mean(abs_err, axis=0).astype(np.float32).tolist(),
+        "per_dim_mse": np.mean(sq_err, axis=0).astype(np.float32).tolist(),
+    }
+
 @dataclasses.dataclass
 class GenerateConfig:
     dataset_path: str = "data/vlabench"
@@ -54,6 +67,8 @@ class GenerateConfig:
     use_wrist_image: bool = True
     seed: int = 42
     output_json: Optional[str] = None
+    norm_stats_json_path: Optional[str] = None
+    save_actions: bool = True
 
 
 class DummyPolicy:
@@ -62,13 +77,14 @@ class DummyPolicy:
     Users should implement the __init__ and run_policy methods according to their own logic.
     """
 
-    def __init__(self, base_url: str = "http://localhost:7777"):
+    def __init__(self, base_url: str = "http://localhost:7777", norm_stats_json_path: Optional[str] = None):
         """
         Initialize the policy.
         Args:
             port (str): Port to the model checkpoint file.
         """
         self.base_url = base_url.rstrip('/')
+        self.norm_stats_json_path = norm_stats_json_path
         self.session = requests.Session()
         self.session.headers.update({
             'Content-Type': 'application/json',
@@ -94,6 +110,7 @@ class DummyPolicy:
                 encode_image_to_base64(image_data) for image_data in input_data['images']
             ],
             "proprio_data": input_data['proprio'].tolist(),
+            "norm_stats_json_path": self.norm_stats_json_path,
         }
 
 
@@ -134,7 +151,7 @@ def main(cfg: GenerateConfig) -> None:
         use_proprio=cfg.use_proprio,
         use_wrist_image=cfg.use_wrist_image,
     )
-    policy = DummyPolicy(base_url=cfg.url)
+    policy = DummyPolicy(base_url=cfg.url, norm_stats_json_path=cfg.norm_stats_json_path)
 
     num_samples = min(len(dataset), cfg.n_episode)
     logger.info(f"Debug inference started: num_samples={num_samples}, dataset_path={cfg.dataset_path}")
@@ -143,6 +160,8 @@ def main(cfg: GenerateConfig) -> None:
     replace = num_samples > len(dataset)
     sampled_indices = rng.choice(len(dataset), size=num_samples, replace=replace)
     per_sample_metrics = []
+    per_dim_l1_sum = None
+    per_dim_mse_sum = None
     for i, idx in enumerate(sampled_indices):
         idx = int(idx)
         item = dataset.get(idx, rng)
@@ -156,20 +175,42 @@ def main(cfg: GenerateConfig) -> None:
             raise ValueError(
                 f"Predicted action shape {actions.shape} does not match ground truth {gt_action.shape}"
             )
+        dim_metrics = _compute_dim_metrics(actions, gt_action)
+        cur_dim_l1 = np.asarray(dim_metrics["per_dim_l1"], dtype=np.float32)
+        cur_dim_mse = np.asarray(dim_metrics["per_dim_mse"], dtype=np.float32)
+        if per_dim_l1_sum is None:
+            per_dim_l1_sum = np.zeros_like(cur_dim_l1)
+            per_dim_mse_sum = np.zeros_like(cur_dim_mse)
+        per_dim_l1_sum += cur_dim_l1
+        per_dim_mse_sum += cur_dim_mse
         mse = np.mean(np.square(actions - gt_action))
         l1 = np.mean(np.abs(actions - gt_action))
         avg_l1_loss += l1
         avg_mse_loss += mse
-        per_sample_metrics.append(
-            {
-                "sample_index": i,
-                "dataset_index": idx,
-                "question": item["question"],
-                "mse": float(mse),
-                "l1": float(l1),
-            }
-        )
+        sample_summary = {
+            "sample_index": i,
+            "dataset_index": idx,
+            "question": item["question"],
+            "mse": float(mse),
+            "l1": float(l1),
+            "per_dim_l1": dim_metrics["per_dim_l1"],
+            "per_dim_mse": dim_metrics["per_dim_mse"],
+            "metadata": {
+                "timestamp": float(item["metadata"]["timestamp"]),
+                "frame_index": int(item["metadata"]["frame_index"]),
+                "episode_index": int(item["metadata"]["episode_index"]),
+                "index": int(item["metadata"]["index"]),
+                "task_index": int(item["metadata"]["task_index"]),
+                "task": item["metadata"]["task"],
+            },
+        }
+        if cfg.save_actions:
+            sample_summary["pred_action"] = _to_serializable_array(actions)
+            sample_summary["gt_action"] = _to_serializable_array(gt_action)
+        per_sample_metrics.append(sample_summary)
         logger.info(f"sample={i} mse={mse} l1={l1}")
+    if num_samples == 0:
+        raise ValueError("No samples available for evaluation")
     summary = {
         "dataset_path": cfg.dataset_path,
         "url": cfg.url,
@@ -179,8 +220,12 @@ def main(cfg: GenerateConfig) -> None:
         "use_proprio": cfg.use_proprio,
         "use_wrist_image": cfg.use_wrist_image,
         "seed": cfg.seed,
+        "norm_stats_json_path": cfg.norm_stats_json_path,
+        "save_actions": cfg.save_actions,
         "avg_l1_loss": float(avg_l1_loss / num_samples),
         "avg_mse_loss": float(avg_mse_loss / num_samples),
+        "per_dim_avg_l1": (per_dim_l1_sum / num_samples).astype(np.float32).tolist(),
+        "per_dim_avg_mse": (per_dim_mse_sum / num_samples).astype(np.float32).tolist(),
         "samples": per_sample_metrics,
     }
     if cfg.output_json:

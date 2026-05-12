@@ -52,6 +52,7 @@ log = logging.getLogger("vla_api_server")
 model_instance = None
 model_config = None
 norm_stats = None
+norm_stats_cache = {}
 normalization_type = None
 use_proprio = True
 use_wrist_image = True
@@ -90,6 +91,7 @@ class InferenceRequest(BaseModel):
     # normalization_type: str = "bounds"
 
     proprio_data: Optional[List[List[float]]] = None  # Custom proprioception data
+    norm_stats_json_path: Optional[str] = None
     # previous_actions: Optional[List[List[float]]] = None  # Custom action history
 
 class HealthResponse(BaseModel):
@@ -213,6 +215,17 @@ def get_norm_stats_from_json(json_file_path):
     with open(json_file_path, 'r') as f:
         stats = json.load(f)
     return stats
+
+
+def resolve_norm_stats(request: InferenceRequest):
+    if request.norm_stats_json_path:
+        stats_path = os.path.abspath(request.norm_stats_json_path)
+        cached = norm_stats_cache.get(stats_path)
+        if cached is None:
+            cached = get_norm_stats_from_json(stats_path)
+            norm_stats_cache[stats_path] = cached
+        return cached
+    return norm_stats
     
 def decode_base64_image(base64_str: str) -> torch.Tensor:
     """Decode base64 string to image tensor"""
@@ -341,13 +354,13 @@ async def run_vla_inference(request: InferenceRequest):
         
         # Prepare input data
         input_data = prepare_inference_data(request)
-        
+        active_norm_stats = resolve_norm_stats(request)
 
         # Run inference
         results = run_inference(model_instance, 
                     input_data,
                     sequence_length, 
-                    norm_stats, 
+                    active_norm_stats,
                     normalization_type, 
                     use_proprio, 
                     use_wrist_image, 

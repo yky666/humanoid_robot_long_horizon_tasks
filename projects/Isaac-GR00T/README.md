@@ -5,41 +5,55 @@ machine.
 
 ## Import Metadata
 
-- Import date: `2026-04-22`
+- Import date: `2026-05-31`
 - Imported into: `humanoid_robot_long_horizon_tasks`
 - Upstream repository: `https://github.com/NVIDIA/Isaac-GR00T`
-- Upstream base commit: `23ace64f17aa5015259b8609d371eb61a357c776`
 - Source local path: `/home/sys01/yangky/test/Isaac-GR00T`
 
 ## Local Changes Included In This Snapshot
 
-- Modified `pyproject.toml`
 - Added `scripts/convert_g1_raw_episode_to_gr00t.py` for converting raw Unitree
   G1 episode dumps into GR00T-flavored LeRobot v2 datasets.
+- Added `examples/G1/g1_upper_body_config.py` for custom G1 upper-body
+  fine-tuning experiments under `NEW_EMBODIMENT`.
 - Added local converted sample dataset
-  `data/g1_episode_0015_psi0_gr00t/`, generated from
-  `/home/sys01/yangky/test/Isaac-GR00T/data/episode_0015`.
-  This dataset uses the raw `states.psi0` 32-dimensional observation vector,
-  the raw `actions.psi0` 36-dimensional action vector, and includes both
-  `ego_view` and `wrist` camera videos.
+  `data/g1_episode_0015_psi0_gr00t/`, generated from local G1 recordings.
+- Exposed fine-tuning knobs for `tune_vlln`, gradient checkpointing, optimizer
+  selection, and bf16 model loading in the finetune CLI config.
+
+## G1 Baseline Guidance
+
+For checking the GR00T-N1.7 base model on humanoid G1, use the base checkpoint
+with the pretrain embodiment tag `REAL_G1`:
+
+```bash
+source .venv/bin/activate
+python gr00t/eval/run_gr00t_server.py \
+    --model-path /home/sys01/.cache/huggingface/hub/models--nvidia--GR00T-N1.7-3B/snapshots/2fc962b973bccdd5d8ce4f67cc63b264d6886495 \
+    --embodiment-tag REAL_G1 \
+    --device cuda:0
+```
+
+`nvidia/GR00T-N1.7-DROID` is a DROID robot finetuned checkpoint. It is useful
+for DROID examples, but it is not the correct baseline for a Unitree G1
+humanoid simulation because the state/action semantics and embodiment tag are
+DROID-specific.
+
+For local G1 recordings under `data/`, first convert raw episodes with
+`scripts/convert_g1_raw_episode_to_gr00t.py`, then use the converted dataset for
+open-loop checks or fine-tune with `examples/G1/g1_upper_body_config.py` as
+`NEW_EMBODIMENT`.
 
 ## Excluded From Version Control
 
-- `.venv/` because it is a local environment
-- `demo_data/` because it is sample dataset content
-- most local `data/` content because raw recordings and generated datasets are
-  usually workstation artifacts; `data/g1_episode_0015_psi0_gr00t/` is included
-  intentionally as a compact GR00T/psi0 conversion sample
-- `media/` because it is documentation asset content copied from upstream
-- `external_dependencies/` payloads because these are upstream submodules and not local source changes
-- `scripts/deployment/dgpu/wheels/` and `tensorrt_cu12_libs-10.15.1.29-py2.py3-none-manylinux_2_28_x86_64.whl` because they are bulky deployment wheel artifacts
-- `pyproject copy.toml` because it is a local backup file
-
-## Trimmed Snapshot Caveat
-
-Some upstream README sections reference files under `media/`, `demo_data/`, and
-submodule-backed directories. Those references are intentionally not fully
-materialized in this managed repository snapshot.
+- `.venv/` because it is a local environment.
+- Most local `data/` content because raw recordings and generated datasets are
+  workstation artifacts; `data/g1_episode_0015_psi0_gr00t/` is kept as a compact
+  converted sample.
+- `media/` and `external_dependencies/` because they are upstream asset and
+  dependency payloads, not local source changes.
+- `pyproject copy.toml` and local wheel artifacts because they are local backups
+  or bulky deployment artifacts.
 
 ---
 

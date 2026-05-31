@@ -57,6 +57,9 @@ class FinetuneConfig:
     tune_diffusion_model: bool = True
     """If True, fine-tune the diffusion-based action decoder (if present in the model)."""
 
+    tune_vlln: bool = True
+    """If True, fine-tune the VL normalization / self-attention bridge in the action head."""
+
     state_dropout_prob: float = 0.2
     """
     Dropout probability applied to state inputs for regularization during training.
@@ -111,6 +114,9 @@ class FinetuneConfig:
     gradient_accumulation_steps: int = 1
     """Number of forward passes to accumulate before performing a backward/update step."""
 
+    gradient_checkpointing: bool = False
+    """If True, enable gradient checkpointing to reduce activation memory usage."""
+
     output_dir: str = "./outputs"
     """Directory where model checkpoints, logs, and outputs are saved."""
 
@@ -144,6 +150,15 @@ class FinetuneConfig:
 
     warmup_ratio: float = 0.05
     """Proportion of total training steps used for learning rate warm-up."""
+
+    optim: str = "adamw_torch"
+    """Optimizer name passed to Hugging Face TrainingArguments.optim."""
+
+    load_bf16: bool = False
+    """If True, load the frozen Qwen3-VL backbone weights directly in bfloat16."""
+
+    backbone_trainable_params_fp32: bool = True
+    """If True, keep trainable backbone parameters in fp32 when load_bf16 is enabled."""
 
     shard_size: int = 2**10
     """Size of the shard to use for the dataset during preloading."""

@@ -172,3 +172,9 @@ offline_open_loop_eval_plots/
 /data/*
 !/data/g1_episode_0015_psi0_gr00t/
 !/data/g1_episode_0015_psi0_gr00t/**
+
+# Managed monorepo snapshot exclusions
+/.venv
+/external_dependencies/
+/media/
+/pyproject copy.toml

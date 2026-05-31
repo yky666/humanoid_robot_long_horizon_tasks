@@ -60,6 +60,24 @@ simulation. Closed-loop visual evaluation needs a simulator adapter that exposes
 the `REAL_G1` observation keys (`ego_view`, wrist EEF 9D, hand, arm, waist) and
 applies the returned action dictionary back to the G1 simulator.
 
+To aggregate saved chunks into a full-episode video, add `--full-episode` and
+the dataset root:
+
+```bash
+MUJOCO_GL=egl /home/sys01/yangky/test/nlp225/msw0418_稳定/Psi0/.venv-psi/bin/python \
+    scripts/visualize_g1_action_replay.py \
+    --input-json /home/sys01/yangky/test/humanoid_robot_long_horizon_tasks/projects/A1/outputs/g1_bimanual_handover_ep0030_base_norm_eval_50_actions.json \
+    --full-episode \
+    --dataset-root /home/sys01/yangky/test/A1/data/g1_episode_0030_lerobot \
+    --aggregation average \
+    --output-mp4 outputs/g1_visual_replay/ep0030_base_full_episode_gt_vs_pred.mp4
+```
+
+In this replay mode, GT comes from the dataset parquet `actions` column.
+Prediction comes from saved `pred_action` chunks in the input JSON. If an eval
+JSON only contains sampled chunks that do not cover every frame, re-run
+inference over all frame indices before using `--full-episode`.
+
 ## Excluded From Version Control
 
 - `.venv/` because it is a local environment.

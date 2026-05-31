@@ -15,6 +15,7 @@ from pathlib import Path
 import cv2
 import mujoco
 import numpy as np
+import pandas as pd
 
 
 ARM_JOINTS = [
@@ -54,6 +55,26 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--input-json", type=Path, required=True)
     parser.add_argument("--sample-index", type=int, default=0)
+    parser.add_argument(
+        "--full-episode",
+        action="store_true",
+        help=(
+            "Aggregate all saved chunks onto the dataset timeline and render the full episode. "
+            "Requires --dataset-root."
+        ),
+    )
+    parser.add_argument(
+        "--dataset-root",
+        type=Path,
+        default=None,
+        help="LeRobot dataset root used to read full-episode GT actions when --full-episode is set.",
+    )
+    parser.add_argument(
+        "--aggregation",
+        choices=("average", "latest", "earliest"),
+        default="average",
+        help="How to combine overlapping saved prediction chunks in --full-episode mode.",
+    )
     parser.add_argument(
         "--g1-xml",
         type=Path,
@@ -104,6 +125,69 @@ def set_pose(model: mujoco.MjModel, data: mujoco.MjData, action: np.ndarray) -> 
     mujoco.mj_forward(model, data)
 
 
+def load_full_episode_actions(dataset_root: Path) -> tuple[np.ndarray, list[int]]:
+    parquet = dataset_root / "data" / "chunk-000" / "episode_000000.parquet"
+    if not parquet.exists():
+        raise FileNotFoundError(f"Missing episode parquet: {parquet}")
+    df = pd.read_parquet(parquet)
+    if "actions" in df.columns:
+        action_key = "actions"
+    elif "action" in df.columns:
+        action_key = "action"
+    else:
+        raise ValueError(f"No action/actions column found in {parquet}; columns={list(df.columns)}")
+    actions = np.stack(df[action_key].to_numpy()).astype(np.float32)
+    frame_indices = [int(v) for v in df["frame_index"].to_numpy()]
+    if actions.shape[1] != 26:
+        raise ValueError(f"This replay utility expects 26D A1 G1 actions, got {actions.shape[1]}D")
+    return actions, frame_indices
+
+
+def aggregate_saved_chunks(
+    samples: list[dict],
+    episode_len: int,
+    action_dim: int,
+    aggregation: str,
+) -> tuple[np.ndarray, np.ndarray]:
+    pred = np.zeros((episode_len, action_dim), dtype=np.float32)
+    counts = np.zeros((episode_len,), dtype=np.int32)
+    written_order = np.full((episode_len,), -1, dtype=np.int32)
+
+    sorted_samples = sorted(samples, key=lambda s: int(s["dataset_index"]))
+    for order, sample in enumerate(sorted_samples):
+        start = int(sample["dataset_index"])
+        chunk = np.asarray(sample["pred_action"], dtype=np.float32)
+        if chunk.ndim != 2 or chunk.shape[1] != action_dim:
+            raise ValueError(f"Bad pred_action shape for dataset_index={start}: {chunk.shape}")
+        for j, value in enumerate(chunk):
+            t = start + j
+            if t >= episode_len:
+                break
+            if aggregation == "average":
+                pred[t] += value
+                counts[t] += 1
+            elif aggregation == "earliest":
+                if counts[t] == 0:
+                    pred[t] = value
+                    counts[t] = 1
+                    written_order[t] = order
+            elif aggregation == "latest":
+                pred[t] = value
+                counts[t] = 1
+                written_order[t] = order
+
+    if aggregation == "average":
+        covered = counts > 0
+        pred[covered] /= counts[covered, None]
+    if not np.all(counts > 0):
+        missing = np.where(counts == 0)[0].tolist()
+        raise ValueError(
+            f"Saved chunks do not cover the full episode. Missing {len(missing)} frames, "
+            f"first missing frames: {missing[:20]}. Re-run inference on every frame."
+        )
+    return pred, counts
+
+
 def render(model: mujoco.MjModel, renderer: mujoco.Renderer, data: mujoco.MjData) -> np.ndarray:
     cam = mujoco.MjvCamera()
     cam.type = mujoco.mjtCamera.mjCAMERA_FREE
@@ -126,9 +210,30 @@ def main() -> None:
     args = parse_args()
     payload = json.loads(args.input_json.read_text())
     samples = payload["samples"]
-    sample = samples[args.sample_index]
-    pred = np.asarray(sample["pred_action"], dtype=np.float32)
-    gt = np.asarray(sample["gt_action"], dtype=np.float32)
+    if args.full_episode:
+        dataset_root = args.dataset_root or Path(payload.get("dataset_path", ""))
+        if not dataset_root:
+            raise ValueError("--dataset-root is required when input JSON lacks dataset_path")
+        gt, frame_indices = load_full_episode_actions(dataset_root)
+        pred, coverage = aggregate_saved_chunks(
+            samples=samples,
+            episode_len=len(gt),
+            action_dim=gt.shape[1],
+            aggregation=args.aggregation,
+        )
+        sample_label = (
+            f"full_episode frames={len(gt)} chunks={len(samples)} "
+            f"coverage={int(coverage.min())}-{int(coverage.max())}"
+        )
+        mean_l1 = float(np.mean(np.abs(pred - gt)))
+        mean_mse = float(np.mean(np.square(pred - gt)))
+    else:
+        sample = samples[args.sample_index]
+        pred = np.asarray(sample["pred_action"], dtype=np.float32)
+        gt = np.asarray(sample["gt_action"], dtype=np.float32)
+        sample_label = f"sample={args.sample_index}"
+        mean_l1 = float(sample["l1"])
+        mean_mse = float(sample["mse"])
     if pred.shape != gt.shape:
         raise ValueError(f"pred/gt shape mismatch: {pred.shape} vs {gt.shape}")
     if pred.shape[1] != 26:
@@ -156,7 +261,7 @@ def main() -> None:
         gt_frame = label(render(model, gt_renderer, gt_data), "GT")
         pred_frame = label(
             render(model, pred_renderer, pred_data),
-            f"Pred  sample={args.sample_index} frame={t} L1={sample['l1']:.4f} MSE={sample['mse']:.4f}",
+            f"Pred  {sample_label} frame={t} L1={mean_l1:.4f} MSE={mean_mse:.4f}",
         )
         frame = np.concatenate([gt_frame, pred_frame], axis=1)
         writer.write(cv2.cvtColor(frame, cv2.COLOR_RGB2BGR))

@@ -161,12 +161,21 @@ def evaluate_single_trajectory(
     action_horizon=16,
     save_plot_path=None,
 ):
-    # Ensure steps doesn't exceed trajectory length
+    # Ensure steps doesn't exceed trajectory length. Some embodiments, such as
+    # REAL_G1, need image history at negative delta indices; start after enough
+    # frames are available so pandas negative iloc does not wrap to episode tail.
     traj = loader[traj_id]
     traj_length = len(traj)
-    actual_steps = min(steps, traj_length)
+    obs_min_delta = min(
+        min(config.delta_indices)
+        for name, config in loader.modality_configs.items()
+        if name != "action"
+    )
+    start_step = max(0, -obs_min_delta)
+    actual_steps = min(steps, max(0, traj_length - start_step))
     logging.info(
-        f"Using {actual_steps} steps (requested: {steps}, trajectory length: {traj_length})"
+        f"Using {actual_steps} steps from step {start_step} "
+        f"(requested: {steps}, trajectory length: {traj_length})"
     )
 
     pred_action_across_time = []
@@ -179,7 +188,7 @@ def evaluate_single_trajectory(
 
     modality_configs = deepcopy(loader.modality_configs)
     modality_configs.pop("action")
-    for step_count in range(0, actual_steps, action_horizon):
+    for step_count in range(start_step, start_step + actual_steps, action_horizon):
         data_point = extract_step_data(traj, step_count, modality_configs, embodiment_tag)
         logging.info(f"inferencing at step: {step_count}")
         obs = {}
@@ -213,7 +222,7 @@ def evaluate_single_trajectory(
     # plot the joints
     state_joints_across_time = extract_state_joints(traj, [f"state.{key}" for key in state_keys])
     gt_action_across_time = extract_state_joints(traj, [f"action.{key}" for key in action_keys])[
-        :actual_steps
+        start_step : start_step + actual_steps
     ]
     pred_action_across_time = np.array(pred_action_across_time)[:actual_steps]
     assert gt_action_across_time.shape == pred_action_across_time.shape, (

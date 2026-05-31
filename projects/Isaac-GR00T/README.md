@@ -23,8 +23,12 @@ machine.
 
 ## G1 Baseline Guidance
 
-For checking the GR00T-N1.7 base model on humanoid G1, use the base checkpoint
-with the pretrain embodiment tag `REAL_G1`:
+For checking GR00T-N1.7 on humanoid G1, keep the baseline tied to GR00T
+itself:
+
+- Use `nvidia/GR00T-N1.7-3B` as the base model checkpoint.
+- Use `--embodiment-tag REAL_G1` for zero-shot/base-model inference.
+- Use the checkpoint snapshot directory, not the HuggingFace cache root.
 
 ```bash
 source .venv/bin/activate
@@ -34,49 +38,98 @@ python gr00t/eval/run_gr00t_server.py \
     --device cuda:0
 ```
 
+The cache root
+`/home/sys01/.cache/huggingface/hub/models--nvidia--GR00T-N1.7-3B/` is not a
+loadable model directory. The loadable directory is the snapshot containing
+`model-00001-of-00002.safetensors`, `model.safetensors.index.json`,
+`processor_config.json`, and `statistics.json`.
+
 `nvidia/GR00T-N1.7-DROID` is a DROID robot finetuned checkpoint. It is useful
 for DROID examples, but it is not the correct baseline for a Unitree G1
 humanoid simulation because the state/action semantics and embodiment tag are
 DROID-specific.
 
-For local G1 recordings under `data/`, first convert raw episodes with
-`scripts/convert_g1_raw_episode_to_gr00t.py`, then use the converted dataset for
-open-loop checks or fine-tune with `examples/G1/g1_upper_body_config.py` as
-`NEW_EMBODIMENT`.
+### Convert local G1 recordings
 
-For visual inspection of saved A1/G1 action-evaluation JSON files, render GT vs
-predicted actions with:
+Raw local G1 episodes must be converted to a LeRobot dataset whose modality
+groups match the GR00T checkpoint. For the base `REAL_G1` model, convert with
+`--state-format real_g1`:
 
 ```bash
-MUJOCO_GL=egl /home/sys01/yangky/test/nlp225/msw0418_稳定/Psi0/.venv-psi/bin/python \
-    scripts/visualize_g1_action_replay.py \
-    --input-json /home/sys01/yangky/test/humanoid_robot_long_horizon_tasks/projects/A1/outputs/g1_bimanual_handover_ep0030_base_norm_eval_50_actions.json \
-    --sample-index 0 \
-    --output-mp4 outputs/g1_visual_replay/ep0030_base_sample0000_gt_vs_pred.mp4
+source .venv/bin/activate
+python scripts/convert_g1_raw_episode_to_gr00t.py \
+    --input-episode-dir /home/sys01/yangky/test/A1/data/episode_0030 \
+    --output-dataset-dir data/g1_episode_0030_real_g1_gr00t \
+    --state-format real_g1 \
+    --video-keys ego_view,wrist,camera_2 \
+    --overwrite
 ```
 
-This is an offline MuJoCo replay of saved action chunks, not a closed-loop
-simulation. Closed-loop visual evaluation needs a simulator adapter that exposes
-the `REAL_G1` observation keys (`ego_view`, wrist EEF 9D, hand, arm, waist) and
-applies the returned action dictionary back to the G1 simulator.
+The `real_g1` layout writes these GR00T groups:
 
-To aggregate saved chunks into a full-episode video, add `--full-episode` and
-the dataset root:
+- state: `left_wrist_eef_9d`, `right_wrist_eef_9d`, `left_hand`, `right_hand`,
+  `left_arm`, `right_arm`, `waist`
+- action: the same groups plus `base_height_command` and `navigate_command`
+
+The wrist EEF groups are converted from raw `left_arm_ee` and `right_arm_ee`
+xyz+rpy poses into xyz+rot6d. Arm actions are stored as absolute targets; the
+GR00T processor converts configured groups to relative action chunks internally
+when `use_relative_action` is enabled by the checkpoint.
+
+### Open-loop GR00T baseline
+
+Run the open-loop evaluator against the converted dataset to compare full
+ground-truth action trajectories with GR00T predictions:
 
 ```bash
-MUJOCO_GL=egl /home/sys01/yangky/test/nlp225/msw0418_稳定/Psi0/.venv-psi/bin/python \
-    scripts/visualize_g1_action_replay.py \
-    --input-json /home/sys01/yangky/test/humanoid_robot_long_horizon_tasks/projects/A1/outputs/g1_bimanual_handover_ep0030_base_norm_eval_50_actions.json \
-    --full-episode \
-    --dataset-root /home/sys01/yangky/test/A1/data/g1_episode_0030_lerobot \
-    --aggregation average \
-    --output-mp4 outputs/g1_visual_replay/ep0030_base_full_episode_gt_vs_pred.mp4
+source .venv/bin/activate
+python gr00t/eval/open_loop_eval.py \
+    --model-path /home/sys01/.cache/huggingface/hub/models--nvidia--GR00T-N1.7-3B/snapshots/2fc962b973bccdd5d8ce4f67cc63b264d6886495 \
+    --dataset-path data/g1_episode_0030_real_g1_gr00t \
+    --embodiment-tag REAL_G1 \
+    --traj-ids 0 \
+    --steps 100000 \
+    --action-horizon 40 \
+    --save-plot-path outputs/g1_real_g1_baseline/episode_0030_open_loop.jpeg
 ```
 
-In this replay mode, GT comes from the dataset parquet `actions` column.
-Prediction comes from saved `pred_action` chunks in the input JSON. If an eval
-JSON only contains sampled chunks that do not cover every frame, re-run
-inference over all frame indices before using `--full-episode`.
+This evaluates GR00T predictions, not any A1 model output. Ground truth comes
+from the converted dataset action columns. Prediction comes directly from the
+GR00T action head through `Gr00tPolicy`.
+
+### Fine-tune smoke path
+
+For a first wiring check, fine-tune from the base snapshot on the converted
+`REAL_G1` dataset with a short run:
+
+```bash
+source .venv/bin/activate
+CUDA_VISIBLE_DEVICES=0 NUM_GPUS=1 MAX_STEPS=20 SAVE_STEPS=20 \
+  bash examples/finetune.sh \
+    --base-model-path /home/sys01/.cache/huggingface/hub/models--nvidia--GR00T-N1.7-3B/snapshots/2fc962b973bccdd5d8ce4f67cc63b264d6886495 \
+    --dataset-path data/g1_episode_0030_real_g1_gr00t \
+    --embodiment-tag REAL_G1 \
+    --output-dir outputs/g1_real_g1_finetune_smoke
+```
+
+For the older custom upper-body dataset layout, use
+`examples/G1/g1_upper_body_config.py` and `--embodiment-tag NEW_EMBODIMENT`.
+Do not use that path for evaluating the base `REAL_G1` checkpoint.
+
+### Closed-loop G1 simulation
+
+SimplerEnv is not the right simulator for Unitree G1/SMPLX humanoid evaluation.
+Closed-loop visual evaluation needs a G1 simulator adapter that:
+
+- renders/provides `ego_view`
+- publishes the `REAL_G1` state groups listed above
+- calls `PolicyClient.get_action` or `Gr00tPolicy.get_action`
+- applies returned absolute action targets to the G1 simulator
+- records rollout video and metrics
+
+Keep A1 model plots, A1 action replay JSONs, and A1 visualization scripts under
+`projects/A1/outputs` or `projects/A1/scripts`. This project directory is for
+GR00T conversion, inference, fine-tuning, and G1 deployment wiring.
 
 ## Excluded From Version Control
 

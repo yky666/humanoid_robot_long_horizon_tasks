@@ -39,6 +39,7 @@ from gr00t.data.stats import generate_stats
 DEFAULT_TASK = "grasp the cup and place it"
 DEFAULT_VIDEO_KEY = "ego_view"
 DEFAULT_WRIST_VIDEO_KEY = "wrist"
+DEFAULT_REAL_G1_ROBOT_TYPE = "unitree_g1_real_g1"
 DEFAULT_PSI0_ROBOT_TYPE = "unitree_g1_29dof_psi0"
 DEFAULT_LEGACY_ROBOT_TYPE = "unitree_g1_upper_body_custom"
 
@@ -96,9 +97,12 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument(
         "--state-format",
-        choices=("auto", "legacy", "psi0"),
+        choices=("auto", "legacy", "psi0", "real_g1"),
         default="auto",
-        help="Vector layout for observation.state/action. Auto uses psi0 when present.",
+        help=(
+            "Vector layout for observation.state/action. Auto uses psi0 when present. "
+            "Use real_g1 for the GR00T base checkpoint REAL_G1 embodiment."
+        ),
     )
     parser.add_argument(
         "--robot-type",
@@ -194,7 +198,58 @@ def select_state_format(payload: dict[str, Any], requested: str) -> str:
     return requested
 
 
+def euler_xyz_to_rot6d(euler_xyz: np.ndarray) -> np.ndarray:
+    """Convert XYZ Euler angles to the first two columns of the rotation matrix."""
+    roll, pitch, yaw = [float(x) for x in euler_xyz]
+    cr, sr = np.cos(roll), np.sin(roll)
+    cp, sp = np.cos(pitch), np.sin(pitch)
+    cy, sy = np.cos(yaw), np.sin(yaw)
+
+    rx = np.array([[1.0, 0.0, 0.0], [0.0, cr, -sr], [0.0, sr, cr]], dtype=np.float32)
+    ry = np.array([[cp, 0.0, sp], [0.0, 1.0, 0.0], [-sp, 0.0, cp]], dtype=np.float32)
+    rz = np.array([[cy, -sy, 0.0], [sy, cy, 0.0], [0.0, 0.0, 1.0]], dtype=np.float32)
+    rot = rz @ ry @ rx
+    return rot[:, :2].reshape(-1).astype(np.float32)
+
+
+def pose6d_to_xyz_rot6d(qpos: list[float]) -> np.ndarray:
+    pose = np.asarray(qpos, dtype=np.float32)
+    if pose.shape[0] != 6:
+        raise ValueError(f"Expected 6D xyz+rpy pose, got {pose.shape[0]}D")
+    return np.concatenate([pose[:3], euler_xyz_to_rot6d(pose[3:6])]).astype(np.float32)
+
+
+def take_or_pad(values: list[float], size: int) -> np.ndarray:
+    arr = np.asarray(values, dtype=np.float32)
+    if arr.shape[0] >= size:
+        return arr[:size]
+    return np.pad(arr, (0, size - arr.shape[0]), mode="constant").astype(np.float32)
+
+
 def build_state_action_vectors(frame: dict[str, Any], state_format: str) -> tuple[np.ndarray, np.ndarray]:
+    if state_format == "real_g1":
+        state_groups = [
+            pose6d_to_xyz_rot6d(frame["states"]["left_arm_ee"]["qpos"]),
+            pose6d_to_xyz_rot6d(frame["states"]["right_arm_ee"]["qpos"]),
+            take_or_pad(frame["states"]["left_hand"]["qpos"], 7),
+            take_or_pad(frame["states"]["right_hand"]["qpos"], 7),
+            take_or_pad(frame["states"]["left_arm"]["qpos"], 7),
+            take_or_pad(frame["states"]["right_arm"]["qpos"], 7),
+            take_or_pad(frame["states"]["body"]["qpos"], 3),
+        ]
+        action_groups = [
+            pose6d_to_xyz_rot6d(frame["actions"]["left_arm_ee"]["qpos"]),
+            pose6d_to_xyz_rot6d(frame["actions"]["right_arm_ee"]["qpos"]),
+            take_or_pad(frame["actions"]["left_hand"]["qpos"], 7),
+            take_or_pad(frame["actions"]["right_hand"]["qpos"], 7),
+            take_or_pad(frame["actions"]["left_arm"]["qpos"], 7),
+            take_or_pad(frame["actions"]["right_arm"]["qpos"], 7),
+            take_or_pad(frame["actions"]["body"]["qpos"], 3),
+            take_or_pad(frame["actions"]["body"]["qpos"], 1),
+            take_or_pad(frame["actions"]["body"]["qpos"], 3),
+        ]
+        return np.concatenate(state_groups), np.concatenate(action_groups)
+
     if state_format == "psi0":
         return (
             np.asarray(frame["states"]["psi0"]["qpos"], dtype=np.float32),
@@ -271,7 +326,30 @@ def build_info_json(
     fps = int(round(float(image_info.get("fps", 30.0))))
 
     joint_names = payload.get("info", {}).get("joint_names", {})
-    if state_format == "psi0":
+    if state_format == "real_g1":
+        state_groups = [
+            ("left_wrist_eef_9d", 9),
+            ("right_wrist_eef_9d", 9),
+            ("left_hand", 7),
+            ("right_hand", 7),
+            ("left_arm", 7),
+            ("right_arm", 7),
+            ("waist", 3),
+        ]
+        action_groups = [
+            ("left_wrist_eef_9d", 9),
+            ("right_wrist_eef_9d", 9),
+            ("left_hand", 7),
+            ("right_hand", 7),
+            ("left_arm", 7),
+            ("right_arm", 7),
+            ("waist", 3),
+            ("base_height_command", 1),
+            ("navigate_command", 3),
+        ]
+        state_names = [f"{group}_{i}.pos" for group, dim in state_groups for i in range(dim)]
+        action_names = [f"{group}_{i}.cmd" for group, dim in action_groups for i in range(dim)]
+    elif state_format == "psi0":
         state_names = [f"{name}.pos" for name in joint_names.get("psi0_state", [])]
         action_names = [f"{name}.cmd" for name in joint_names.get("psi0_action", [])]
         if not state_names:
@@ -382,7 +460,32 @@ def build_ranges(groups: list[tuple[str, int]]) -> dict[str, dict[str, int]]:
 
 
 def build_modality_json(video_keys: list[str], state_format: str) -> dict[str, Any]:
-    if state_format == "psi0":
+    if state_format == "real_g1":
+        state = build_ranges(
+            [
+                ("left_wrist_eef_9d", 9),
+                ("right_wrist_eef_9d", 9),
+                ("left_hand", 7),
+                ("right_hand", 7),
+                ("left_arm", 7),
+                ("right_arm", 7),
+                ("waist", 3),
+            ]
+        )
+        action = build_ranges(
+            [
+                ("left_wrist_eef_9d", 9),
+                ("right_wrist_eef_9d", 9),
+                ("left_hand", 7),
+                ("right_hand", 7),
+                ("left_arm", 7),
+                ("right_arm", 7),
+                ("waist", 3),
+                ("base_height_command", 1),
+                ("navigate_command", 3),
+            ]
+        )
+    elif state_format == "psi0":
         state = build_ranges(
             [
                 ("left_hand", 7),
@@ -517,9 +620,12 @@ def convert(args: argparse.Namespace) -> None:
     validate_raw_episode(payload)
 
     state_format = select_state_format(payload, args.state_format)
-    robot_type = args.robot_type or (
-        DEFAULT_PSI0_ROBOT_TYPE if state_format == "psi0" else DEFAULT_LEGACY_ROBOT_TYPE
-    )
+    default_robot_type = {
+        "real_g1": DEFAULT_REAL_G1_ROBOT_TYPE,
+        "psi0": DEFAULT_PSI0_ROBOT_TYPE,
+        "legacy": DEFAULT_LEGACY_ROBOT_TYPE,
+    }[state_format]
+    robot_type = args.robot_type or default_robot_type
     task_description = infer_task_description(payload, args.task_description)
     fps = float(payload.get("info", {}).get("image", {}).get("fps", 30.0))
     if args.max_frames is not None and args.max_frames > 0:

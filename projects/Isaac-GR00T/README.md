@@ -44,6 +44,22 @@ For local G1 recordings under `data/`, first convert raw episodes with
 open-loop checks or fine-tune with `examples/G1/g1_upper_body_config.py` as
 `NEW_EMBODIMENT`.
 
+For visual inspection of saved A1/G1 action-evaluation JSON files, render GT vs
+predicted actions with:
+
+```bash
+MUJOCO_GL=egl /home/sys01/yangky/test/nlp225/msw0418_稳定/Psi0/.venv-psi/bin/python \
+    scripts/visualize_g1_action_replay.py \
+    --input-json /home/sys01/yangky/test/humanoid_robot_long_horizon_tasks/projects/A1/outputs/g1_bimanual_handover_ep0030_base_norm_eval_50_actions.json \
+    --sample-index 0 \
+    --output-mp4 outputs/g1_visual_replay/ep0030_base_sample0000_gt_vs_pred.mp4
+```
+
+This is an offline MuJoCo replay of saved action chunks, not a closed-loop
+simulation. Closed-loop visual evaluation needs a simulator adapter that exposes
+the `REAL_G1` observation keys (`ego_view`, wrist EEF 9D, hand, arm, waist) and
+applies the returned action dictionary back to the G1 simulator.
+
 ## Excluded From Version Control
 
 - `.venv/` because it is a local environment.

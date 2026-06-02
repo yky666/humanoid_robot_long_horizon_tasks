@@ -70,10 +70,24 @@ def parse_args() -> argparse.Namespace:
         help="LeRobot dataset root used to read full-episode GT actions when --full-episode is set.",
     )
     parser.add_argument(
+        "--raw-episode-dir",
+        type=Path,
+        default=None,
+        help="Raw episode directory with data.json. Used to read full-episode 26D A1 GT actions.",
+    )
+    parser.add_argument(
         "--aggregation",
         choices=("average", "latest", "earliest"),
         default="average",
         help="How to combine overlapping saved prediction chunks in --full-episode mode.",
+    )
+    parser.add_argument(
+        "--allow-missing-pred",
+        action="store_true",
+        help=(
+            "Render full GT episode even when saved prediction chunks do not cover every "
+            "frame. Missing prediction frames are rendered with the GT pose and labeled."
+        ),
     )
     parser.add_argument(
         "--g1-xml",
@@ -143,11 +157,40 @@ def load_full_episode_actions(dataset_root: Path) -> tuple[np.ndarray, list[int]
     return actions, frame_indices
 
 
+def load_raw_episode_actions(raw_episode_dir: Path) -> tuple[np.ndarray, list[int]]:
+    data_path = raw_episode_dir / "data.json"
+    if not data_path.exists():
+        raise FileNotFoundError(f"Missing raw episode data.json: {data_path}")
+    payload = json.loads(data_path.read_text())
+    frames = payload.get("data", [])
+    if not frames:
+        raise ValueError(f"No frames found in {data_path}")
+
+    actions = []
+    frame_indices = []
+    for frame_index, frame in enumerate(frames):
+        raw_actions = frame["actions"]
+        action = np.concatenate(
+            [
+                np.asarray(raw_actions["left_arm"]["qpos"], dtype=np.float32),
+                np.asarray(raw_actions["right_arm"]["qpos"], dtype=np.float32),
+                np.asarray(raw_actions["left_ee"]["qpos"], dtype=np.float32),
+                np.asarray(raw_actions["right_ee"]["qpos"], dtype=np.float32),
+            ]
+        )
+        if action.shape[0] != 26:
+            raise ValueError(f"Expected 26D raw A1 action at frame {frame_index}, got {action.shape[0]}D")
+        actions.append(action)
+        frame_indices.append(frame_index)
+    return np.stack(actions).astype(np.float32), frame_indices
+
+
 def aggregate_saved_chunks(
     samples: list[dict],
     episode_len: int,
     action_dim: int,
     aggregation: str,
+    allow_missing_pred: bool = False,
 ) -> tuple[np.ndarray, np.ndarray]:
     pred = np.zeros((episode_len, action_dim), dtype=np.float32)
     counts = np.zeros((episode_len,), dtype=np.int32)
@@ -181,6 +224,8 @@ def aggregate_saved_chunks(
         pred[covered] /= counts[covered, None]
     if not np.all(counts > 0):
         missing = np.where(counts == 0)[0].tolist()
+        if allow_missing_pred:
+            return pred, counts
         raise ValueError(
             f"Saved chunks do not cover the full episode. Missing {len(missing)} frames, "
             f"first missing frames: {missing[:20]}. Re-run inference on every frame."
@@ -212,21 +257,31 @@ def main() -> None:
     samples = payload["samples"]
     if args.full_episode:
         dataset_root = args.dataset_root or Path(payload.get("dataset_path", ""))
-        if not dataset_root:
+        if args.raw_episode_dir is not None:
+            gt, frame_indices = load_raw_episode_actions(args.raw_episode_dir)
+        elif dataset_root:
+            gt, frame_indices = load_full_episode_actions(dataset_root)
+        else:
             raise ValueError("--dataset-root is required when input JSON lacks dataset_path")
-        gt, frame_indices = load_full_episode_actions(dataset_root)
         pred, coverage = aggregate_saved_chunks(
             samples=samples,
             episode_len=len(gt),
             action_dim=gt.shape[1],
             aggregation=args.aggregation,
+            allow_missing_pred=args.allow_missing_pred,
         )
+        covered = coverage > 0
+        pred_for_metrics = pred[covered]
+        gt_for_metrics = gt[covered]
+        pred = pred.copy()
+        pred[~covered] = gt[~covered]
         sample_label = (
             f"full_episode frames={len(gt)} chunks={len(samples)} "
+            f"covered={int(covered.sum())}/{len(gt)} "
             f"coverage={int(coverage.min())}-{int(coverage.max())}"
         )
-        mean_l1 = float(np.mean(np.abs(pred - gt)))
-        mean_mse = float(np.mean(np.square(pred - gt)))
+        mean_l1 = float(np.mean(np.abs(pred_for_metrics - gt_for_metrics)))
+        mean_mse = float(np.mean(np.square(pred_for_metrics - gt_for_metrics)))
     else:
         sample = samples[args.sample_index]
         pred = np.asarray(sample["pred_action"], dtype=np.float32)
@@ -234,6 +289,7 @@ def main() -> None:
         sample_label = f"sample={args.sample_index}"
         mean_l1 = float(sample["l1"])
         mean_mse = float(sample["mse"])
+        coverage = np.ones((len(gt),), dtype=np.int32)
     if pred.shape != gt.shape:
         raise ValueError(f"pred/gt shape mismatch: {pred.shape} vs {gt.shape}")
     if pred.shape[1] != 26:
@@ -259,9 +315,10 @@ def main() -> None:
         set_pose(model, gt_data, gt[t])
         set_pose(model, pred_data, pred[t])
         gt_frame = label(render(model, gt_renderer, gt_data), "GT")
+        pred_status = "Pred" if coverage[t] > 0 else "Pred missing; showing GT pose"
         pred_frame = label(
             render(model, pred_renderer, pred_data),
-            f"Pred  {sample_label} frame={t} L1={mean_l1:.4f} MSE={mean_mse:.4f}",
+            f"{pred_status}  {sample_label} frame={t} L1={mean_l1:.4f} MSE={mean_mse:.4f}",
         )
         frame = np.concatenate([gt_frame, pred_frame], axis=1)
         writer.write(cv2.cvtColor(frame, cv2.COLOR_RGB2BGR))

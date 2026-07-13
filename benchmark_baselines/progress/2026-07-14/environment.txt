@@ -1,0 +1,2 @@
+Linux pytorch-ng-13155124-ktk9g 5.15.0-78-th-an #29 SMP Tue Jun 10 16:15:58 CST 2025 x86_64 x86_64 x86_64 GNU/Linux
+NVIDIA A800 80GB PCIe, 25 %, 17208 MiB, 81920 MiB

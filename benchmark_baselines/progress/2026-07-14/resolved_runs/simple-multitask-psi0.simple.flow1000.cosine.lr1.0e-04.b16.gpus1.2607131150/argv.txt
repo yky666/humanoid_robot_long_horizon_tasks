@@ -1,0 +1,54 @@
+scripts/train.py
+finetune_simple_psi0_config
+--seed=292285
+--exp=simple-multitask-psi0
+--train.name=finetune
+--train.data_parallel=ddp
+--train.mixed_precision=bf16
+--train.train_batch_size=16
+--train.max_checkpoints_to_keep=3
+--train.gradient_accumulation_steps=1
+--train.learning_rate=1e-4
+--train.max_training_steps=40000
+--train.warmup_ratio=None
+--train.warmup_steps=10
+--train.checkpointing_steps=5000
+--train.validation_steps=5000
+--train.val_num_batches=2
+--train.max_grad_norm=1.0
+--train.lr_scheduler_type=cosine
+--train.lr_scheduler_kwargs.weight_decay=1e-6
+--train.lr_scheduler_kwargs.betas 0.95 0.999
+--log.report_to=wandb
+--data.root_dir=/HOME/sysu_xdliang/sysu_xdliang_1/HDD_POOL/Humanoid/yangky/Psi0/data/simple
+--data.train-repo-ids G1WholebodyBendHandoverTeleop-v0 G1WholebodyBendPickAndPlaceTeleop-v0 G1WholebodyBendPickMP-v0 G1WholebodyBendPickSimToRealTeleop-v0 G1WholebodyBendPickTeleop-v0 G1WholebodyCloseDoorTeleop-v0 G1WholebodyHandoverTeleop-v0 G1WholebodyLocomotionPickBetweenTablesTeleop-v0 G1WholebodyOpenFaucetTeleop-v0 G1WholebodyOpenOvenTeleop-v0 G1WholebodyOpenTrashCanTeleop-v0 G1WholebodyPickAndPlaceAndHugContainerTeleop-v0 G1WholebodyPushOfficeChairTeleop-v0 G1WholebodyTabletopGraspMP-v0 G1WholebodyXMoveBendPickMP-v0 G1WholebodyXMoveBendPickTeleop-v0 G1WholebodyXMovePickTeleop-v0
+--data.val-repo-ids G1WholebodyBendHandoverTeleop-v0 G1WholebodyBendPickAndPlaceTeleop-v0 G1WholebodyBendPickMP-v0 G1WholebodyBendPickSimToRealTeleop-v0 G1WholebodyBendPickTeleop-v0 G1WholebodyCloseDoorTeleop-v0 G1WholebodyHandoverTeleop-v0 G1WholebodyLocomotionPickBetweenTablesTeleop-v0 G1WholebodyOpenFaucetTeleop-v0 G1WholebodyOpenOvenTeleop-v0 G1WholebodyOpenTrashCanTeleop-v0 G1WholebodyPickAndPlaceAndHugContainerTeleop-v0 G1WholebodyPushOfficeChairTeleop-v0 G1WholebodyTabletopGraspMP-v0 G1WholebodyXMoveBendPickMP-v0 G1WholebodyXMoveBendPickTeleop-v0 G1WholebodyXMovePickTeleop-v0
+--data.transform.repack.pad-action-dim=36
+--data.transform.repack.pad-state-dim=36
+--data.transform.field.stat-path=/HOME/sysu_xdliang/sysu_xdliang_1/HDD_POOL/Humanoid/yangky/baseline_experiments/state/simple_multitask_stats.json
+--data.transform.field.stat-action-key=action
+--data.transform.field.stat-state-key=states
+--data.transform.field.action_norm_type=bounds
+--data.transform.field.no-use-norm-mask
+--data.transform.field.normalize-state
+--data.transform.field.pad-action-dim=36
+--data.transform.field.pad-state-dim=36
+--data.transform.model.img-aug
+--data.transform.model.resize.size 180 320
+--data.transform.model.center_crop.size 180 320
+--model.model_name_or_path=/HOME/sysu_xdliang/sysu_xdliang_1/HDD_POOL/Humanoid/yangky/Psi0/cache/checkpoints/psi0/pre.fast.1by1.2601091803.ckpt.ego200k.he30k
+--model.pretrained-action-header-path=/HOME/sysu_xdliang/sysu_xdliang_1/HDD_POOL/Humanoid/yangky/Psi0/cache/checkpoints/psi0/postpre.1by1.pad36.2601131206.ckpt.he30k
+--model.noise-scheduler=flow
+--model.train-diffusion-steps=1000
+--model.n_conditions=0
+--model.action-chunk-size=30
+--model.action-dim=36
+--model.action-exec-horizon=30
+--model.observation-horizon=1
+--model.odim=36
+--model.view_feature_dim=2048
+--model.no-tune-vlm
+--model.no-use_film
+--model.no-combined_temb
+--model.rtc
+--model.max-delay=8

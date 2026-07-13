@@ -1,0 +1,27 @@
+[2026-07-13T11:10:39+00:00] bootstrap started
+[2026-07-13T11:10:39+00:00] SIMPLE data download attempt after 0s
+Fetching 17 files:   0%|          | 0/17 [00:00<?, ?it/s]Still waiting to acquire lock on /HOME/sysu_xdliang/sysu_xdliang_1/HDD_POOL/Humanoid/yangky/Psi0/data/.cache/huggingface/.gitignore.lock (elapsed: 0.1 seconds)
+Still waiting to acquire lock on /HOME/sysu_xdliang/sysu_xdliang_1/HDD_POOL/Humanoid/yangky/Psi0/data/.cache/huggingface/.gitignore.lock (elapsed: 0.1 seconds)
+Still waiting to acquire lock on /HOME/sysu_xdliang/sysu_xdliang_1/HDD_POOL/Humanoid/yangky/Psi0/data/.cache/huggingface/.gitignore.lock (elapsed: 0.1 seconds)
+Still waiting to acquire lock on /HOME/sysu_xdliang/sysu_xdliang_1/HDD_POOL/Humanoid/yangky/Psi0/data/.cache/huggingface/.gitignore.lock (elapsed: 0.1 seconds)
+Fetching 17 files:   6%|▌         | 1/17 [00:27<07:13, 27.08s/it]Fetching 17 files:  12%|█▏        | 2/17 [00:37<04:15, 17.03s/it]Fetching 17 files:  35%|███▌      | 6/17 [00:52<01:15,  6.86s/it]Fetching 17 files:  65%|██████▍   | 11/17 [00:53<00:18,  3.07s/it]Fetching 17 files: 100%|██████████| 17/17 [00:54<00:00,  3.18s/it]
+[32m✓ Downloaded[0m
+  path: /XYAIFS00/HDD_POOL/sysu_xdliang/sysu_xdliang_1/Humanoid/yangky/Psi0/data
+[2026-07-13T11:11:34+00:00] extracting /HOME/sysu_xdliang/sysu_xdliang_1/HDD_POOL/Humanoid/yangky/Psi0/data/simple/G1WholebodyBendPickSimToRealTeleop-v0.zip
+[2026-07-13T11:11:35+00:00] extracting /HOME/sysu_xdliang/sysu_xdliang_1/HDD_POOL/Humanoid/yangky/Psi0/data/simple/G1WholebodyBendHandoverTeleop-v0.zip
+[2026-07-13T11:11:37+00:00] extracting /HOME/sysu_xdliang/sysu_xdliang_1/HDD_POOL/Humanoid/yangky/Psi0/data/simple/G1WholebodyOpenFaucetTeleop-v0.zip
+[2026-07-13T11:11:38+00:00] extracting /HOME/sysu_xdliang/sysu_xdliang_1/HDD_POOL/Humanoid/yangky/Psi0/data/simple/G1WholebodyHandoverTeleop-v0.zip
+[2026-07-13T11:11:39+00:00] extracting /HOME/sysu_xdliang/sysu_xdliang_1/HDD_POOL/Humanoid/yangky/Psi0/data/simple/G1WholebodyXMoveBendPickTeleop-v0.zip
+[2026-07-13T11:11:40+00:00] extracting /HOME/sysu_xdliang/sysu_xdliang_1/HDD_POOL/Humanoid/yangky/Psi0/data/simple/G1WholebodyBendPickMP-v0.zip
+[2026-07-13T11:11:41+00:00] extracting /HOME/sysu_xdliang/sysu_xdliang_1/HDD_POOL/Humanoid/yangky/Psi0/data/simple/G1WholebodyOpenTrashCanTeleop-v0.zip
+[2026-07-13T11:11:42+00:00] extracting /HOME/sysu_xdliang/sysu_xdliang_1/HDD_POOL/Humanoid/yangky/Psi0/data/simple/G1WholebodyTabletopGraspMP-v0.zip
+[2026-07-13T11:11:43+00:00] extracting /HOME/sysu_xdliang/sysu_xdliang_1/HDD_POOL/Humanoid/yangky/Psi0/data/simple/G1WholebodyCloseDoorTeleop-v0.zip
+[2026-07-13T11:11:44+00:00] extracting /HOME/sysu_xdliang/sysu_xdliang_1/HDD_POOL/Humanoid/yangky/Psi0/data/simple/G1WholebodyBendPickAndPlaceTeleop-v0.zip
+[2026-07-13T11:11:45+00:00] extracting /HOME/sysu_xdliang/sysu_xdliang_1/HDD_POOL/Humanoid/yangky/Psi0/data/simple/G1WholebodyOpenOvenTeleop-v0.zip
+[2026-07-13T11:11:46+00:00] extracting /HOME/sysu_xdliang/sysu_xdliang_1/HDD_POOL/Humanoid/yangky/Psi0/data/simple/G1WholebodyXMovePickTeleop-v0.zip
+[2026-07-13T11:11:47+00:00] extracting /HOME/sysu_xdliang/sysu_xdliang_1/HDD_POOL/Humanoid/yangky/Psi0/data/simple/G1WholebodyBendPickTeleop-v0.zip
+[2026-07-13T11:11:48+00:00] extracting /HOME/sysu_xdliang/sysu_xdliang_1/HDD_POOL/Humanoid/yangky/Psi0/data/simple/G1WholebodyPickAndPlaceAndHugContainerTeleop-v0.zip
+[2026-07-13T11:11:49+00:00] extracting /HOME/sysu_xdliang/sysu_xdliang_1/HDD_POOL/Humanoid/yangky/Psi0/data/simple/G1WholebodyXMoveBendPickMP-v0.zip
+[2026-07-13T11:11:51+00:00] extracting /HOME/sysu_xdliang/sysu_xdliang_1/HDD_POOL/Humanoid/yangky/Psi0/data/simple/G1WholebodyPushOfficeChairTeleop-v0.zip
+[2026-07-13T11:11:52+00:00] extracting /HOME/sysu_xdliang/sysu_xdliang_1/HDD_POOL/Humanoid/yangky/Psi0/data/simple/G1WholebodyLocomotionPickBetweenTablesTeleop-v0.zip
+[2026-07-13T11:11:55+00:00] bootstrap completed

@@ -1,27 +1,33 @@
 {
+  "model_run": "psi0_simple",
+  "status": "full_complete",
   "source_log": "/HOME/sysu_xdliang/sysu_xdliang_1/HDD_POOL/Humanoid/yangky/baseline_experiments/logs/psi0_simple_full.log",
-  "num_logged_steps": 33495,
-  "first_step": 1,
-  "latest_step": 33495,
+  "updated_at_utc": "2026-07-13T22:19:17.251935+00:00",
+  "num_logged_steps": 40000,
+  "first_step": 0,
+  "latest_step": 40000,
   "total_steps": 40000,
-  "latest_progress_percent_from_log": 84,
-  "computed_progress_percent": 83.74,
-  "latest_loss": 0.336,
-  "latest_lr": 6.4e-06,
-  "min_loss": 0.0606,
+  "computed_progress_percent": 100.0,
+  "latest_loss": 0.375,
+  "latest_lr": 0.0,
+  "min_loss": 0.0527,
   "max_loss": 36.4,
-  "mean_loss": 0.9123227436930885,
-  "median_loss": 0.619,
-  "last_100_mean_loss": 0.47930999999999996,
-  "last_500_mean_loss": 0.47598039999999997,
+  "mean_loss": 0.83689086,
+  "median_loss": 0.563,
+  "last_100_mean_loss": 0.447421,
+  "last_500_mean_loss": 0.433983,
   "checkpoints_observed": [
+    5000,
     10000,
+    15000,
     20000,
     25000,
-    30000
+    30000,
+    35000,
+    40000
   ],
   "notes": [
-    "Parsed from tqdm training log; W&B run is offline on remote.",
+    "Parsed from tqdm training log; W&B run may be offline on remote.",
     "This is training progress, not simulator success-rate evaluation."
   ]
 }

@@ -1,0 +1,71 @@
+{
+  "updated_at_utc": "2026-07-13T22:19:17.436119+00:00",
+  "remote_root": "/HOME/sysu_xdliang/sysu_xdliang_1/HDD_POOL/Humanoid/yangky",
+  "statuses": {
+    "act_simple.status": "smoke_failed",
+    "bootstrap_assets.status": "ready",
+    "bootstrap_models.status": "ready",
+    "diffusion_policy_simple.status": "full_running",
+    "psi0_simple.status": "full_complete",
+    "simple_install.status": "install_failed"
+  },
+  "runs": {
+    "psi0_simple": {
+      "model_run": "psi0_simple",
+      "status": "full_complete",
+      "source_log": "/HOME/sysu_xdliang/sysu_xdliang_1/HDD_POOL/Humanoid/yangky/baseline_experiments/logs/psi0_simple_full.log",
+      "updated_at_utc": "2026-07-13T22:19:17.251935+00:00",
+      "num_logged_steps": 40000,
+      "first_step": 0,
+      "latest_step": 40000,
+      "total_steps": 40000,
+      "computed_progress_percent": 100.0,
+      "latest_loss": 0.375,
+      "latest_lr": 0.0,
+      "min_loss": 0.0527,
+      "max_loss": 36.4,
+      "mean_loss": 0.83689086,
+      "median_loss": 0.563,
+      "last_100_mean_loss": 0.447421,
+      "last_500_mean_loss": 0.433983,
+      "checkpoints_observed": [
+        5000,
+        10000,
+        15000,
+        20000,
+        25000,
+        30000,
+        35000,
+        40000
+      ],
+      "notes": [
+        "Parsed from tqdm training log; W&B run may be offline on remote.",
+        "This is training progress, not simulator success-rate evaluation."
+      ]
+    },
+    "diffusion_policy_simple": {
+      "model_run": "diffusion_policy_simple",
+      "status": "full_running",
+      "source_log": "/HOME/sysu_xdliang/sysu_xdliang_1/HDD_POOL/Humanoid/yangky/baseline_experiments/logs/diffusion_policy_simple_full.log",
+      "updated_at_utc": "2026-07-13T22:19:17.432419+00:00",
+      "num_logged_steps": 2089,
+      "first_step": 0,
+      "latest_step": 2089,
+      "total_steps": 40000,
+      "computed_progress_percent": 5.22,
+      "latest_loss": 0.0931,
+      "latest_lr": 9.9e-05,
+      "min_loss": 0.0327,
+      "max_loss": 1.22,
+      "mean_loss": 0.19341833413116324,
+      "median_loss": 0.0874,
+      "last_100_mean_loss": 0.054799,
+      "last_500_mean_loss": 0.0589342,
+      "checkpoints_observed": [],
+      "notes": [
+        "Parsed from tqdm training log; W&B run may be offline on remote.",
+        "This is training progress, not simulator success-rate evaluation."
+      ]
+    }
+  }
+}

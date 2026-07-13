@@ -1,0 +1,42 @@
+{
+  "remote_root": "/HOME/sysu_xdliang/sysu_xdliang_1/HDD_POOL/Humanoid/yangky",
+  "seeds": [0, 1, 2],
+  "models": [
+    "psi0",
+    "pi0.5",
+    "rldx-1",
+    "egovla",
+    "gr00t-n1.6",
+    "gr00t-n1.7",
+    "abot-m0.5",
+    "act",
+    "diffusion-policy"
+  ],
+  "upstream_status": {
+    "psi0": "public_training_code",
+    "pi0.5": "public_training_code",
+    "rldx-1": "public_training_code_and_multidataset_cli",
+    "egovla": "public_training_code",
+    "gr00t-n1.6": "public_training_code",
+    "gr00t-n1.7": "public_training_code_and_mixture_loader",
+    "abot-m0.5": "upstream_readme_says_code_and_weights_coming_soon",
+    "act": "public_training_code",
+    "diffusion-policy": "public_training_code"
+  },
+  "benchmarks": {
+    "simple": {
+      "sampling": "uniform_by_task",
+      "single_checkpoint": true,
+      "task_discovery": "released_zip_manifest"
+    },
+    "dexjoco": {
+      "root": "/HOME/sysu_xdliang/sysu_xdliang_1/HDD_POOL/linmin/datasets/DexJoCo-Datasets-LeRobot/dexjoco_lerobot_datasets",
+      "sampling": "uniform_by_task",
+      "single_checkpoint": true,
+      "expected_tasks": 11,
+      "action_dim": 44,
+      "state_dim": 46,
+      "pad_and_mask_single_arm": true
+    }
+  }
+}

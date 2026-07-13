@@ -1,0 +1,482 @@
+combined 17 task statistics into /HOME/sysu_xdliang/sysu_xdliang_1/HDD_POOL/Humanoid/yangky/baseline_experiments/state/simple_multitask_stats.json
+[11:41:17 07/13] INFO     | >> [*] === Environment Variables ===    train.py:335
+                 INFO     | >> [*] OMP_NUM_THREADS: 16              train.py:345
+                 INFO     | >> [*] HF_HOME:                         train.py:345
+                          /HOME/sysu_xdliang/sysu_xdliang_1/HDD_POO             
+                          L/Humanoid/yangky/Psi0/cache                          
+                 INFO     | >> [*] TORCH_HOME:                      train.py:345
+                          /HOME/sysu_xdliang/sysu_xdliang_1/HDD_POO             
+                          L/Humanoid/yangky/Psi0/cache                          
+                 INFO     | >> [*] HF_TOKEN:                        train.py:345
+                 INFO     | >> [*] HF_LEROBOT_HOME:                 train.py:345
+                          /HOME/sysu_xdliang/sysu_xdliang_1/HDD_POO             
+                          L/Humanoid/yangky/Psi0/data/lerobot                   
+                 INFO     | >> [*] DATA_HOME:                       train.py:345
+                          /HOME/sysu_xdliang/sysu_xdliang_1/HDD_POO             
+                          L/Humanoid/yangky/Psi0/data                           
+                 INFO     | >> [*] UV_CACHE_DIR:                    train.py:345
+                          /HOME/sysu_xdliang/sysu_xdliang_1/HDD_POO             
+                          L/Humanoid/yangky/Psi0/cache/uv                       
+                 INFO     | >> [*] WANDB_API_KEY:                   train.py:345
+                 INFO     | >> [*]                                  train.py:345
+                          PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION:               
+                          python                                                
+                 INFO     | >> [*] CUDA_VISIBLE_DEVICES: 0          train.py:345
+                 INFO     | >> [*] WORLD_SIZE: 1                    train.py:345
+                 INFO     | >> [*] LOCAL_WORLD_SIZE: 1              train.py:345
+                 INFO     | >> [*] RANK: 0                          train.py:345
+                 INFO     | >> [*] LOCAL_RANK: 0                    train.py:345
+                 INFO     | >> [*] MASTER_ADDR:                     train.py:345
+                          pytorch-ng-13155124-ktk9g                             
+                 INFO     | >> [*] MASTER_PORT: 33475               train.py:345
+                 INFO     | >> [*] Parsing configuration...         train.py:351
+[11:41:19 07/13] INFO     | >> [*] Config parsing took 2.16s        train.py:363
+                 INFO     | >> [*] Seed everything with 292285      train.py:174
+[11:41:22 07/13] INFO     | >> [*] Initialize models ...            train.py:178
+[11:41:23 07/13] INFO     | >> [*] Load pretrained VLM model from finetune.py:98
+                          /HOME/sysu_xdliang/sysu_xdliang_1/HDD_P               
+                          OOL/Humanoid/yangky/Psi0/cache/checkpoi               
+                          nts/psi0/pre.fast.1by1.2601091803.ckpt.               
+                          ego200k.he30k                                         
+[11:41:27 07/13] INFO     | >> [*] Total ActionTransformerModel     psi0.py:1510
+                          parameters: 497,719,256                               
+                 INFO     | >> [*] Total VLM Backbone parameters:   psi0.py:1514
+                          2,131,333,120                                         
+                 INFO     | >> [*] Loading pretrained action     finetune.py:129
+                          header from                                           
+                          /HOME/sysu_xdliang/sysu_xdliang_1/HDD_                
+                          POOL/Humanoid/yangky/Psi0/cache/checkp                
+                          oints/psi0/postpre.1by1.pad36.26011312                
+                          06.ckpt.he30k                                         
+[11:41:29 07/13] WARNING  | >> [*] action header size mismatch,  finetune.py:131
+                          only loaded transformer blocks.                       
+                 INFO     | >> [*] loaded pretrained action      finetune.py:134
+                          header successfully.                                  
+                 INFO     | >> [*] VLM parameters are frozen     finetune.py:147
+                          (tune_vlm=False)                                      
+                 INFO     | >> [*] Model has 490,039,128         finetune.py:159
+                          trainable parameters                                  
+wandb: WARNING `resume` will be ignored since W&B syncing is set to `offline`. Starting a new run with run id 3rmvuplc.
+wandb: Tracking run with wandb version 0.25.0
+wandb: W&B syncing is set to `offline` in this directory. Run `wandb online` or set WANDB_MODE=online to enable cloud syncing.
+wandb: Run data is saved locally in /XYAIFS00/HDD_POOL/sysu_xdliang/sysu_xdliang_1/Humanoid/yangky/Psi0/.runs/finetune/simple-multitask-psi0-smoke.simple.flow1000.cosine.lr1.0e-04.b16.gpus1.2607131141/wandb/offline-run-20260713_114129-3rmvuplc
+[11:41:31 07/13] INFO     | >> [*] Saved configuration to           train.py:128
+                          .runs/finetune/simple-multitask-psi0-smok             
+                          e.simple.flow1000.cosine.lr1.0e-04.b16.gp             
+                          us1.2607131141                                        
+                 INFO     | >> [*] Training configurations:         train.py:181
+                 INFO     | >>     |=> training task: 'finetune'    train.py:182
+                 INFO     | >>     |=> run name:                    train.py:183
+                          simple-multitask-psi0-smoke.simple.flow10             
+                          00.cosine.lr1.0e-04.b16.gpus1.2607131141              
+                 INFO     | >>     |=> seed: 292285                 train.py:184
+                 INFO     | >>     |=> mixed precision:             train.py:185
+                          torch.bfloat16                                        
+                 INFO     | >>     |=> warmup steps: 10             train.py:186
+                 INFO     | >>     |=> validation steps: 20         train.py:187
+                 INFO     | >>     |=> checkpoint steps: 20         train.py:188
+                 INFO     | >>     |=> max gradient norm: 1.0       train.py:189
+[11:41:33 07/13] INFO     | >> PyTorch version 2.7.0 available.     config.py:54
+Downloading data:   0%|          | 0/96 [00:00<?, ?files/s]Downloading data: 100%|██████████| 96/96 [00:00<00:00, 204288.78files/s]
+Generating train split: 0 examples [00:00, ? examples/s]Generating train split: 13124 examples [00:00, 122006.52 examples/s]Generating train split: 31256 examples [00:00, 120478.60 examples/s]Generating train split: 38418 examples [00:00, 120653.62 examples/s]
+Downloading data:   0%|          | 0/94 [00:00<?, ?files/s]Downloading data: 100%|██████████| 94/94 [00:00<00:00, 101015.78files/s]
+Generating train split: 0 examples [00:00, ? examples/s]Generating train split: 13594 examples [00:00, 128248.23 examples/s]Generating train split: 27035 examples [00:00, 128624.14 examples/s]Generating train split: 40068 examples [00:00, 127165.71 examples/s]Generating train split: 43641 examples [00:00, 127406.39 examples/s]
+Downloading data:   0%|          | 0/100 [00:00<?, ?files/s]Downloading data: 100%|██████████| 100/100 [00:00<00:00, 144880.97files/s]
+Generating train split: 0 examples [00:00, ? examples/s]Generating train split: 6977 examples [00:00, 68752.78 examples/s]Generating train split: 14267 examples [00:00, 52457.07 examples/s]Generating train split: 15509 examples [00:00, 53887.48 examples/s]
+Downloading data:   0%|          | 0/99 [00:00<?, ?files/s]Downloading data: 100%|██████████| 99/99 [00:00<00:00, 84586.70files/s]
+Generating train split: 0 examples [00:00, ? examples/s]Generating train split: 10084 examples [00:00, 96911.69 examples/s]Generating train split: 21618 examples [00:00, 85282.84 examples/s]Generating train split: 21618 examples [00:00, 86277.08 examples/s]
+Downloading data:   0%|          | 0/97 [00:00<?, ?files/s]Downloading data: 100%|██████████| 97/97 [00:00<00:00, 97988.32files/s]
+Generating train split: 0 examples [00:00, ? examples/s]Generating train split: 6863 examples [00:00, 66943.98 examples/s]Generating train split: 13699 examples [00:00, 66791.34 examples/s]Generating train split: 17623 examples [00:00, 67251.22 examples/s]
+Downloading data:   0%|          | 0/99 [00:00<?, ?files/s]Downloading data: 100%|██████████| 99/99 [00:00<00:00, 139763.08files/s]
+Generating train split: 0 examples [00:00, ? examples/s]Generating train split: 7003 examples [00:00, 63941.01 examples/s]Generating train split: 16048 examples [00:00, 59501.43 examples/s]Generating train split: 22539 examples [00:00, 59644.21 examples/s]Generating train split: 28906 examples [00:00, 60229.91 examples/s]Generating train split: 29601 examples [00:00, 59271.13 examples/s]
+Downloading data:   0%|          | 0/100 [00:00<?, ?files/s]Downloading data: 100%|██████████| 100/100 [00:00<00:00, 62564.20files/s]
+Generating train split: 0 examples [00:00, ? examples/s]Generating train split: 9711 examples [00:00, 91135.64 examples/s]Generating train split: 23095 examples [00:00, 85705.43 examples/s]Generating train split: 35067 examples [00:00, 80989.88 examples/s]Generating train split: 43943 examples [00:00, 81778.24 examples/s]Generating train split: 45530 examples [00:00, 81106.79 examples/s]
+Downloading data:   0%|          | 0/99 [00:00<?, ?files/s]Downloading data: 100%|██████████| 99/99 [00:00<00:00, 268587.38files/s]
+Generating train split: 0 examples [00:00, ? examples/s]Generating train split: 16317 examples [00:00, 152916.99 examples/s]Generating train split: 37799 examples [00:00, 138040.28 examples/s]Generating train split: 58250 examples [00:00, 134004.36 examples/s]Generating train split: 62764 examples [00:00, 134012.48 examples/s]
+Downloading data:   0%|          | 0/99 [00:00<?, ?files/s]Downloading data: 100%|██████████| 99/99 [00:00<00:00, 127451.23files/s]
+Generating train split: 0 examples [00:00, ? examples/s]Generating train split: 5562 examples [00:00, 53208.59 examples/s]Generating train split: 12316 examples [00:00, 58060.00 examples/s]Generating train split: 18868 examples [00:00, 60820.58 examples/s]Generating train split: 26253 examples [00:00, 64666.25 examples/s]Generating train split: 33541 examples [00:00, 65294.98 examples/s]Generating train split: 35808 examples [00:00, 62813.83 examples/s]
+Downloading data:   0%|          | 0/99 [00:00<?, ?files/s]Downloading data: 100%|██████████| 99/99 [00:00<00:00, 99648.69files/s]
+Generating train split: 0 examples [00:00, ? examples/s]Generating train split: 9754 examples [00:00, 95433.16 examples/s]Generating train split: 19573 examples [00:00, 94040.32 examples/s]Generating train split: 33289 examples [00:00, 90936.05 examples/s]Generating train split: 34713 examples [00:00, 90212.47 examples/s]
+Downloading data:   0%|          | 0/99 [00:00<?, ?files/s]Downloading data: 100%|██████████| 99/99 [00:00<00:00, 83683.21files/s]
+Generating train split: 0 examples [00:00, ? examples/s]Generating train split: 5792 examples [00:00, 55804.45 examples/s]Generating train split: 12643 examples [00:00, 47868.52 examples/s]Generating train split: 21068 examples [00:00, 60309.18 examples/s]Generating train split: 28765 examples [00:00, 64301.83 examples/s]Generating train split: 32285 examples [00:00, 60183.09 examples/s]
+Downloading data:   0%|          | 0/94 [00:00<?, ?files/s]Downloading data: 100%|██████████| 94/94 [00:00<00:00, 83636.95files/s]
+Generating train split: 0 examples [00:00, ? examples/s]Generating train split: 13144 examples [00:00, 123836.84 examples/s]Generating train split: 31343 examples [00:00, 116644.13 examples/s]Generating train split: 42688 examples [00:00, 110478.31 examples/s]
+Downloading data:   0%|          | 0/99 [00:00<?, ?files/s]Downloading data: 100%|██████████| 99/99 [00:00<00:00, 63259.61files/s]
+Generating train split: 0 examples [00:00, ? examples/s]Generating train split: 8771 examples [00:00, 83627.31 examples/s]Generating train split: 17580 examples [00:00, 84138.36 examples/s]Generating train split: 26865 examples [00:00, 87733.54 examples/s]Generating train split: 31679 examples [00:00, 83553.60 examples/s]
+Downloading data:   0%|          | 0/100 [00:00<?, ?files/s]Downloading data: 100%|██████████| 100/100 [00:00<00:00, 119359.82files/s]
+Generating train split: 0 examples [00:00, ? examples/s]Generating train split: 3910 examples [00:00, 37250.61 examples/s]Generating train split: 9419 examples [00:00, 36359.61 examples/s]Generating train split: 12226 examples [00:00, 32285.94 examples/s]
+Downloading data:   0%|          | 0/100 [00:00<?, ?files/s]Downloading data: 100%|██████████| 100/100 [00:00<00:00, 127408.99files/s]
+Generating train split: 0 examples [00:00, ? examples/s]Generating train split: 11266 examples [00:00, 108337.51 examples/s]Generating train split: 22855 examples [00:00, 109793.24 examples/s]Generating train split: 32193 examples [00:00, 110225.41 examples/s]
+Downloading data:   0%|          | 0/100 [00:00<?, ?files/s]Downloading data: 100%|██████████| 100/100 [00:00<00:00, 80443.11files/s]
+Generating train split: 0 examples [00:00, ? examples/s]Generating train split: 5559 examples [00:00, 52519.50 examples/s]Generating train split: 11646 examples [00:00, 55041.41 examples/s]Generating train split: 17362 examples [00:00, 54327.49 examples/s]Generating train split: 23664 examples [00:00, 56828.19 examples/s]Generating train split: 23664 examples [00:00, 55242.52 examples/s]
+Downloading data:   0%|          | 0/99 [00:00<?, ?files/s]Downloading data: 100%|██████████| 99/99 [00:00<00:00, 100225.95files/s]
+Generating train split: 0 examples [00:00, ? examples/s]Generating train split: 8377 examples [00:00, 80911.19 examples/s]Generating train split: 20133 examples [00:00, 77252.26 examples/s]Generating train split: 20704 examples [00:00, 76564.46 examples/s]
+[11:41:55 07/13] WARNING  | >> keys set() of             lerobot_dataset.py:1104
+                          G1WholebodyBendHandoverTeleop-                        
+                          v0 were disabled as they are                          
+                          not contained in all the other                        
+                          datasets.                                             
+                 WARNING  | >> keys set() of             lerobot_dataset.py:1104
+                          G1WholebodyBendPickAndPlaceTel                        
+                          eop-v0 were disabled as they                          
+                          are not contained in all the                          
+                          other datasets.                                       
+                 WARNING  | >> keys set() of             lerobot_dataset.py:1104
+                          G1WholebodyBendPickMP-v0 were                         
+                          disabled as they are not                              
+                          contained in all the other                            
+                          datasets.                                             
+                 WARNING  | >> keys set() of             lerobot_dataset.py:1104
+                          G1WholebodyBendPickSimToRealTe                        
+                          leop-v0 were disabled as they                         
+                          are not contained in all the                          
+                          other datasets.                                       
+                 WARNING  | >> keys set() of             lerobot_dataset.py:1104
+                          G1WholebodyBendPickTeleop-v0                          
+                          were disabled as they are not                         
+                          contained in all the other                            
+                          datasets.                                             
+                 WARNING  | >> keys set() of             lerobot_dataset.py:1104
+                          G1WholebodyCloseDoorTeleop-v0                         
+                          were disabled as they are not                         
+                          contained in all the other                            
+                          datasets.                                             
+                 WARNING  | >> keys set() of             lerobot_dataset.py:1104
+                          G1WholebodyHandoverTeleop-v0                          
+                          were disabled as they are not                         
+                          contained in all the other                            
+                          datasets.                                             
+                 WARNING  | >> keys set() of             lerobot_dataset.py:1104
+                          G1WholebodyLocomotionPickBetwe                        
+                          enTablesTeleop-v0 were                                
+                          disabled as they are not                              
+                          contained in all the other                            
+                          datasets.                                             
+                 WARNING  | >> keys set() of             lerobot_dataset.py:1104
+                          G1WholebodyOpenFaucetTeleop-v0                        
+                          were disabled as they are not                         
+                          contained in all the other                            
+                          datasets.                                             
+                 WARNING  | >> keys set() of             lerobot_dataset.py:1104
+                          G1WholebodyOpenOvenTeleop-v0                          
+                          were disabled as they are not                         
+                          contained in all the other                            
+                          datasets.                                             
+                 WARNING  | >> keys set() of             lerobot_dataset.py:1104
+                          G1WholebodyOpenTrashCanTeleop-                        
+                          v0 were disabled as they are                          
+                          not contained in all the other                        
+                          datasets.                                             
+                 WARNING  | >> keys set() of             lerobot_dataset.py:1104
+                          G1WholebodyPickAndPlaceAndHugC                        
+                          ontainerTeleop-v0 were                                
+                          disabled as they are not                              
+                          contained in all the other                            
+                          datasets.                                             
+                 WARNING  | >> keys set() of             lerobot_dataset.py:1104
+                          G1WholebodyPushOfficeChairTele                        
+                          op-v0 were disabled as they                           
+                          are not contained in all the                          
+                          other datasets.                                       
+                 WARNING  | >> keys set() of             lerobot_dataset.py:1104
+                          G1WholebodyTabletopGraspMP-v0                         
+                          were disabled as they are not                         
+                          contained in all the other                            
+                          datasets.                                             
+                 WARNING  | >> keys set() of             lerobot_dataset.py:1104
+                          G1WholebodyXMoveBendPickMP-v0                         
+                          were disabled as they are not                         
+                          contained in all the other                            
+                          datasets.                                             
+                 WARNING  | >> keys set() of             lerobot_dataset.py:1104
+                          G1WholebodyXMoveBendPickTeleop                        
+                          -v0 were disabled as they are                         
+                          not contained in all the other                        
+                          datasets.                                             
+                 WARNING  | >> keys set() of             lerobot_dataset.py:1104
+                          G1WholebodyXMovePickTeleop-v0                         
+                          were disabled as they are not                         
+                          contained in all the other                            
+                          datasets.                                             
+[11:42:06 07/13] WARNING  | >> keys set() of             lerobot_dataset.py:1104
+                          G1WholebodyBendHandoverTeleop-                        
+                          v0 were disabled as they are                          
+                          not contained in all the other                        
+                          datasets.                                             
+                 WARNING  | >> keys set() of             lerobot_dataset.py:1104
+                          G1WholebodyBendPickAndPlaceTel                        
+                          eop-v0 were disabled as they                          
+                          are not contained in all the                          
+                          other datasets.                                       
+                 WARNING  | >> keys set() of             lerobot_dataset.py:1104
+                          G1WholebodyBendPickMP-v0 were                         
+                          disabled as they are not                              
+                          contained in all the other                            
+                          datasets.                                             
+                 WARNING  | >> keys set() of             lerobot_dataset.py:1104
+                          G1WholebodyBendPickSimToRealTe                        
+                          leop-v0 were disabled as they                         
+                          are not contained in all the                          
+                          other datasets.                                       
+                 WARNING  | >> keys set() of             lerobot_dataset.py:1104
+                          G1WholebodyBendPickTeleop-v0                          
+                          were disabled as they are not                         
+                          contained in all the other                            
+                          datasets.                                             
+                 WARNING  | >> keys set() of             lerobot_dataset.py:1104
+                          G1WholebodyCloseDoorTeleop-v0                         
+                          were disabled as they are not                         
+                          contained in all the other                            
+                          datasets.                                             
+                 WARNING  | >> keys set() of             lerobot_dataset.py:1104
+                          G1WholebodyHandoverTeleop-v0                          
+                          were disabled as they are not                         
+                          contained in all the other                            
+                          datasets.                                             
+                 WARNING  | >> keys set() of             lerobot_dataset.py:1104
+                          G1WholebodyLocomotionPickBetwe                        
+                          enTablesTeleop-v0 were                                
+                          disabled as they are not                              
+                          contained in all the other                            
+                          datasets.                                             
+                 WARNING  | >> keys set() of             lerobot_dataset.py:1104
+                          G1WholebodyOpenFaucetTeleop-v0                        
+                          were disabled as they are not                         
+                          contained in all the other                            
+                          datasets.                                             
+                 WARNING  | >> keys set() of             lerobot_dataset.py:1104
+                          G1WholebodyOpenOvenTeleop-v0                          
+                          were disabled as they are not                         
+                          contained in all the other                            
+                          datasets.                                             
+                 WARNING  | >> keys set() of             lerobot_dataset.py:1104
+                          G1WholebodyOpenTrashCanTeleop-                        
+                          v0 were disabled as they are                          
+                          not contained in all the other                        
+                          datasets.                                             
+                 WARNING  | >> keys set() of             lerobot_dataset.py:1104
+                          G1WholebodyPickAndPlaceAndHugC                        
+                          ontainerTeleop-v0 were                                
+                          disabled as they are not                              
+                          contained in all the other                            
+                          datasets.                                             
+                 WARNING  | >> keys set() of             lerobot_dataset.py:1104
+                          G1WholebodyPushOfficeChairTele                        
+                          op-v0 were disabled as they                           
+                          are not contained in all the                          
+                          other datasets.                                       
+                 WARNING  | >> keys set() of             lerobot_dataset.py:1104
+                          G1WholebodyTabletopGraspMP-v0                         
+                          were disabled as they are not                         
+                          contained in all the other                            
+                          datasets.                                             
+                 WARNING  | >> keys set() of             lerobot_dataset.py:1104
+                          G1WholebodyXMoveBendPickMP-v0                         
+                          were disabled as they are not                         
+                          contained in all the other                            
+                          datasets.                                             
+                 WARNING  | >> keys set() of             lerobot_dataset.py:1104
+                          G1WholebodyXMoveBendPickTeleop                        
+                          -v0 were disabled as they are                         
+                          not contained in all the other                        
+                          datasets.                                             
+                 WARNING  | >> keys set() of             lerobot_dataset.py:1104
+                          G1WholebodyXMovePickTeleop-v0                         
+                          were disabled as they are not                         
+                          contained in all the other                            
+                          datasets.                                             
+                 INFO     | >>     |=> Num training samples:        train.py:192
+                 INFO     | >>         |=> Training dataset size:   train.py:193
+                          540,664                                               
+                 INFO     | >>         |=> Val dataset size:        train.py:195
+                          540,664                                               
+                 INFO     | >> [*] Initialize optimizers and        train.py:198
+                          schedulers...                                         
+                 INFO     | >> [*] ***** Running training *****     train.py:202
+                 INFO     | >>     |=> Num training examples =      train.py:203
+                          540664                                                
+                 INFO     | >>     |=> Max training Epochs = 1      train.py:204
+                 INFO     | >>         |=> Total optimization steps train.py:205
+                          = 20                                                  
+                 INFO     | >>         |=> Num steps Per Epoch =    train.py:206
+                          33791                                                 
+                 INFO     | >>         |=> Effective training       train.py:207
+                          epochs = 0.00                                         
+                 INFO     | >>     |=> Global train batch size (w.  train.py:208
+                          parallel, distributed & accumulation) =               
+                          16                                                    
+                 INFO     | >>         |=> Device train batch size  train.py:209
+                          = 8                                                   
+                 INFO     | >>         |=> Gradient Accumulation    train.py:210
+                          steps = 2                                             
+                 INFO     | >>         |=> Num processes (GPUs) = 1 train.py:211
+[11:42:09 07/13] INFO     | >> [*] Accelerator runs in:             train.py:218
+                          .runs/finetune/simple-multitask-psi0-smok             
+                          e.simple.flow1000.cosine.lr1.0e-04.b16.gp             
+                          us1.2607131141                                        
+Training steps:   0%|          | 0/20 [00:00<?, ?it/s]Traceback (most recent call last):
+  File "/XYAIFS00/HDD_POOL/sysu_xdliang/sysu_xdliang_1/Humanoid/yangky/Psi0/scripts/train.py", line 364, in <module>
+    train(config) # type: ignore
+  File "/XYAIFS00/HDD_POOL/sysu_xdliang/sysu_xdliang_1/Humanoid/yangky/Psi0/scripts/train.py", line 236, in train
+    for local_step, batch in enumerate(trainer.train_dataloader):
+  File "/HOME/sysu_xdliang/sysu_xdliang_1/HDD_POOL/Humanoid/yangky/Psi0/.venv-psi/lib/python3.10/site-packages/accelerate/data_loader.py", line 566, in __iter__
+    current_batch = next(dataloader_iter)
+  File "/HOME/sysu_xdliang/sysu_xdliang_1/HDD_POOL/Humanoid/yangky/Psi0/.venv-psi/lib/python3.10/site-packages/torch/utils/data/dataloader.py", line 733, in __next__
+    data = self._next_data()
+  File "/HOME/sysu_xdliang/sysu_xdliang_1/HDD_POOL/Humanoid/yangky/Psi0/.venv-psi/lib/python3.10/site-packages/torch/utils/data/dataloader.py", line 1515, in _next_data
+    return self._process_data(data, worker_id)
+  File "/HOME/sysu_xdliang/sysu_xdliang_1/HDD_POOL/Humanoid/yangky/Psi0/.venv-psi/lib/python3.10/site-packages/torch/utils/data/dataloader.py", line 1550, in _process_data
+    data.reraise()
+  File "/HOME/sysu_xdliang/sysu_xdliang_1/HDD_POOL/Humanoid/yangky/Psi0/.venv-psi/lib/python3.10/site-packages/torch/_utils.py", line 750, in reraise
+    raise exception
+RuntimeError: Caught RuntimeError in DataLoader worker process 0.
+Original Traceback (most recent call last):
+  File "/HOME/sysu_xdliang/sysu_xdliang_1/HDD_POOL/Humanoid/yangky/Psi0/.venv-psi/lib/python3.10/site-packages/torch/utils/data/_utils/worker.py", line 349, in _worker_loop
+    data = fetcher.fetch(index)  # type: ignore[possibly-undefined]
+  File "/HOME/sysu_xdliang/sysu_xdliang_1/HDD_POOL/Humanoid/yangky/Psi0/.venv-psi/lib/python3.10/site-packages/torch/utils/data/_utils/fetch.py", line 52, in fetch
+    data = [self.dataset[idx] for idx in possibly_batched_index]
+  File "/HOME/sysu_xdliang/sysu_xdliang_1/HDD_POOL/Humanoid/yangky/Psi0/.venv-psi/lib/python3.10/site-packages/torch/utils/data/_utils/fetch.py", line 52, in <listcomp>
+    data = [self.dataset[idx] for idx in possibly_batched_index]
+  File "/XYAIFS00/HDD_POOL/sysu_xdliang/sysu_xdliang_1/Humanoid/yangky/Psi0/src/psi/data/dataset.py", line 24, in __getitem__
+    raw = self.raw_dataset[idx]
+  File "/XYAIFS00/HDD_POOL/sysu_xdliang/sysu_xdliang_1/Humanoid/yangky/Psi0/src/psi/data/lerobot/lerobot_ext.py", line 48, in __getitem__
+    return self.base_dataset[idx]
+  File "/HOME/sysu_xdliang/sysu_xdliang_1/HDD_POOL/Humanoid/yangky/Psi0/.venv-psi/lib/python3.10/site-packages/lerobot/datasets/lerobot_dataset.py", line 1214, in __getitem__
+    item = self._datasets[dataset_idx][idx - start_idx]
+  File "/HOME/sysu_xdliang/sysu_xdliang_1/HDD_POOL/Humanoid/yangky/Psi0/.venv-psi/lib/python3.10/site-packages/lerobot/datasets/lerobot_dataset.py", line 720, in __getitem__
+    video_frames = self._query_videos(query_timestamps, ep_idx)
+  File "/HOME/sysu_xdliang/sysu_xdliang_1/HDD_POOL/Humanoid/yangky/Psi0/.venv-psi/lib/python3.10/site-packages/lerobot/datasets/lerobot_dataset.py", line 692, in _query_videos
+    frames = decode_video_frames(video_path, query_ts, self.tolerance_s, self.video_backend)
+  File "/HOME/sysu_xdliang/sysu_xdliang_1/HDD_POOL/Humanoid/yangky/Psi0/.venv-psi/lib/python3.10/site-packages/lerobot/datasets/video_utils.py", line 66, in decode_video_frames
+    return decode_video_frames_torchcodec(video_path, timestamps, tolerance_s)
+  File "/HOME/sysu_xdliang/sysu_xdliang_1/HDD_POOL/Humanoid/yangky/Psi0/.venv-psi/lib/python3.10/site-packages/lerobot/datasets/video_utils.py", line 190, in decode_video_frames_torchcodec
+    from torchcodec.decoders import VideoDecoder
+  File "/HOME/sysu_xdliang/sysu_xdliang_1/HDD_POOL/Humanoid/yangky/Psi0/.venv-psi/lib/python3.10/site-packages/torchcodec/__init__.py", line 10, in <module>
+    from . import decoders, samplers  # noqa
+  File "/HOME/sysu_xdliang/sysu_xdliang_1/HDD_POOL/Humanoid/yangky/Psi0/.venv-psi/lib/python3.10/site-packages/torchcodec/decoders/__init__.py", line 7, in <module>
+    from .._core import AudioStreamMetadata, VideoStreamMetadata
+  File "/HOME/sysu_xdliang/sysu_xdliang_1/HDD_POOL/Humanoid/yangky/Psi0/.venv-psi/lib/python3.10/site-packages/torchcodec/_core/__init__.py", line 8, in <module>
+    from ._metadata import (
+  File "/HOME/sysu_xdliang/sysu_xdliang_1/HDD_POOL/Humanoid/yangky/Psi0/.venv-psi/lib/python3.10/site-packages/torchcodec/_core/_metadata.py", line 15, in <module>
+    from torchcodec._core.ops import (
+  File "/HOME/sysu_xdliang/sysu_xdliang_1/HDD_POOL/Humanoid/yangky/Psi0/.venv-psi/lib/python3.10/site-packages/torchcodec/_core/ops.py", line 86, in <module>
+    load_torchcodec_shared_libraries()
+  File "/HOME/sysu_xdliang/sysu_xdliang_1/HDD_POOL/Humanoid/yangky/Psi0/.venv-psi/lib/python3.10/site-packages/torchcodec/_core/ops.py", line 71, in load_torchcodec_shared_libraries
+    raise RuntimeError(
+RuntimeError: Could not load libtorchcodec. Likely causes:
+          1. FFmpeg is not properly installed in your environment. We support
+             versions 4, 5, 6 and 7.
+          2. The PyTorch version (2.7.0+cu126) is not compatible with
+             this version of TorchCodec. Refer to the version compatibility
+             table:
+             https://github.com/pytorch/torchcodec?tab=readme-ov-file#installing-torchcodec.
+          3. Another runtime dependency; see exceptions below.
+        The following exceptions were raised as we tried to load libtorchcodec:
+        
+[start of libtorchcodec loading traceback]
+FFmpeg version 7: libavutil.so.59: cannot open shared object file: No such file or directory
+FFmpeg version 6: libavutil.so.58: cannot open shared object file: No such file or directory
+FFmpeg version 5: libavutil.so.57: cannot open shared object file: No such file or directory
+FFmpeg version 4: libavutil.so.56: cannot open shared object file: No such file or directory
+[end of libtorchcodec loading traceback].
+
+[rank0]: Traceback (most recent call last):
+[rank0]:   File "/XYAIFS00/HDD_POOL/sysu_xdliang/sysu_xdliang_1/Humanoid/yangky/Psi0/scripts/train.py", line 364, in <module>
+[rank0]:     train(config) # type: ignore
+[rank0]:   File "/XYAIFS00/HDD_POOL/sysu_xdliang/sysu_xdliang_1/Humanoid/yangky/Psi0/scripts/train.py", line 236, in train
+[rank0]:     for local_step, batch in enumerate(trainer.train_dataloader):
+[rank0]:   File "/HOME/sysu_xdliang/sysu_xdliang_1/HDD_POOL/Humanoid/yangky/Psi0/.venv-psi/lib/python3.10/site-packages/accelerate/data_loader.py", line 566, in __iter__
+[rank0]:     current_batch = next(dataloader_iter)
+[rank0]:   File "/HOME/sysu_xdliang/sysu_xdliang_1/HDD_POOL/Humanoid/yangky/Psi0/.venv-psi/lib/python3.10/site-packages/torch/utils/data/dataloader.py", line 733, in __next__
+[rank0]:     data = self._next_data()
+[rank0]:   File "/HOME/sysu_xdliang/sysu_xdliang_1/HDD_POOL/Humanoid/yangky/Psi0/.venv-psi/lib/python3.10/site-packages/torch/utils/data/dataloader.py", line 1515, in _next_data
+[rank0]:     return self._process_data(data, worker_id)
+[rank0]:   File "/HOME/sysu_xdliang/sysu_xdliang_1/HDD_POOL/Humanoid/yangky/Psi0/.venv-psi/lib/python3.10/site-packages/torch/utils/data/dataloader.py", line 1550, in _process_data
+[rank0]:     data.reraise()
+[rank0]:   File "/HOME/sysu_xdliang/sysu_xdliang_1/HDD_POOL/Humanoid/yangky/Psi0/.venv-psi/lib/python3.10/site-packages/torch/_utils.py", line 750, in reraise
+[rank0]:     raise exception
+[rank0]: RuntimeError: Caught RuntimeError in DataLoader worker process 0.
+[rank0]: Original Traceback (most recent call last):
+[rank0]:   File "/HOME/sysu_xdliang/sysu_xdliang_1/HDD_POOL/Humanoid/yangky/Psi0/.venv-psi/lib/python3.10/site-packages/torch/utils/data/_utils/worker.py", line 349, in _worker_loop
+[rank0]:     data = fetcher.fetch(index)  # type: ignore[possibly-undefined]
+[rank0]:   File "/HOME/sysu_xdliang/sysu_xdliang_1/HDD_POOL/Humanoid/yangky/Psi0/.venv-psi/lib/python3.10/site-packages/torch/utils/data/_utils/fetch.py", line 52, in fetch
+[rank0]:     data = [self.dataset[idx] for idx in possibly_batched_index]
+[rank0]:   File "/HOME/sysu_xdliang/sysu_xdliang_1/HDD_POOL/Humanoid/yangky/Psi0/.venv-psi/lib/python3.10/site-packages/torch/utils/data/_utils/fetch.py", line 52, in <listcomp>
+[rank0]:     data = [self.dataset[idx] for idx in possibly_batched_index]
+[rank0]:   File "/XYAIFS00/HDD_POOL/sysu_xdliang/sysu_xdliang_1/Humanoid/yangky/Psi0/src/psi/data/dataset.py", line 24, in __getitem__
+[rank0]:     raw = self.raw_dataset[idx]
+[rank0]:   File "/XYAIFS00/HDD_POOL/sysu_xdliang/sysu_xdliang_1/Humanoid/yangky/Psi0/src/psi/data/lerobot/lerobot_ext.py", line 48, in __getitem__
+[rank0]:     return self.base_dataset[idx]
+[rank0]:   File "/HOME/sysu_xdliang/sysu_xdliang_1/HDD_POOL/Humanoid/yangky/Psi0/.venv-psi/lib/python3.10/site-packages/lerobot/datasets/lerobot_dataset.py", line 1214, in __getitem__
+[rank0]:     item = self._datasets[dataset_idx][idx - start_idx]
+[rank0]:   File "/HOME/sysu_xdliang/sysu_xdliang_1/HDD_POOL/Humanoid/yangky/Psi0/.venv-psi/lib/python3.10/site-packages/lerobot/datasets/lerobot_dataset.py", line 720, in __getitem__
+[rank0]:     video_frames = self._query_videos(query_timestamps, ep_idx)
+[rank0]:   File "/HOME/sysu_xdliang/sysu_xdliang_1/HDD_POOL/Humanoid/yangky/Psi0/.venv-psi/lib/python3.10/site-packages/lerobot/datasets/lerobot_dataset.py", line 692, in _query_videos
+[rank0]:     frames = decode_video_frames(video_path, query_ts, self.tolerance_s, self.video_backend)
+[rank0]:   File "/HOME/sysu_xdliang/sysu_xdliang_1/HDD_POOL/Humanoid/yangky/Psi0/.venv-psi/lib/python3.10/site-packages/lerobot/datasets/video_utils.py", line 66, in decode_video_frames
+[rank0]:     return decode_video_frames_torchcodec(video_path, timestamps, tolerance_s)
+[rank0]:   File "/HOME/sysu_xdliang/sysu_xdliang_1/HDD_POOL/Humanoid/yangky/Psi0/.venv-psi/lib/python3.10/site-packages/lerobot/datasets/video_utils.py", line 190, in decode_video_frames_torchcodec
+[rank0]:     from torchcodec.decoders import VideoDecoder
+[rank0]:   File "/HOME/sysu_xdliang/sysu_xdliang_1/HDD_POOL/Humanoid/yangky/Psi0/.venv-psi/lib/python3.10/site-packages/torchcodec/__init__.py", line 10, in <module>
+[rank0]:     from . import decoders, samplers  # noqa
+[rank0]:   File "/HOME/sysu_xdliang/sysu_xdliang_1/HDD_POOL/Humanoid/yangky/Psi0/.venv-psi/lib/python3.10/site-packages/torchcodec/decoders/__init__.py", line 7, in <module>
+[rank0]:     from .._core import AudioStreamMetadata, VideoStreamMetadata
+[rank0]:   File "/HOME/sysu_xdliang/sysu_xdliang_1/HDD_POOL/Humanoid/yangky/Psi0/.venv-psi/lib/python3.10/site-packages/torchcodec/_core/__init__.py", line 8, in <module>
+[rank0]:     from ._metadata import (
+[rank0]:   File "/HOME/sysu_xdliang/sysu_xdliang_1/HDD_POOL/Humanoid/yangky/Psi0/.venv-psi/lib/python3.10/site-packages/torchcodec/_core/_metadata.py", line 15, in <module>
+[rank0]:     from torchcodec._core.ops import (
+[rank0]:   File "/HOME/sysu_xdliang/sysu_xdliang_1/HDD_POOL/Humanoid/yangky/Psi0/.venv-psi/lib/python3.10/site-packages/torchcodec/_core/ops.py", line 86, in <module>
+[rank0]:     load_torchcodec_shared_libraries()
+[rank0]:   File "/HOME/sysu_xdliang/sysu_xdliang_1/HDD_POOL/Humanoid/yangky/Psi0/.venv-psi/lib/python3.10/site-packages/torchcodec/_core/ops.py", line 71, in load_torchcodec_shared_libraries
+[rank0]:     raise RuntimeError(
+[rank0]: RuntimeError: Could not load libtorchcodec. Likely causes:
+[rank0]:           1. FFmpeg is not properly installed in your environment. We support
+[rank0]:              versions 4, 5, 6 and 7.
+[rank0]:           2. The PyTorch version (2.7.0+cu126) is not compatible with
+[rank0]:              this version of TorchCodec. Refer to the version compatibility
+[rank0]:              table:
+[rank0]:              https://github.com/pytorch/torchcodec?tab=readme-ov-file#installing-torchcodec.
+[rank0]:           3. Another runtime dependency; see exceptions below.
+[rank0]:         The following exceptions were raised as we tried to load libtorchcodec:
+[rank0]:         
+[rank0]: [start of libtorchcodec loading traceback]
+[rank0]: FFmpeg version 7: libavutil.so.59: cannot open shared object file: No such file or directory
+[rank0]: FFmpeg version 6: libavutil.so.58: cannot open shared object file: No such file or directory
+[rank0]: FFmpeg version 5: libavutil.so.57: cannot open shared object file: No such file or directory
+[rank0]: FFmpeg version 4: libavutil.so.56: cannot open shared object file: No such file or directory
+[rank0]: [end of libtorchcodec loading traceback].
+
+[1;34mwandb[0m: 
+[1;34mwandb[0m: You can sync this run to the cloud by running:
+[1;34mwandb[0m: [1mwandb sync /XYAIFS00/HDD_POOL/sysu_xdliang/sysu_xdliang_1/Humanoid/yangky/Psi0/.runs/finetune/simple-multitask-psi0-smoke.simple.flow1000.cosine.lr1.0e-04.b16.gpus1.2607131141/wandb/offline-run-20260713_114129-3rmvuplc[0m
+[1;34mwandb[0m: Find logs at: [1;35m../../../../../../../XYAIFS00/HDD_POOL/sysu_xdliang/sysu_xdliang_1/Humanoid/yangky/Psi0/.runs/finetune/simple-multitask-psi0-smoke.simple.flow1000.cosine.lr1.0e-04.b16.gpus1.2607131141/wandb/offline-run-20260713_114129-3rmvuplc/logs[0m
+E0713 11:42:12.051000 11868 /XYAIFS00/HDD_POOL/sysu_xdliang/sysu_xdliang_1/Humanoid/yangky/Psi0/.venv-psi/lib/python3.10/site-packages/torch/distributed/elastic/multiprocessing/api.py:874] failed (exitcode: 1) local_rank: 0 (pid: 11887) of binary: /HOME/sysu_xdliang/sysu_xdliang_1/HDD_POOL/Humanoid/yangky/Psi0/.venv-psi/bin/python3
+Traceback (most recent call last):
+  File "/XYAIFS00/HDD_POOL/sysu_xdliang/sysu_xdliang_1/Humanoid/yangky/Psi0/.venv-psi/bin/torchrun", line 10, in <module>
+    sys.exit(main())
+  File "/HOME/sysu_xdliang/sysu_xdliang_1/HDD_POOL/Humanoid/yangky/Psi0/.venv-psi/lib/python3.10/site-packages/torch/distributed/elastic/multiprocessing/errors/__init__.py", line 355, in wrapper
+    return f(*args, **kwargs)
+  File "/HOME/sysu_xdliang/sysu_xdliang_1/HDD_POOL/Humanoid/yangky/Psi0/.venv-psi/lib/python3.10/site-packages/torch/distributed/run.py", line 892, in main
+    run(args)
+  File "/HOME/sysu_xdliang/sysu_xdliang_1/HDD_POOL/Humanoid/yangky/Psi0/.venv-psi/lib/python3.10/site-packages/torch/distributed/run.py", line 883, in run
+    elastic_launch(
+  File "/HOME/sysu_xdliang/sysu_xdliang_1/HDD_POOL/Humanoid/yangky/Psi0/.venv-psi/lib/python3.10/site-packages/torch/distributed/launcher/api.py", line 139, in __call__
+    return launch_agent(self._config, self._entrypoint, list(args))
+  File "/HOME/sysu_xdliang/sysu_xdliang_1/HDD_POOL/Humanoid/yangky/Psi0/.venv-psi/lib/python3.10/site-packages/torch/distributed/launcher/api.py", line 270, in launch_agent
+    raise ChildFailedError(
+torch.distributed.elastic.multiprocessing.errors.ChildFailedError: 
+============================================================
+scripts/train.py FAILED
+------------------------------------------------------------
+Failures:
+  <NO_OTHER_FAILURES>
+------------------------------------------------------------
+Root Cause (first observed failure):
+[0]:
+  time      : 2026-07-13_11:42:12
+  host      : pytorch-ng-13155124-ktk9g
+  rank      : 0 (local_rank: 0)
+  exitcode  : 1 (pid: 11887)
+  error_file: <N/A>
+  traceback : To enable traceback see: https://pytorch.org/docs/stable/elastic/errors.html
+============================================================

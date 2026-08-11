@@ -2,14 +2,14 @@
   "songyan_n2_edu": {
     "label": "松延 N2 / N2 EDU",
     "role": "target_platform",
-    "urdf": "assets/models/songyan_n2/n2.urdf",
-    "status": "official_public_spec_derived_urdf_preview",
-    "retarget_route": "GVHMR/GMR -> N2 RobotAdapter -> LeRobot/GR00T",
+    "urdf": "assets/models/noetix_n2/urdf/N2.urdf",
+    "status": "official_noetix_n2_urdf_imported",
+    "retarget_route": "GVHMR/GMR -> official N2 URDF RobotAdapter -> LeRobot/GR00T",
     "official_sources": [
       "https://en.noetixrobotics.com/n2",
       "https://en.noetixrobotics.com/download/document"
     ],
-    "notes": "The public official site exposes N2 specifications and delivery documentation mentioning URDF files, but does not expose the raw delivered n2.urdf package. Replace this preview with the SDK-delivered official URDF when available."
+    "notes": "Imported from Noetix-Robotics/noetix_n2_gym resources/robots/N2/urdf/N2.urdf."
   },
   "unitree_g1": {
     "label": "Unitree G1",
@@ -26,12 +26,12 @@
     "status": "waiting_urdf_or_description_asset",
     "retarget_route": "locomotion trajectory -> Go2/B2 foot-contact constraints -> quadruped dataset"
   },
-  "rh56dftp": {
-    "label": "Allegro / RH56DFTP",
+  "inspire_rh56dftp": {
+    "label": "因时灵巧手 RH56DFTP",
     "role": "dexterous_hand_platform",
-    "urdf": "assets/models/rh56dftp/rh56dftp_hand.urdf",
-    "status": "benchmark_videos_connected",
-    "retarget_route": "MANO/glove skeleton -> RH56DFTP finger joints -> BC/RL fine-tuning",
+    "urdf": "assets/models/inspire_hand/rh56dftp_hand.urdf",
+    "status": "inspire_hand_videos_connected",
+    "retarget_route": "MANO/glove skeleton -> Inspire RH56DFTP finger joints -> BC/RL fine-tuning",
     "videos": ["rh56dftp_bc_rnn_eval.mp4", "rh56dftp_ppo_eval.mp4"]
   }
 }

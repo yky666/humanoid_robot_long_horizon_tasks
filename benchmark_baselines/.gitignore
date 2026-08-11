@@ -1,7 +1,0 @@
-*.bin
-*.safetensors
-*.pt
-*.pth
-*.ckpt
-wandb/
-__pycache__/

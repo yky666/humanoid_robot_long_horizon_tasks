@@ -1,6 +1,0 @@
-projects/xr_teleoperate/teleop/utils/data/
-**/__pycache__/
-*.pyc
-*.bak
-cert.pem
-key.pem

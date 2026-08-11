@@ -1,473 +1,0 @@
-combined 17 task statistics into /HOME/sysu_xdliang/sysu_xdliang_1/HDD_POOL/Humanoid/yangky/baseline_experiments/state/simple_multitask_stats.json
-[11:46:33 07/13] INFO     | >> [*] === Environment Variables ===    train.py:335
-                 INFO     | >> [*] OMP_NUM_THREADS: 16              train.py:345
-                 INFO     | >> [*] HF_HOME:                         train.py:345
-                          /HOME/sysu_xdliang/sysu_xdliang_1/HDD_POO             
-                          L/Humanoid/yangky/Psi0/cache                          
-                 INFO     | >> [*] TORCH_HOME:                      train.py:345
-                          /HOME/sysu_xdliang/sysu_xdliang_1/HDD_POO             
-                          L/Humanoid/yangky/Psi0/cache                          
-                 INFO     | >> [*] HF_TOKEN:                        train.py:345
-                 INFO     | >> [*] HF_LEROBOT_HOME:                 train.py:345
-                          /HOME/sysu_xdliang/sysu_xdliang_1/HDD_POO             
-                          L/Humanoid/yangky/Psi0/data/lerobot                   
-                 INFO     | >> [*] DATA_HOME:                       train.py:345
-                          /HOME/sysu_xdliang/sysu_xdliang_1/HDD_POO             
-                          L/Humanoid/yangky/Psi0/data                           
-                 INFO     | >> [*] UV_CACHE_DIR:                    train.py:345
-                          /HOME/sysu_xdliang/sysu_xdliang_1/HDD_POO             
-                          L/Humanoid/yangky/Psi0/cache/uv                       
-                 INFO     | >> [*] WANDB_API_KEY:                   train.py:345
-                 INFO     | >> [*]                                  train.py:345
-                          PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION:               
-                          python                                                
-                 INFO     | >> [*] CUDA_VISIBLE_DEVICES: 0          train.py:345
-                 INFO     | >> [*] WORLD_SIZE: 1                    train.py:345
-                 INFO     | >> [*] LOCAL_WORLD_SIZE: 1              train.py:345
-                 INFO     | >> [*] RANK: 0                          train.py:345
-                 INFO     | >> [*] LOCAL_RANK: 0                    train.py:345
-                 INFO     | >> [*] MASTER_ADDR:                     train.py:345
-                          pytorch-ng-13155124-ktk9g                             
-                 INFO     | >> [*] MASTER_PORT: 42807               train.py:345
-                 INFO     | >> [*] Parsing configuration...         train.py:351
-[11:46:35 07/13] INFO     | >> [*] Config parsing took 2.13s        train.py:363
-                 INFO     | >> [*] Seed everything with 292285      train.py:174
-[11:46:38 07/13] INFO     | >> [*] Initialize models ...            train.py:178
-[11:46:39 07/13] INFO     | >> [*] Load pretrained VLM model from finetune.py:98
-                          /HOME/sysu_xdliang/sysu_xdliang_1/HDD_P               
-                          OOL/Humanoid/yangky/Psi0/cache/checkpoi               
-                          nts/psi0/pre.fast.1by1.2601091803.ckpt.               
-                          ego200k.he30k                                         
-[11:46:43 07/13] INFO     | >> [*] Total ActionTransformerModel     psi0.py:1510
-                          parameters: 497,719,256                               
-                 INFO     | >> [*] Total VLM Backbone parameters:   psi0.py:1514
-                          2,131,333,120                                         
-                 INFO     | >> [*] Loading pretrained action     finetune.py:129
-                          header from                                           
-                          /HOME/sysu_xdliang/sysu_xdliang_1/HDD_                
-                          POOL/Humanoid/yangky/Psi0/cache/checkp                
-                          oints/psi0/postpre.1by1.pad36.26011312                
-                          06.ckpt.he30k                                         
-[11:46:44 07/13] WARNING  | >> [*] action header size mismatch,  finetune.py:131
-                          only loaded transformer blocks.                       
-                 INFO     | >> [*] loaded pretrained action      finetune.py:134
-                          header successfully.                                  
-                 INFO     | >> [*] VLM parameters are frozen     finetune.py:147
-                          (tune_vlm=False)                                      
-                 INFO     | >> [*] Model has 490,039,128         finetune.py:159
-                          trainable parameters                                  
-wandb: WARNING `resume` will be ignored since W&B syncing is set to `offline`. Starting a new run with run id awuwl0k4.
-wandb: Tracking run with wandb version 0.25.0
-wandb: W&B syncing is set to `offline` in this directory. Run `wandb online` or set WANDB_MODE=online to enable cloud syncing.
-wandb: Run data is saved locally in /XYAIFS00/HDD_POOL/sysu_xdliang/sysu_xdliang_1/Humanoid/yangky/Psi0/.runs/finetune/simple-multitask-psi0-smoke.simple.flow1000.cosine.lr1.0e-04.b16.gpus1.2607131146/wandb/offline-run-20260713_114644-awuwl0k4
-[11:46:45 07/13] INFO     | >> [*] Saved configuration to           train.py:128
-                          .runs/finetune/simple-multitask-psi0-smok             
-                          e.simple.flow1000.cosine.lr1.0e-04.b16.gp             
-                          us1.2607131146                                        
-                 INFO     | >> [*] Training configurations:         train.py:181
-                 INFO     | >>     |=> training task: 'finetune'    train.py:182
-                 INFO     | >>     |=> run name:                    train.py:183
-                          simple-multitask-psi0-smoke.simple.flow10             
-                          00.cosine.lr1.0e-04.b16.gpus1.2607131146              
-                 INFO     | >>     |=> seed: 292285                 train.py:184
-                 INFO     | >>     |=> mixed precision:             train.py:185
-                          torch.bfloat16                                        
-                 INFO     | >>     |=> warmup steps: 10             train.py:186
-                 INFO     | >>     |=> validation steps: 20         train.py:187
-                 INFO     | >>     |=> checkpoint steps: 20         train.py:188
-                 INFO     | >>     |=> max gradient norm: 1.0       train.py:189
-[11:46:46 07/13] INFO     | >> PyTorch version 2.7.0 available.     config.py:54
-[11:46:56 07/13] WARNING  | >> keys set() of             lerobot_dataset.py:1104
-                          G1WholebodyBendHandoverTeleop-                        
-                          v0 were disabled as they are                          
-                          not contained in all the other                        
-                          datasets.                                             
-                 WARNING  | >> keys set() of             lerobot_dataset.py:1104
-                          G1WholebodyBendPickAndPlaceTel                        
-                          eop-v0 were disabled as they                          
-                          are not contained in all the                          
-                          other datasets.                                       
-                 WARNING  | >> keys set() of             lerobot_dataset.py:1104
-                          G1WholebodyBendPickMP-v0 were                         
-                          disabled as they are not                              
-                          contained in all the other                            
-                          datasets.                                             
-                 WARNING  | >> keys set() of             lerobot_dataset.py:1104
-                          G1WholebodyBendPickSimToRealTe                        
-                          leop-v0 were disabled as they                         
-                          are not contained in all the                          
-                          other datasets.                                       
-                 WARNING  | >> keys set() of             lerobot_dataset.py:1104
-                          G1WholebodyBendPickTeleop-v0                          
-                          were disabled as they are not                         
-                          contained in all the other                            
-                          datasets.                                             
-                 WARNING  | >> keys set() of             lerobot_dataset.py:1104
-                          G1WholebodyCloseDoorTeleop-v0                         
-                          were disabled as they are not                         
-                          contained in all the other                            
-                          datasets.                                             
-                 WARNING  | >> keys set() of             lerobot_dataset.py:1104
-                          G1WholebodyHandoverTeleop-v0                          
-                          were disabled as they are not                         
-                          contained in all the other                            
-                          datasets.                                             
-                 WARNING  | >> keys set() of             lerobot_dataset.py:1104
-                          G1WholebodyLocomotionPickBetwe                        
-                          enTablesTeleop-v0 were                                
-                          disabled as they are not                              
-                          contained in all the other                            
-                          datasets.                                             
-                 WARNING  | >> keys set() of             lerobot_dataset.py:1104
-                          G1WholebodyOpenFaucetTeleop-v0                        
-                          were disabled as they are not                         
-                          contained in all the other                            
-                          datasets.                                             
-                 WARNING  | >> keys set() of             lerobot_dataset.py:1104
-                          G1WholebodyOpenOvenTeleop-v0                          
-                          were disabled as they are not                         
-                          contained in all the other                            
-                          datasets.                                             
-                 WARNING  | >> keys set() of             lerobot_dataset.py:1104
-                          G1WholebodyOpenTrashCanTeleop-                        
-                          v0 were disabled as they are                          
-                          not contained in all the other                        
-                          datasets.                                             
-                 WARNING  | >> keys set() of             lerobot_dataset.py:1104
-                          G1WholebodyPickAndPlaceAndHugC                        
-                          ontainerTeleop-v0 were                                
-                          disabled as they are not                              
-                          contained in all the other                            
-                          datasets.                                             
-                 WARNING  | >> keys set() of             lerobot_dataset.py:1104
-                          G1WholebodyPushOfficeChairTele                        
-                          op-v0 were disabled as they                           
-                          are not contained in all the                          
-                          other datasets.                                       
-                 WARNING  | >> keys set() of             lerobot_dataset.py:1104
-                          G1WholebodyTabletopGraspMP-v0                         
-                          were disabled as they are not                         
-                          contained in all the other                            
-                          datasets.                                             
-                 WARNING  | >> keys set() of             lerobot_dataset.py:1104
-                          G1WholebodyXMoveBendPickMP-v0                         
-                          were disabled as they are not                         
-                          contained in all the other                            
-                          datasets.                                             
-                 WARNING  | >> keys set() of             lerobot_dataset.py:1104
-                          G1WholebodyXMoveBendPickTeleop                        
-                          -v0 were disabled as they are                         
-                          not contained in all the other                        
-                          datasets.                                             
-                 WARNING  | >> keys set() of             lerobot_dataset.py:1104
-                          G1WholebodyXMovePickTeleop-v0                         
-                          were disabled as they are not                         
-                          contained in all the other                            
-                          datasets.                                             
-[11:47:07 07/13] WARNING  | >> keys set() of             lerobot_dataset.py:1104
-                          G1WholebodyBendHandoverTeleop-                        
-                          v0 were disabled as they are                          
-                          not contained in all the other                        
-                          datasets.                                             
-                 WARNING  | >> keys set() of             lerobot_dataset.py:1104
-                          G1WholebodyBendPickAndPlaceTel                        
-                          eop-v0 were disabled as they                          
-                          are not contained in all the                          
-                          other datasets.                                       
-                 WARNING  | >> keys set() of             lerobot_dataset.py:1104
-                          G1WholebodyBendPickMP-v0 were                         
-                          disabled as they are not                              
-                          contained in all the other                            
-                          datasets.                                             
-                 WARNING  | >> keys set() of             lerobot_dataset.py:1104
-                          G1WholebodyBendPickSimToRealTe                        
-                          leop-v0 were disabled as they                         
-                          are not contained in all the                          
-                          other datasets.                                       
-                 WARNING  | >> keys set() of             lerobot_dataset.py:1104
-                          G1WholebodyBendPickTeleop-v0                          
-                          were disabled as they are not                         
-                          contained in all the other                            
-                          datasets.                                             
-                 WARNING  | >> keys set() of             lerobot_dataset.py:1104
-                          G1WholebodyCloseDoorTeleop-v0                         
-                          were disabled as they are not                         
-                          contained in all the other                            
-                          datasets.                                             
-                 WARNING  | >> keys set() of             lerobot_dataset.py:1104
-                          G1WholebodyHandoverTeleop-v0                          
-                          were disabled as they are not                         
-                          contained in all the other                            
-                          datasets.                                             
-                 WARNING  | >> keys set() of             lerobot_dataset.py:1104
-                          G1WholebodyLocomotionPickBetwe                        
-                          enTablesTeleop-v0 were                                
-                          disabled as they are not                              
-                          contained in all the other                            
-                          datasets.                                             
-                 WARNING  | >> keys set() of             lerobot_dataset.py:1104
-                          G1WholebodyOpenFaucetTeleop-v0                        
-                          were disabled as they are not                         
-                          contained in all the other                            
-                          datasets.                                             
-                 WARNING  | >> keys set() of             lerobot_dataset.py:1104
-                          G1WholebodyOpenOvenTeleop-v0                          
-                          were disabled as they are not                         
-                          contained in all the other                            
-                          datasets.                                             
-                 WARNING  | >> keys set() of             lerobot_dataset.py:1104
-                          G1WholebodyOpenTrashCanTeleop-                        
-                          v0 were disabled as they are                          
-                          not contained in all the other                        
-                          datasets.                                             
-                 WARNING  | >> keys set() of             lerobot_dataset.py:1104
-                          G1WholebodyPickAndPlaceAndHugC                        
-                          ontainerTeleop-v0 were                                
-                          disabled as they are not                              
-                          contained in all the other                            
-                          datasets.                                             
-                 WARNING  | >> keys set() of             lerobot_dataset.py:1104
-                          G1WholebodyPushOfficeChairTele                        
-                          op-v0 were disabled as they                           
-                          are not contained in all the                          
-                          other datasets.                                       
-                 WARNING  | >> keys set() of             lerobot_dataset.py:1104
-                          G1WholebodyTabletopGraspMP-v0                         
-                          were disabled as they are not                         
-                          contained in all the other                            
-                          datasets.                                             
-                 WARNING  | >> keys set() of             lerobot_dataset.py:1104
-                          G1WholebodyXMoveBendPickMP-v0                         
-                          were disabled as they are not                         
-                          contained in all the other                            
-                          datasets.                                             
-                 WARNING  | >> keys set() of             lerobot_dataset.py:1104
-                          G1WholebodyXMoveBendPickTeleop                        
-                          -v0 were disabled as they are                         
-                          not contained in all the other                        
-                          datasets.                                             
-                 WARNING  | >> keys set() of             lerobot_dataset.py:1104
-                          G1WholebodyXMovePickTeleop-v0                         
-                          were disabled as they are not                         
-                          contained in all the other                            
-                          datasets.                                             
-                 INFO     | >>     |=> Num training samples:        train.py:192
-                 INFO     | >>         |=> Training dataset size:   train.py:193
-                          540,664                                               
-                 INFO     | >>         |=> Val dataset size:        train.py:195
-                          540,664                                               
-                 INFO     | >> [*] Initialize optimizers and        train.py:198
-                          schedulers...                                         
-                 INFO     | >> [*] ***** Running training *****     train.py:202
-                 INFO     | >>     |=> Num training examples =      train.py:203
-                          540664                                                
-                 INFO     | >>     |=> Max training Epochs = 1      train.py:204
-                 INFO     | >>         |=> Total optimization steps train.py:205
-                          = 20                                                  
-                 INFO     | >>         |=> Num steps Per Epoch =    train.py:206
-                          33791                                                 
-                 INFO     | >>         |=> Effective training       train.py:207
-                          epochs = 0.00                                         
-                 INFO     | >>     |=> Global train batch size (w.  train.py:208
-                          parallel, distributed & accumulation) =               
-                          16                                                    
-                 INFO     | >>         |=> Device train batch size  train.py:209
-                          = 8                                                   
-                 INFO     | >>         |=> Gradient Accumulation    train.py:210
-                          steps = 2                                             
-                 INFO     | >>         |=> Num processes (GPUs) = 1 train.py:211
-[11:47:10 07/13] INFO     | >> [*] Accelerator runs in:             train.py:218
-                          .runs/finetune/simple-multitask-psi0-smok             
-                          e.simple.flow1000.cosine.lr1.0e-04.b16.gp             
-                          us1.2607131146                                        
-Training steps:   0%|          | 0/20 [00:00<?, ?it/s]/HOME/sysu_xdliang/sysu_xdliang_1/HDD_POOL/Humanoid/yangky/Psi0/.venv-psi/lib/python3.10/site-packages/torchvision/io/_video_deprecation_warning.py:5: UserWarning: The video decoding and encoding capabilities of torchvision are deprecated from version 0.22 and will be removed in version 0.24. We recommend that you migrate to TorchCodec, where we'll consolidate the future decoding/encoding capabilities of PyTorch: https://github.com/pytorch/torchcodec
-  warnings.warn(
-/HOME/sysu_xdliang/sysu_xdliang_1/HDD_POOL/Humanoid/yangky/Psi0/.venv-psi/lib/python3.10/site-packages/torchvision/io/_video_deprecation_warning.py:5: UserWarning: The video decoding and encoding capabilities of torchvision are deprecated from version 0.22 and will be removed in version 0.24. We recommend that you migrate to TorchCodec, where we'll consolidate the future decoding/encoding capabilities of PyTorch: https://github.com/pytorch/torchcodec
-  warnings.warn(
-/HOME/sysu_xdliang/sysu_xdliang_1/HDD_POOL/Humanoid/yangky/Psi0/.venv-psi/lib/python3.10/site-packages/torchvision/io/_video_deprecation_warning.py:5: UserWarning: The video decoding and encoding capabilities of torchvision are deprecated from version 0.22 and will be removed in version 0.24. We recommend that you migrate to TorchCodec, where we'll consolidate the future decoding/encoding capabilities of PyTorch: https://github.com/pytorch/torchcodec
-  warnings.warn(
-/HOME/sysu_xdliang/sysu_xdliang_1/HDD_POOL/Humanoid/yangky/Psi0/.venv-psi/lib/python3.10/site-packages/torchvision/io/_video_deprecation_warning.py:5: UserWarning: The video decoding and encoding capabilities of torchvision are deprecated from version 0.22 and will be removed in version 0.24. We recommend that you migrate to TorchCodec, where we'll consolidate the future decoding/encoding capabilities of PyTorch: https://github.com/pytorch/torchcodec
-  warnings.warn(
-/HOME/sysu_xdliang/sysu_xdliang_1/HDD_POOL/Humanoid/yangky/Psi0/.venv-psi/lib/python3.10/site-packages/torchvision/io/_video_deprecation_warning.py:5: UserWarning: The video decoding and encoding capabilities of torchvision are deprecated from version 0.22 and will be removed in version 0.24. We recommend that you migrate to TorchCodec, where we'll consolidate the future decoding/encoding capabilities of PyTorch: https://github.com/pytorch/torchcodec
-  warnings.warn(
-/HOME/sysu_xdliang/sysu_xdliang_1/HDD_POOL/Humanoid/yangky/Psi0/.venv-psi/lib/python3.10/site-packages/torchvision/io/_video_deprecation_warning.py:5: UserWarning: The video decoding and encoding capabilities of torchvision are deprecated from version 0.22 and will be removed in version 0.24. We recommend that you migrate to TorchCodec, where we'll consolidate the future decoding/encoding capabilities of PyTorch: https://github.com/pytorch/torchcodec
-  warnings.warn(
-/HOME/sysu_xdliang/sysu_xdliang_1/HDD_POOL/Humanoid/yangky/Psi0/.venv-psi/lib/python3.10/site-packages/torchvision/io/_video_deprecation_warning.py:5: UserWarning: The video decoding and encoding capabilities of torchvision are deprecated from version 0.22 and will be removed in version 0.24. We recommend that you migrate to TorchCodec, where we'll consolidate the future decoding/encoding capabilities of PyTorch: https://github.com/pytorch/torchcodec
-  warnings.warn(
-/HOME/sysu_xdliang/sysu_xdliang_1/HDD_POOL/Humanoid/yangky/Psi0/.venv-psi/lib/python3.10/site-packages/torchvision/io/_video_deprecation_warning.py:5: UserWarning: The video decoding and encoding capabilities of torchvision are deprecated from version 0.22 and will be removed in version 0.24. We recommend that you migrate to TorchCodec, where we'll consolidate the future decoding/encoding capabilities of PyTorch: https://github.com/pytorch/torchcodec
-  warnings.warn(
-/HOME/sysu_xdliang/sysu_xdliang_1/HDD_POOL/Humanoid/yangky/Psi0/.venv-psi/lib/python3.10/site-packages/torchvision/io/_video_deprecation_warning.py:5: UserWarning: The video decoding and encoding capabilities of torchvision are deprecated from version 0.22 and will be removed in version 0.24. We recommend that you migrate to TorchCodec, where we'll consolidate the future decoding/encoding capabilities of PyTorch: https://github.com/pytorch/torchcodec
-  warnings.warn(
-/HOME/sysu_xdliang/sysu_xdliang_1/HDD_POOL/Humanoid/yangky/Psi0/.venv-psi/lib/python3.10/site-packages/torchvision/io/_video_deprecation_warning.py:5: UserWarning: The video decoding and encoding capabilities of torchvision are deprecated from version 0.22 and will be removed in version 0.24. We recommend that you migrate to TorchCodec, where we'll consolidate the future decoding/encoding capabilities of PyTorch: https://github.com/pytorch/torchcodec
-  warnings.warn(
-/HOME/sysu_xdliang/sysu_xdliang_1/HDD_POOL/Humanoid/yangky/Psi0/.venv-psi/lib/python3.10/site-packages/torchvision/io/_video_deprecation_warning.py:5: UserWarning: The video decoding and encoding capabilities of torchvision are deprecated from version 0.22 and will be removed in version 0.24. We recommend that you migrate to TorchCodec, where we'll consolidate the future decoding/encoding capabilities of PyTorch: https://github.com/pytorch/torchcodec
-  warnings.warn(
-/HOME/sysu_xdliang/sysu_xdliang_1/HDD_POOL/Humanoid/yangky/Psi0/.venv-psi/lib/python3.10/site-packages/torchvision/io/_video_deprecation_warning.py:5: UserWarning: The video decoding and encoding capabilities of torchvision are deprecated from version 0.22 and will be removed in version 0.24. We recommend that you migrate to TorchCodec, where we'll consolidate the future decoding/encoding capabilities of PyTorch: https://github.com/pytorch/torchcodec
-  warnings.warn(
-/HOME/sysu_xdliang/sysu_xdliang_1/HDD_POOL/Humanoid/yangky/Psi0/.venv-psi/lib/python3.10/site-packages/torch/autograd/graph.py:824: UserWarning: Memory Efficient attention defaults to a non-deterministic algorithm. To explicitly enable determinism call torch.use_deterministic_algorithms(True, warn_only=False). (Triggered internally at /pytorch/aten/src/ATen/native/transformers/cuda/attention_backward.cu:752.)
-  return Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass
-[2026-07-13 11:47:20,685] [INFO] [real_accelerator.py:254:get_accelerator] Setting ds_accelerator to cuda (auto detect)
-[11:47:21 07/13] INFO     | >> x86_64-linux-gnu-gcc                  spawn.py:77
-                          -Wno-unused-result -Wsign-compare -DNDEBUG            
-                          -g -fwrapv -O2 -Wall -g                               
-                          -fstack-protector-strong -Wformat                     
-                          -Werror=format-security -g -fwrapv -O2                
-                          -fPIC -c /tmp/tmppu41nq1v/test.c -o                   
-                          /tmp/tmppu41nq1v/test.o                               
-                 INFO     | >> x86_64-linux-gnu-gcc                  spawn.py:77
-                          /tmp/tmppu41nq1v/test.o -laio -o                      
-                          /tmp/tmppu41nq1v/a.out                                
-[11:47:22 07/13] INFO     | >> x86_64-linux-gnu-gcc                  spawn.py:77
-                          -Wno-unused-result -Wsign-compare -DNDEBUG            
-                          -g -fwrapv -O2 -Wall -g                               
-                          -fstack-protector-strong -Wformat                     
-                          -Werror=format-security -g -fwrapv -O2                
-                          -fPIC -c /tmp/tmpyvu05e0_/test.c -o                   
-                          /tmp/tmpyvu05e0_/test.o                               
-                 INFO     | >> x86_64-linux-gnu-gcc                  spawn.py:77
-                          /tmp/tmpyvu05e0_/test.o -L/usr/local/cuda             
-                          -L/usr/local/cuda/lib64 -lcufile -o                   
-                          /tmp/tmpyvu05e0_/a.out                                
-                 INFO     | >> x86_64-linux-gnu-gcc                  spawn.py:77
-                          -Wno-unused-result -Wsign-compare -DNDEBUG            
-                          -g -fwrapv -O2 -Wall -g                               
-                          -fstack-protector-strong -Wformat                     
-                          -Werror=format-security -g -fwrapv -O2                
-                          -fPIC -c /tmp/tmpi3oqu_4m/test.c -o                   
-                          /tmp/tmpi3oqu_4m/test.o                               
-                 INFO     | >> x86_64-linux-gnu-gcc                  spawn.py:77
-                          /tmp/tmpi3oqu_4m/test.o -laio -o                      
-                          /tmp/tmpi3oqu_4m/a.out                                
-[2026-07-13 11:47:25,449] [INFO] [logging.py:107:log_dist] [Rank -1] [TorchCheckpointEngine] Initialized with serialization = False
-
-  0%|          | 0/2 [00:00<?, ?it/s][A
-Eval at global step 0:   0%|          | 0/2 [00:00<?, ?it/s][A[11:47:29 07/13] INFO     | >> PyTorch version 2.7.0 available.     config.py:54
-[11:47:37 07/13] INFO     | >> PyTorch version 2.7.0 available.     config.py:54
-[11:47:43 07/13] INFO     | >> PyTorch version 2.7.0 available.     config.py:54
-[11:47:49 07/13] INFO     | >> PyTorch version 2.7.0 available.     config.py:54
-[11:47:55 07/13] INFO     | >> PyTorch version 2.7.0 available.     config.py:54
-[11:48:01 07/13] INFO     | >> PyTorch version 2.7.0 available.     config.py:54
-[11:48:06 07/13] INFO     | >> PyTorch version 2.7.0 available.     config.py:54
-[11:48:12 07/13] INFO     | >> PyTorch version 2.7.0 available.     config.py:54
-[11:48:17 07/13] INFO     | >> PyTorch version 2.7.0 available.     config.py:54
-[11:48:23 07/13] INFO     | >> PyTorch version 2.7.0 available.     config.py:54
-[11:48:28 07/13] INFO     | >> PyTorch version 2.7.0 available.     config.py:54
-[11:48:34 07/13] INFO     | >> PyTorch version 2.7.0 available.     config.py:54
-/HOME/sysu_xdliang/sysu_xdliang_1/HDD_POOL/Humanoid/yangky/Psi0/.venv-psi/lib/python3.10/site-packages/torchvision/io/_video_deprecation_warning.py:5: UserWarning: The video decoding and encoding capabilities of torchvision are deprecated from version 0.22 and will be removed in version 0.24. We recommend that you migrate to TorchCodec, where we'll consolidate the future decoding/encoding capabilities of PyTorch: https://github.com/pytorch/torchcodec
-  warnings.warn(
-/HOME/sysu_xdliang/sysu_xdliang_1/HDD_POOL/Humanoid/yangky/Psi0/.venv-psi/lib/python3.10/site-packages/torchvision/io/_video_deprecation_warning.py:5: UserWarning: The video decoding and encoding capabilities of torchvision are deprecated from version 0.22 and will be removed in version 0.24. We recommend that you migrate to TorchCodec, where we'll consolidate the future decoding/encoding capabilities of PyTorch: https://github.com/pytorch/torchcodec
-  warnings.warn(
-/HOME/sysu_xdliang/sysu_xdliang_1/HDD_POOL/Humanoid/yangky/Psi0/.venv-psi/lib/python3.10/site-packages/torchvision/io/_video_deprecation_warning.py:5: UserWarning: The video decoding and encoding capabilities of torchvision are deprecated from version 0.22 and will be removed in version 0.24. We recommend that you migrate to TorchCodec, where we'll consolidate the future decoding/encoding capabilities of PyTorch: https://github.com/pytorch/torchcodec
-  warnings.warn(
-/HOME/sysu_xdliang/sysu_xdliang_1/HDD_POOL/Humanoid/yangky/Psi0/.venv-psi/lib/python3.10/site-packages/torchvision/io/_video_deprecation_warning.py:5: UserWarning: The video decoding and encoding capabilities of torchvision are deprecated from version 0.22 and will be removed in version 0.24. We recommend that you migrate to TorchCodec, where we'll consolidate the future decoding/encoding capabilities of PyTorch: https://github.com/pytorch/torchcodec
-  warnings.warn(
-/HOME/sysu_xdliang/sysu_xdliang_1/HDD_POOL/Humanoid/yangky/Psi0/.venv-psi/lib/python3.10/site-packages/torchvision/io/_video_deprecation_warning.py:5: UserWarning: The video decoding and encoding capabilities of torchvision are deprecated from version 0.22 and will be removed in version 0.24. We recommend that you migrate to TorchCodec, where we'll consolidate the future decoding/encoding capabilities of PyTorch: https://github.com/pytorch/torchcodec
-  warnings.warn(
-/HOME/sysu_xdliang/sysu_xdliang_1/HDD_POOL/Humanoid/yangky/Psi0/.venv-psi/lib/python3.10/site-packages/torchvision/io/_video_deprecation_warning.py:5: UserWarning: The video decoding and encoding capabilities of torchvision are deprecated from version 0.22 and will be removed in version 0.24. We recommend that you migrate to TorchCodec, where we'll consolidate the future decoding/encoding capabilities of PyTorch: https://github.com/pytorch/torchcodec
-  warnings.warn(
-/HOME/sysu_xdliang/sysu_xdliang_1/HDD_POOL/Humanoid/yangky/Psi0/.venv-psi/lib/python3.10/site-packages/torchvision/io/_video_deprecation_warning.py:5: UserWarning: The video decoding and encoding capabilities of torchvision are deprecated from version 0.22 and will be removed in version 0.24. We recommend that you migrate to TorchCodec, where we'll consolidate the future decoding/encoding capabilities of PyTorch: https://github.com/pytorch/torchcodec
-  warnings.warn(
-/HOME/sysu_xdliang/sysu_xdliang_1/HDD_POOL/Humanoid/yangky/Psi0/.venv-psi/lib/python3.10/site-packages/torchvision/io/_video_deprecation_warning.py:5: UserWarning: The video decoding and encoding capabilities of torchvision are deprecated from version 0.22 and will be removed in version 0.24. We recommend that you migrate to TorchCodec, where we'll consolidate the future decoding/encoding capabilities of PyTorch: https://github.com/pytorch/torchcodec
-  warnings.warn(
-/HOME/sysu_xdliang/sysu_xdliang_1/HDD_POOL/Humanoid/yangky/Psi0/.venv-psi/lib/python3.10/site-packages/torchvision/io/_video_deprecation_warning.py:5: UserWarning: The video decoding and encoding capabilities of torchvision are deprecated from version 0.22 and will be removed in version 0.24. We recommend that you migrate to TorchCodec, where we'll consolidate the future decoding/encoding capabilities of PyTorch: https://github.com/pytorch/torchcodec
-  warnings.warn(
-/HOME/sysu_xdliang/sysu_xdliang_1/HDD_POOL/Humanoid/yangky/Psi0/.venv-psi/lib/python3.10/site-packages/torchvision/io/_video_deprecation_warning.py:5: UserWarning: The video decoding and encoding capabilities of torchvision are deprecated from version 0.22 and will be removed in version 0.24. We recommend that you migrate to TorchCodec, where we'll consolidate the future decoding/encoding capabilities of PyTorch: https://github.com/pytorch/torchcodec
-  warnings.warn(
-/HOME/sysu_xdliang/sysu_xdliang_1/HDD_POOL/Humanoid/yangky/Psi0/.venv-psi/lib/python3.10/site-packages/torchvision/io/_video_deprecation_warning.py:5: UserWarning: The video decoding and encoding capabilities of torchvision are deprecated from version 0.22 and will be removed in version 0.24. We recommend that you migrate to TorchCodec, where we'll consolidate the future decoding/encoding capabilities of PyTorch: https://github.com/pytorch/torchcodec
-  warnings.warn(
-/HOME/sysu_xdliang/sysu_xdliang_1/HDD_POOL/Humanoid/yangky/Psi0/.venv-psi/lib/python3.10/site-packages/torchvision/io/_video_deprecation_warning.py:5: UserWarning: The video decoding and encoding capabilities of torchvision are deprecated from version 0.22 and will be removed in version 0.24. We recommend that you migrate to TorchCodec, where we'll consolidate the future decoding/encoding capabilities of PyTorch: https://github.com/pytorch/torchcodec
-  warnings.warn(
-
-Eval at global step 0:  50%|█████     | 1/2 [01:29<01:29, 89.19s/it][A
-                                                                    [ATraining steps:   5%|▌         | 1/20 [01:46<33:39, 106.31s/it]Training steps:   5%|▌         | 1/20 [01:46<33:39, 106.31s/it, loss=37.5, lr=1.0e-05]Training steps:  10%|█         | 2/20 [01:46<13:12, 44.02s/it, loss=37.5, lr=1.0e-05] Training steps:  10%|█         | 2/20 [01:46<13:12, 44.02s/it, loss=39.3, lr=2.0e-05]Training steps:  15%|█▌        | 3/20 [01:47<06:50, 24.13s/it, loss=39.3, lr=2.0e-05]Training steps:  15%|█▌        | 3/20 [01:47<06:50, 24.13s/it, loss=36.5, lr=3.0e-05]Training steps:  20%|██        | 4/20 [01:47<03:57, 14.83s/it, loss=36.5, lr=3.0e-05]Training steps:  20%|██        | 4/20 [01:47<03:57, 14.83s/it, loss=35.3, lr=4.0e-05]Training steps:  25%|██▌       | 5/20 [01:48<02:25,  9.70s/it, loss=35.3, lr=4.0e-05]Training steps:  25%|██▌       | 5/20 [01:48<02:25,  9.70s/it, loss=36.8, lr=5.0e-05]Training steps:  30%|███       | 6/20 [01:48<01:31,  6.54s/it, loss=36.8, lr=5.0e-05]Training steps:  30%|███       | 6/20 [01:48<01:31,  6.54s/it, loss=31.7, lr=6.0e-05]Training steps:  35%|███▌      | 7/20 [01:49<00:59,  4.58s/it, loss=31.7, lr=6.0e-05]Training steps:  35%|███▌      | 7/20 [01:49<00:59,  4.58s/it, loss=31, lr=7.0e-05]  Training steps:  40%|████      | 8/20 [01:49<00:39,  3.33s/it, loss=31, lr=7.0e-05]Training steps:  40%|████      | 8/20 [01:49<00:39,  3.33s/it, loss=33.5, lr=8.0e-05]Training steps:  45%|████▌     | 9/20 [01:50<00:26,  2.42s/it, loss=33.5, lr=8.0e-05]Training steps:  45%|████▌     | 9/20 [01:50<00:26,  2.42s/it, loss=28.1, lr=9.0e-05]Training steps:  50%|█████     | 10/20 [01:50<00:18,  1.82s/it, loss=28.1, lr=9.0e-05]Training steps:  50%|█████     | 10/20 [01:50<00:18,  1.82s/it, loss=29.5, lr=1.0e-04]Training steps:  55%|█████▌    | 11/20 [01:51<00:12,  1.42s/it, loss=29.5, lr=1.0e-04]Training steps:  55%|█████▌    | 11/20 [01:51<00:12,  1.42s/it, loss=25.1, lr=9.8e-05]Training steps:  60%|██████    | 12/20 [01:51<00:09,  1.14s/it, loss=25.1, lr=9.8e-05]Training steps:  60%|██████    | 12/20 [01:51<00:09,  1.14s/it, loss=30.7, lr=9.0e-05]Training steps:  65%|██████▌   | 13/20 [01:52<00:06,  1.04it/s, loss=30.7, lr=9.0e-05]Training steps:  65%|██████▌   | 13/20 [01:52<00:06,  1.04it/s, loss=30.9, lr=7.9e-05]Training steps:  70%|███████   | 14/20 [01:53<00:05,  1.16it/s, loss=30.9, lr=7.9e-05]Training steps:  70%|███████   | 14/20 [01:53<00:05,  1.16it/s, loss=36.7, lr=6.5e-05]Training steps:  75%|███████▌  | 15/20 [01:53<00:03,  1.32it/s, loss=36.7, lr=6.5e-05]Training steps:  75%|███████▌  | 15/20 [01:53<00:03,  1.32it/s, loss=26.3, lr=5.0e-05]Training steps:  80%|████████  | 16/20 [01:54<00:02,  1.39it/s, loss=26.3, lr=5.0e-05]Training steps:  80%|████████  | 16/20 [01:54<00:02,  1.39it/s, loss=28.8, lr=3.5e-05]Training steps:  85%|████████▌ | 17/20 [01:54<00:02,  1.47it/s, loss=28.8, lr=3.5e-05]Training steps:  85%|████████▌ | 17/20 [01:54<00:02,  1.47it/s, loss=28.1, lr=2.1e-05]Training steps:  90%|█████████ | 18/20 [01:55<00:01,  1.48it/s, loss=28.1, lr=2.1e-05]Training steps:  90%|█████████ | 18/20 [01:55<00:01,  1.48it/s, loss=26.9, lr=9.5e-06]Training steps:  95%|█████████▌| 19/20 [01:55<00:00,  1.59it/s, loss=26.9, lr=9.5e-06]Training steps:  95%|█████████▌| 19/20 [01:55<00:00,  1.59it/s, loss=26.5, lr=2.4e-06][11:49:06 07/13] WARNING  | >> Removed shared tensor                other.py:272
-                          {'vlm_model.lm_head.weight'} while                    
-                          saving. This should be OK, but check by               
-                          verifying that you don't receive any                  
-                          warning while reloading                               
-[11:49:21 07/13] INFO     | >> Model weights saved in        accelerator.py:3161
-                          .runs/finetune/simple-multitask-ps                    
-                          i0-smoke.simple.flow1000.cosine.lr                    
-                          1.0e-04.b16.gpus1.2607131146/check                    
-                          points/ckpt_20/pytorch_model.bin                      
-                 INFO     | >> Saving current state to       accelerator.py:3260
-                          .runs/finetune/simple-multitask-ps                    
-                          i0-smoke.simple.flow1000.cosine.lr                    
-                          1.0e-04.b16.gpus1.2607131146/check                    
-                          points/ckpt_20                                        
-                 WARNING  | >> Removed shared tensor                other.py:272
-                          {'vlm_model.lm_head.weight'} while                    
-                          saving. This should be OK, but check by               
-                          verifying that you don't receive any                  
-                          warning while reloading                               
-[11:49:33 07/13] INFO     | >> Model weights saved in       checkpointing.py:108
-                          .runs/finetune/simple-multitask-p                     
-                          si0-smoke.simple.flow1000.cosine.                     
-                          lr1.0e-04.b16.gpus1.2607131146/ch                     
-                          eckpoints/ckpt_20/model.safetenso                     
-                          rs                                                    
-[11:49:37 07/13] INFO     | >> Optimizer state saved in     checkpointing.py:115
-                          .runs/finetune/simple-multitask-p                     
-                          si0-smoke.simple.flow1000.cosine.                     
-                          lr1.0e-04.b16.gpus1.2607131146/ch                     
-                          eckpoints/ckpt_20/optimizer.bin                       
-                 INFO     | >> Scheduler state saved in     checkpointing.py:122
-                          .runs/finetune/simple-multitask-p                     
-                          si0-smoke.simple.flow1000.cosine.                     
-                          lr1.0e-04.b16.gpus1.2607131146/ch                     
-                          eckpoints/ckpt_20/scheduler.bin                       
-                 INFO     | >> Sampler state for dataloader checkpointing.py:139
-                          0 saved in                                            
-                          .runs/finetune/simple-multitask-p                     
-                          si0-smoke.simple.flow1000.cosine.                     
-                          lr1.0e-04.b16.gpus1.2607131146/ch                     
-                          eckpoints/ckpt_20/sampler.bin                         
-                 INFO     | >> Sampler state for dataloader checkpointing.py:139
-                          1 saved in                                            
-                          .runs/finetune/simple-multitask-p                     
-                          si0-smoke.simple.flow1000.cosine.                     
-                          lr1.0e-04.b16.gpus1.2607131146/ch                     
-                          eckpoints/ckpt_20/sampler_1.bin                       
-                 INFO     | >> Random states saved in       checkpointing.py:170
-                          .runs/finetune/simple-multitask-p                     
-                          si0-smoke.simple.flow1000.cosine.                     
-                          lr1.0e-04.b16.gpus1.2607131146/ch                     
-                          eckpoints/ckpt_20/random_states_0                     
-                          .pkl                                                  
-                                                                                      Saved state to .runs/finetune/simple-multitask-psi0-smoke.simple.flow1000.cosine.lr1.0e-04.b16.gpus1.2607131146/checkpoints/ckpt_20
-Training steps:  95%|█████████▌| 19/20 [02:26<00:00,  1.59it/s, loss=26.5, lr=2.4e-06]
-  0%|          | 0/2 [00:00<?, ?it/s][A
-Eval at global step 19:   0%|          | 0/2 [00:00<?, ?it/s][A
-Eval at global step 19:  50%|█████     | 1/2 [00:15<00:15, 15.70s/it][A
-                                                                     [ATraining steps: 100%|██████████| 20/20 [02:46<00:00, 15.65s/it, loss=26.5, lr=2.4e-06]Training steps: 100%|██████████| 20/20 [02:46<00:00, 15.65s/it, loss=27, lr=0.0e+00]                                                                                      Training has reached maximum steps.
-Training steps: 100%|██████████| 20/20 [02:46<00:00, 15.65s/it, loss=27, lr=0.0e+00][11:49:57 07/13] INFO     | >> [*] Happy Ending!                    train.py:310
-wandb: 
-wandb: Run history:
-wandb:  eval/err_l1_arm_joints █▁
-wandb: eval/err_l1_hand_joints █▁
-wandb:      eval/err_l1_height █▁
-wandb:  eval/err_l1_target_yaw ▁█
-wandb:   eval/err_l1_torso_rpy █▁
-wandb:          eval/err_l1_vx █▁
-wandb:          eval/err_l1_vy █▁
-wandb:        eval/err_l1_vyaw █▁
-wandb:               eval/loss █▁
-wandb:             train/epoch ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
-wandb:                      +3 ...
-wandb: 
-wandb: Run summary:
-wandb:  eval/err_l1_arm_joints 3.28002
-wandb: eval/err_l1_hand_joints 2.24676
-wandb:      eval/err_l1_height 0.14238
-wandb:  eval/err_l1_target_yaw 2.52368
-wandb:   eval/err_l1_torso_rpy 0.69962
-wandb:          eval/err_l1_vx 0.39724
-wandb:          eval/err_l1_vy 0.37889
-wandb:        eval/err_l1_vyaw 0.74491
-wandb:               eval/loss 27.34775
-wandb:             train/epoch 0
-wandb:                      +3 ...
-wandb: 
-wandb: You can sync this run to the cloud by running:
-wandb: wandb sync /XYAIFS00/HDD_POOL/sysu_xdliang/sysu_xdliang_1/Humanoid/yangky/Psi0/.runs/finetune/simple-multitask-psi0-smoke.simple.flow1000.cosine.lr1.0e-04.b16.gpus1.2607131146/wandb/offline-run-20260713_114644-awuwl0k4
-wandb: Find logs at: ./.runs/finetune/simple-multitask-psi0-smoke.simple.flow1000.cosine.lr1.0e-04.b16.gpus1.2607131146/wandb/offline-run-20260713_114644-awuwl0k4/logs
-Training steps: 100%|██████████| 20/20 [02:50<00:00,  8.54s/it, loss=27, lr=0.0e+00]

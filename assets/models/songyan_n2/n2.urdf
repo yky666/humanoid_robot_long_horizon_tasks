@@ -1,0 +1,210 @@
+<?xml version="1.0"?>
+<!--
+  Songyan / Noetix N2 URDF preview for the competition demo.
+
+  Public official references used for this preview:
+  - Noetix N2 product page: 118 cm * 47 cm * 29 cm, about 30 kg, 18 DoF,
+    5 DoF per leg, 4 DoF per arm, spherical/five-finger hand, knee 0~126 deg,
+    hip pitch -90~45 deg, hip roll/yaw -37~57 deg.
+  - Noetix official open-source page lists Noetix-N2-gym and Noetix_sdk_N2.
+
+  This file is intentionally a readable URDF preview for RobotAdapter mapping.
+  Replace it with the official delivered N2 URDF from the N2 SDK/package when
+  submitting executable simulation assets.
+-->
+<robot name="songyan_n2_official_spec_preview">
+  <link name="base_link">
+    <inertial>
+      <mass value="30.0"/>
+      <origin xyz="0 0 0.58" rpy="0 0 0"/>
+      <inertia ixx="1.6" ixy="0" ixz="0" iyy="1.2" iyz="0" izz="0.8"/>
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0.58" rpy="0 0 0"/>
+      <geometry><box size="0.29 0.47 0.50"/></geometry>
+      <material name="moonlight_white"><color rgba="0.88 0.92 0.96 1"/></material>
+    </visual>
+  </link>
+
+  <link name="torso_link"/>
+  <joint name="torso_fixed" type="fixed">
+    <parent link="base_link"/>
+    <child link="torso_link"/>
+    <origin xyz="0 0 0.58" rpy="0 0 0"/>
+  </joint>
+
+  <!-- Left leg: official N2 single-leg DoF = 5 -->
+  <link name="left_hip_yaw_link"/>
+  <joint name="left_hip_yaw" type="revolute">
+    <parent link="torso_link"/>
+    <child link="left_hip_yaw_link"/>
+    <origin xyz="0 0.095 -0.10" rpy="0 0 0"/>
+    <axis xyz="0 0 1"/>
+    <limit lower="-0.6458" upper="0.9948" effort="150" velocity="10"/>
+  </joint>
+  <link name="left_hip_roll_link"/>
+  <joint name="left_hip_roll" type="revolute">
+    <parent link="left_hip_yaw_link"/>
+    <child link="left_hip_roll_link"/>
+    <axis xyz="1 0 0"/>
+    <limit lower="-0.6458" upper="0.9948" effort="150" velocity="10"/>
+  </joint>
+  <link name="left_hip_pitch_link"/>
+  <joint name="left_hip_pitch" type="revolute">
+    <parent link="left_hip_roll_link"/>
+    <child link="left_hip_pitch_link"/>
+    <axis xyz="0 1 0"/>
+    <limit lower="-1.5708" upper="0.7854" effort="150" velocity="10"/>
+  </joint>
+  <link name="left_knee_link"/>
+  <joint name="left_knee" type="revolute">
+    <parent link="left_hip_pitch_link"/>
+    <child link="left_knee_link"/>
+    <origin xyz="0 0 -0.28" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <limit lower="0" upper="2.1991" effort="150" velocity="10"/>
+  </joint>
+  <link name="left_ankle_pitch_link"/>
+  <joint name="left_ankle_pitch" type="revolute">
+    <parent link="left_knee_link"/>
+    <child link="left_ankle_pitch_link"/>
+    <origin xyz="0 0 -0.28" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <limit lower="-0.7854" upper="0.7854" effort="90" velocity="10"/>
+  </joint>
+  <link name="left_foot_link">
+    <visual>
+      <origin xyz="0.04 0 -0.04" rpy="0 0 0"/>
+      <geometry><box size="0.18 0.08 0.04"/></geometry>
+    </visual>
+  </link>
+  <joint name="left_foot_fixed" type="fixed">
+    <parent link="left_ankle_pitch_link"/>
+    <child link="left_foot_link"/>
+  </joint>
+
+  <!-- Right leg: mirrored 5 DoF -->
+  <link name="right_hip_yaw_link"/>
+  <joint name="right_hip_yaw" type="revolute">
+    <parent link="torso_link"/>
+    <child link="right_hip_yaw_link"/>
+    <origin xyz="0 -0.095 -0.10" rpy="0 0 0"/>
+    <axis xyz="0 0 1"/>
+    <limit lower="-0.6458" upper="0.9948" effort="150" velocity="10"/>
+  </joint>
+  <link name="right_hip_roll_link"/>
+  <joint name="right_hip_roll" type="revolute">
+    <parent link="right_hip_yaw_link"/>
+    <child link="right_hip_roll_link"/>
+    <axis xyz="1 0 0"/>
+    <limit lower="-0.6458" upper="0.9948" effort="150" velocity="10"/>
+  </joint>
+  <link name="right_hip_pitch_link"/>
+  <joint name="right_hip_pitch" type="revolute">
+    <parent link="right_hip_roll_link"/>
+    <child link="right_hip_pitch_link"/>
+    <axis xyz="0 1 0"/>
+    <limit lower="-1.5708" upper="0.7854" effort="150" velocity="10"/>
+  </joint>
+  <link name="right_knee_link"/>
+  <joint name="right_knee" type="revolute">
+    <parent link="right_hip_pitch_link"/>
+    <child link="right_knee_link"/>
+    <origin xyz="0 0 -0.28" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <limit lower="0" upper="2.1991" effort="150" velocity="10"/>
+  </joint>
+  <link name="right_ankle_pitch_link"/>
+  <joint name="right_ankle_pitch" type="revolute">
+    <parent link="right_knee_link"/>
+    <child link="right_ankle_pitch_link"/>
+    <origin xyz="0 0 -0.28" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <limit lower="-0.7854" upper="0.7854" effort="90" velocity="10"/>
+  </joint>
+  <link name="right_foot_link">
+    <visual>
+      <origin xyz="0.04 0 -0.04" rpy="0 0 0"/>
+      <geometry><box size="0.18 0.08 0.04"/></geometry>
+    </visual>
+  </link>
+  <joint name="right_foot_fixed" type="fixed">
+    <parent link="right_ankle_pitch_link"/>
+    <child link="right_foot_link"/>
+  </joint>
+
+  <!-- Arms: official N2 single-arm DoF = 4 -->
+  <link name="left_shoulder_pitch_link"/>
+  <joint name="left_shoulder_pitch" type="revolute">
+    <parent link="torso_link"/>
+    <child link="left_shoulder_pitch_link"/>
+    <origin xyz="0 0.25 0.18" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <limit lower="-2.0944" upper="2.0944" effort="60" velocity="8"/>
+  </joint>
+  <link name="left_shoulder_roll_link"/>
+  <joint name="left_shoulder_roll" type="revolute">
+    <parent link="left_shoulder_pitch_link"/>
+    <child link="left_shoulder_roll_link"/>
+    <axis xyz="1 0 0"/>
+    <limit lower="-1.5708" upper="1.5708" effort="60" velocity="8"/>
+  </joint>
+  <link name="left_elbow_pitch_link"/>
+  <joint name="left_elbow_pitch" type="revolute">
+    <parent link="left_shoulder_roll_link"/>
+    <child link="left_elbow_pitch_link"/>
+    <origin xyz="0 0.18 -0.02" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <limit lower="-1.5708" upper="1.5708" effort="45" velocity="8"/>
+  </joint>
+  <link name="left_wrist_yaw_link"/>
+  <joint name="left_wrist_yaw" type="revolute">
+    <parent link="left_elbow_pitch_link"/>
+    <child link="left_wrist_yaw_link"/>
+    <origin xyz="0 0.18 0" rpy="0 0 0"/>
+    <axis xyz="0 0 1"/>
+    <limit lower="-1.5708" upper="1.5708" effort="25" velocity="8"/>
+  </joint>
+  <link name="left_end_effector"/>
+  <joint name="left_end_effector_fixed" type="fixed">
+    <parent link="left_wrist_yaw_link"/>
+    <child link="left_end_effector"/>
+  </joint>
+
+  <link name="right_shoulder_pitch_link"/>
+  <joint name="right_shoulder_pitch" type="revolute">
+    <parent link="torso_link"/>
+    <child link="right_shoulder_pitch_link"/>
+    <origin xyz="0 -0.25 0.18" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <limit lower="-2.0944" upper="2.0944" effort="60" velocity="8"/>
+  </joint>
+  <link name="right_shoulder_roll_link"/>
+  <joint name="right_shoulder_roll" type="revolute">
+    <parent link="right_shoulder_pitch_link"/>
+    <child link="right_shoulder_roll_link"/>
+    <axis xyz="1 0 0"/>
+    <limit lower="-1.5708" upper="1.5708" effort="60" velocity="8"/>
+  </joint>
+  <link name="right_elbow_pitch_link"/>
+  <joint name="right_elbow_pitch" type="revolute">
+    <parent link="right_shoulder_roll_link"/>
+    <child link="right_elbow_pitch_link"/>
+    <origin xyz="0 -0.18 -0.02" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <limit lower="-1.5708" upper="1.5708" effort="45" velocity="8"/>
+  </joint>
+  <link name="right_wrist_yaw_link"/>
+  <joint name="right_wrist_yaw" type="revolute">
+    <parent link="right_elbow_pitch_link"/>
+    <child link="right_wrist_yaw_link"/>
+    <origin xyz="0 -0.18 0" rpy="0 0 0"/>
+    <axis xyz="0 0 1"/>
+    <limit lower="-1.5708" upper="1.5708" effort="25" velocity="8"/>
+  </joint>
+  <link name="right_end_effector"/>
+  <joint name="right_end_effector_fixed" type="fixed">
+    <parent link="right_wrist_yaw_link"/>
+    <child link="right_end_effector"/>
+  </joint>
+</robot>

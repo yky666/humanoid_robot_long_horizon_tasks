@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Embodied DataFlywheel Control Console</title>
+    <link rel="stylesheet" href="./styles.css?v=20260811-robot-adapter" />
+  </head>
+  <body>
+    <main class="console">
+      <aside class="sidebar">
+        <div class="brand">
+          <p class="eyebrow">Embodied Loop · 松延动力命题</p>
+          <h1>Embodied DataFlywheel</h1>
+          <p>全自动人形机器人数据飞轮：遥操数采、跨构型重定向、后训练微调、评估诊断与 resample 回采闭环。</p>
+        </div>
+
+        <section class="control-block">
+          <div class="block-head">
+            <span>RobotAdapter</span>
+            <strong id="adapterStatus">已适配</strong>
+          </div>
+          <div class="robot-grid" id="robotGrid"></div>
+          <div class="asset-status" id="assetStatus"></div>
+        </section>
+
+        <section class="control-block">
+          <div class="block-head">
+            <span>Autopilot</span>
+            <strong id="runState">待运行</strong>
+          </div>
+          <button id="autoRun" class="primary-action" type="button">启动全自动闭环</button>
+          <button id="stepRun" class="secondary-action" type="button">单步推进</button>
+        </section>
+
+        <section class="control-block">
+          <div class="block-head">
+            <span>发布状态</span>
+            <strong>脱敏优先</strong>
+          </div>
+          <p class="small-copy">公开展示默认使用仿真、benchmark、近景设备和无明显个人信息片段；真机背景视频标注为复核后发布。</p>
+        </section>
+      </aside>
+
+      <section class="main">
+        <header class="topbar">
+          <div>
+            <p class="eyebrow">Pipeline Monitor</p>
+            <h2 id="stageName">遥操数采</h2>
+          </div>
+          <div class="metric-strip">
+            <div><span>有效轨迹/h</span><strong id="mThroughput">18.4</strong></div>
+            <div><span>质量分 Q</span><strong id="mQuality">82</strong></div>
+            <div><span>价值分 V</span><strong id="mValue">76</strong></div>
+            <div><span>回采优先级</span><strong id="mResample">中</strong></div>
+          </div>
+        </header>
+
+        <section class="pipeline" id="pipeline"></section>
+
+        <section class="workbench">
+          <div class="video-panel">
+            <video id="demoVideo" controls autoplay muted loop playsinline></video>
+            <div class="motion-studio">
+              <div class="viewer-head">
+                <span id="sourceAsset">source: teleop_episode.npz</span>
+                <span id="targetRobot">target: Unitree G1</span>
+              </div>
+              <div class="viewer-body">
+                <svg id="robotSketch" viewBox="0 0 420 300" role="img" aria-label="robot trajectory preview"></svg>
+                <div class="curve-panel">
+                  <div class="curve-row"><span>root_vx</span><i style="--w: 74%"></i></div>
+                  <div class="curve-row"><span>left_arm</span><i style="--w: 58%"></i></div>
+                  <div class="curve-row"><span>right_arm</span><i style="--w: 67%"></i></div>
+                  <div class="curve-row"><span>smooth</span><i id="smoothBar" style="--w: 42%"></i></div>
+                </div>
+              </div>
+            </div>
+            <div class="video-overlay">
+              <span id="privacyBadge">可公开展示</span>
+              <strong id="clipTitle">PICO 遥操作数采</strong>
+              <p id="clipDesc">采集员通过 PICO/键盘/手套等输入设备产生机器人轨迹，系统同步记录 RGB-D、IMU、关节、控制指令、事件日志和自然语言任务。</p>
+            </div>
+          </div>
+
+          <div class="detail-panel">
+            <section class="card">
+              <p class="card-label">当前阶段</p>
+              <h3 id="stageTitle">Teleop Data Capture</h3>
+              <p id="stageDesc"></p>
+            </section>
+
+            <section class="card">
+              <p class="card-label">自动化产物</p>
+              <div id="artifactList" class="artifact-list"></div>
+            </section>
+
+            <section class="card compact">
+              <p class="card-label">跨构型映射</p>
+              <div class="mapping-grid">
+                <div><span>自由度</span><strong id="dofValue">29 DoF</strong></div>
+                <div><span>末端</span><strong id="eefValue">双臂+灵巧手</strong></div>
+                <div><span>数据格式</span><strong>LeRobot / GR00T</strong></div>
+                <div><span>安全约束</span><strong id="safetyValue">限位+碰撞</strong></div>
+                <div class="wide"><span>模型资产</span><strong id="assetPath">assets/models/unitree_g1/g1_29dof_with_hand.urdf</strong></div>
+                <div class="wide"><span>重定向链路</span><strong id="retargetRoute">GVHMR/GMR → RobotAdapter → LeRobot/GR00T</strong></div>
+              </div>
+              <button id="viewUrdf" class="inline-action" type="button">查看当前 URDF</button>
+              <pre id="urdfPreview" class="urdf-preview" aria-label="URDF preview"></pre>
+            </section>
+          </div>
+        </section>
+
+        <section class="flywheel">
+          <div class="flywheel-node active" data-node="teleop">遥操数采</div>
+          <div class="flywheel-node" data-node="retarget">重定向</div>
+          <div class="flywheel-node" data-node="finetune">后训练微调</div>
+          <div class="flywheel-node" data-node="evaluate">评估诊断</div>
+          <div class="flywheel-node" data-node="resample">Resample 回采</div>
+        </section>
+      </section>
+    </main>
+    <script src="./script.js?v=20260811-robot-adapter"></script>
+  </body>
+</html>

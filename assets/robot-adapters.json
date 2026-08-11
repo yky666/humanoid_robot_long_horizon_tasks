@@ -1,0 +1,37 @@
+{
+  "songyan_n2_edu": {
+    "label": "松延 N2 / N2 EDU",
+    "role": "target_platform",
+    "urdf": "assets/models/songyan_n2/n2.urdf",
+    "status": "official_public_spec_derived_urdf_preview",
+    "retarget_route": "GVHMR/GMR -> N2 RobotAdapter -> LeRobot/GR00T",
+    "official_sources": [
+      "https://en.noetixrobotics.com/n2",
+      "https://en.noetixrobotics.com/download/document"
+    ],
+    "notes": "The public official site exposes N2 specifications and delivery documentation mentioning URDF files, but does not expose the raw delivered n2.urdf package. Replace this preview with the SDK-delivered official URDF when available."
+  },
+  "unitree_g1": {
+    "label": "Unitree G1",
+    "role": "validation_platform",
+    "urdf": "assets/models/unitree_g1/g1_29dof_with_hand.urdf",
+    "status": "remote_urdf_available_pending_copy_retry",
+    "retarget_route": "GVHMR/GMR/OmniRetarget -> G1 29DoF -> GR00T",
+    "videos": ["omni_new_task2_g1_render.mp4", "gr00t_ep0038_gt_vs_pred.mp4"]
+  },
+  "unitree_go2_b2": {
+    "label": "Unitree Go2 / B2",
+    "role": "quadruped_platform",
+    "urdf": "assets/models/unitree_quadruped/go2_or_b2.urdf",
+    "status": "waiting_urdf_or_description_asset",
+    "retarget_route": "locomotion trajectory -> Go2/B2 foot-contact constraints -> quadruped dataset"
+  },
+  "rh56dftp": {
+    "label": "Allegro / RH56DFTP",
+    "role": "dexterous_hand_platform",
+    "urdf": "assets/models/rh56dftp/rh56dftp_hand.urdf",
+    "status": "benchmark_videos_connected",
+    "retarget_route": "MANO/glove skeleton -> RH56DFTP finger joints -> BC/RL fine-tuning",
+    "videos": ["rh56dftp_bc_rnn_eval.mp4", "rh56dftp_ppo_eval.mp4"]
+  }
+}

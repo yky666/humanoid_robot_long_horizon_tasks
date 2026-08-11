@@ -1,575 +1,0 @@
-[2026-07-13T11:13:50+00:00] Psi0 checkpoint download attempt after 0s
-Number of files in the repo is unreliable. Using `list_repo_tree` to ensure all files are listed.
-Traceback (most recent call last):
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/httpx/_transports/default.py", line 101, in map_httpcore_exceptions
-    yield
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/httpx/_transports/default.py", line 250, in handle_request
-    resp = self._pool.handle_request(req)
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/httpcore/_sync/connection_pool.py", line 256, in handle_request
-    raise exc from None
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/httpcore/_sync/connection_pool.py", line 236, in handle_request
-    response = connection.handle_request(
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/httpcore/_sync/http_proxy.py", line 297, in handle_request
-    raise ProxyError(msg)
-httpcore.ProxyError: 503 Service Unavailable
-
-The above exception was the direct cause of the following exception:
-
-Traceback (most recent call last):
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/bin/hf", line 6, in <module>
-    sys.exit(main())
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/huggingface_hub/cli/hf.py", line 114, in main
-    app()
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/typer/main.py", line 1152, in __call__
-    raise e
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/typer/main.py", line 1135, in __call__
-    return get_command(self)(*args, **kwargs)
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/click/core.py", line 1524, in __call__
-    return self.main(*args, **kwargs)
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/typer/core.py", line 794, in main
-    return _main(
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/typer/core.py", line 188, in _main
-    rv = self.invoke(ctx)
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/huggingface_hub/cli/_cli_utils.py", line 131, in invoke
-    return super().invoke(ctx)
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/click/core.py", line 1912, in invoke
-    return _process_result(sub_ctx.command.invoke(sub_ctx))
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/click/core.py", line 1308, in invoke
-    return ctx.invoke(self.callback, **ctx.params)
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/click/core.py", line 877, in invoke
-    return callback(*args, **kwargs)
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/typer/main.py", line 1514, in wrapper
-    return callback(**use_params)
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/huggingface_hub/cli/download.py", line 219, in download
-    _print_result(run_download())
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/huggingface_hub/cli/download.py", line 181, in run_download
-    return snapshot_download(
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/huggingface_hub/utils/_validators.py", line 88, in _inner_fn
-    return fn(*args, **kwargs)
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/huggingface_hub/_snapshot_download.py", line 454, in snapshot_download
-    thread_map(
-  File "/usr/local/lib/python3.10/dist-packages/tqdm/contrib/concurrent.py", line 69, in thread_map
-    return _executor_map(ThreadPoolExecutor, fn, *iterables, **tqdm_kwargs)
-  File "/usr/local/lib/python3.10/dist-packages/tqdm/contrib/concurrent.py", line 51, in _executor_map
-    return list(tqdm_class(ex.map(fn, *iterables, chunksize=chunksize), **kwargs))
-  File "/usr/lib/python3.10/concurrent/futures/_base.py", line 610, in map
-    fs = [self.submit(fn, *args) for args in zip(*iterables)]
-  File "/usr/lib/python3.10/concurrent/futures/_base.py", line 610, in <listcomp>
-    fs = [self.submit(fn, *args) for args in zip(*iterables)]
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/huggingface_hub/utils/_paths.py", line 127, in filter_repo_objects
-    for item in items:
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/huggingface_hub/_snapshot_download.py", line 348, in <genexpr>
-    repo_files = (
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/huggingface_hub/hf_api.py", line 3927, in list_repo_tree
-    for path_info in paginate(path=tree_url, headers=headers, params={"recursive": recursive, "expand": expand}):
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/huggingface_hub/utils/_pagination.py", line 44, in paginate
-    r = http_backoff("GET", next_page, headers=headers)
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/huggingface_hub/utils/_http.py", line 559, in http_backoff
-    return next(
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/huggingface_hub/utils/_http.py", line 467, in _http_backoff_base
-    response = client.request(method=method, url=url, **kwargs)
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/httpx/_client.py", line 825, in request
-    return self.send(request, auth=auth, follow_redirects=follow_redirects)
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/httpx/_client.py", line 914, in send
-    response = self._send_handling_auth(
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/httpx/_client.py", line 942, in _send_handling_auth
-    response = self._send_handling_redirects(
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/httpx/_client.py", line 979, in _send_handling_redirects
-    response = self._send_single_request(request)
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/httpx/_client.py", line 1014, in _send_single_request
-    response = transport.handle_request(request)
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/httpx/_transports/default.py", line 249, in handle_request
-    with map_httpcore_exceptions():
-  File "/usr/lib/python3.10/contextlib.py", line 153, in __exit__
-    self.gen.throw(typ, value, traceback)
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/httpx/_transports/default.py", line 118, in map_httpcore_exceptions
-    raise mapped_exc(message) from exc
-httpx.ProxyError: 503 Service Unavailable
-[2026-07-13T11:14:14+00:00] Psi0 checkpoint download attempt after 15s
-Number of files in the repo is unreliable. Using `list_repo_tree` to ensure all files are listed.
-Traceback (most recent call last):
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/httpx/_transports/default.py", line 101, in map_httpcore_exceptions
-    yield
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/httpx/_transports/default.py", line 250, in handle_request
-    resp = self._pool.handle_request(req)
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/httpcore/_sync/connection_pool.py", line 256, in handle_request
-    raise exc from None
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/httpcore/_sync/connection_pool.py", line 236, in handle_request
-    response = connection.handle_request(
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/httpcore/_sync/http_proxy.py", line 297, in handle_request
-    raise ProxyError(msg)
-httpcore.ProxyError: 503 Service Unavailable
-
-The above exception was the direct cause of the following exception:
-
-Traceback (most recent call last):
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/bin/hf", line 6, in <module>
-    sys.exit(main())
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/huggingface_hub/cli/hf.py", line 114, in main
-    app()
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/typer/main.py", line 1152, in __call__
-    raise e
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/typer/main.py", line 1135, in __call__
-    return get_command(self)(*args, **kwargs)
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/click/core.py", line 1524, in __call__
-    return self.main(*args, **kwargs)
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/typer/core.py", line 794, in main
-    return _main(
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/typer/core.py", line 188, in _main
-    rv = self.invoke(ctx)
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/huggingface_hub/cli/_cli_utils.py", line 131, in invoke
-    return super().invoke(ctx)
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/click/core.py", line 1912, in invoke
-    return _process_result(sub_ctx.command.invoke(sub_ctx))
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/click/core.py", line 1308, in invoke
-    return ctx.invoke(self.callback, **ctx.params)
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/click/core.py", line 877, in invoke
-    return callback(*args, **kwargs)
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/typer/main.py", line 1514, in wrapper
-    return callback(**use_params)
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/huggingface_hub/cli/download.py", line 219, in download
-    _print_result(run_download())
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/huggingface_hub/cli/download.py", line 181, in run_download
-    return snapshot_download(
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/huggingface_hub/utils/_validators.py", line 88, in _inner_fn
-    return fn(*args, **kwargs)
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/huggingface_hub/_snapshot_download.py", line 454, in snapshot_download
-    thread_map(
-  File "/usr/local/lib/python3.10/dist-packages/tqdm/contrib/concurrent.py", line 69, in thread_map
-    return _executor_map(ThreadPoolExecutor, fn, *iterables, **tqdm_kwargs)
-  File "/usr/local/lib/python3.10/dist-packages/tqdm/contrib/concurrent.py", line 51, in _executor_map
-    return list(tqdm_class(ex.map(fn, *iterables, chunksize=chunksize), **kwargs))
-  File "/usr/lib/python3.10/concurrent/futures/_base.py", line 610, in map
-    fs = [self.submit(fn, *args) for args in zip(*iterables)]
-  File "/usr/lib/python3.10/concurrent/futures/_base.py", line 610, in <listcomp>
-    fs = [self.submit(fn, *args) for args in zip(*iterables)]
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/huggingface_hub/utils/_paths.py", line 127, in filter_repo_objects
-    for item in items:
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/huggingface_hub/_snapshot_download.py", line 348, in <genexpr>
-    repo_files = (
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/huggingface_hub/hf_api.py", line 3927, in list_repo_tree
-    for path_info in paginate(path=tree_url, headers=headers, params={"recursive": recursive, "expand": expand}):
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/huggingface_hub/utils/_pagination.py", line 44, in paginate
-    r = http_backoff("GET", next_page, headers=headers)
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/huggingface_hub/utils/_http.py", line 559, in http_backoff
-    return next(
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/huggingface_hub/utils/_http.py", line 467, in _http_backoff_base
-    response = client.request(method=method, url=url, **kwargs)
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/httpx/_client.py", line 825, in request
-    return self.send(request, auth=auth, follow_redirects=follow_redirects)
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/httpx/_client.py", line 914, in send
-    response = self._send_handling_auth(
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/httpx/_client.py", line 942, in _send_handling_auth
-    response = self._send_handling_redirects(
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/httpx/_client.py", line 979, in _send_handling_redirects
-    response = self._send_single_request(request)
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/httpx/_client.py", line 1014, in _send_single_request
-    response = transport.handle_request(request)
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/httpx/_transports/default.py", line 249, in handle_request
-    with map_httpcore_exceptions():
-  File "/usr/lib/python3.10/contextlib.py", line 153, in __exit__
-    self.gen.throw(typ, value, traceback)
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/httpx/_transports/default.py", line 118, in map_httpcore_exceptions
-    raise mapped_exc(message) from exc
-httpx.ProxyError: 503 Service Unavailable
-[2026-07-13T11:14:45+00:00] Psi0 checkpoint download attempt after 30s
-Number of files in the repo is unreliable. Using `list_repo_tree` to ensure all files are listed.
-Traceback (most recent call last):
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/httpx/_transports/default.py", line 101, in map_httpcore_exceptions
-    yield
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/httpx/_transports/default.py", line 250, in handle_request
-    resp = self._pool.handle_request(req)
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/httpcore/_sync/connection_pool.py", line 256, in handle_request
-    raise exc from None
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/httpcore/_sync/connection_pool.py", line 236, in handle_request
-    response = connection.handle_request(
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/httpcore/_sync/http_proxy.py", line 297, in handle_request
-    raise ProxyError(msg)
-httpcore.ProxyError: 503 Service Unavailable
-
-The above exception was the direct cause of the following exception:
-
-Traceback (most recent call last):
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/bin/hf", line 6, in <module>
-    sys.exit(main())
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/huggingface_hub/cli/hf.py", line 114, in main
-    app()
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/typer/main.py", line 1152, in __call__
-    raise e
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/typer/main.py", line 1135, in __call__
-    return get_command(self)(*args, **kwargs)
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/click/core.py", line 1524, in __call__
-    return self.main(*args, **kwargs)
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/typer/core.py", line 794, in main
-    return _main(
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/typer/core.py", line 188, in _main
-    rv = self.invoke(ctx)
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/huggingface_hub/cli/_cli_utils.py", line 131, in invoke
-    return super().invoke(ctx)
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/click/core.py", line 1912, in invoke
-    return _process_result(sub_ctx.command.invoke(sub_ctx))
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/click/core.py", line 1308, in invoke
-    return ctx.invoke(self.callback, **ctx.params)
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/click/core.py", line 877, in invoke
-    return callback(*args, **kwargs)
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/typer/main.py", line 1514, in wrapper
-    return callback(**use_params)
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/huggingface_hub/cli/download.py", line 219, in download
-    _print_result(run_download())
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/huggingface_hub/cli/download.py", line 181, in run_download
-    return snapshot_download(
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/huggingface_hub/utils/_validators.py", line 88, in _inner_fn
-    return fn(*args, **kwargs)
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/huggingface_hub/_snapshot_download.py", line 454, in snapshot_download
-    thread_map(
-  File "/usr/local/lib/python3.10/dist-packages/tqdm/contrib/concurrent.py", line 69, in thread_map
-    return _executor_map(ThreadPoolExecutor, fn, *iterables, **tqdm_kwargs)
-  File "/usr/local/lib/python3.10/dist-packages/tqdm/contrib/concurrent.py", line 51, in _executor_map
-    return list(tqdm_class(ex.map(fn, *iterables, chunksize=chunksize), **kwargs))
-  File "/usr/lib/python3.10/concurrent/futures/_base.py", line 610, in map
-    fs = [self.submit(fn, *args) for args in zip(*iterables)]
-  File "/usr/lib/python3.10/concurrent/futures/_base.py", line 610, in <listcomp>
-    fs = [self.submit(fn, *args) for args in zip(*iterables)]
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/huggingface_hub/utils/_paths.py", line 127, in filter_repo_objects
-    for item in items:
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/huggingface_hub/_snapshot_download.py", line 348, in <genexpr>
-    repo_files = (
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/huggingface_hub/hf_api.py", line 3927, in list_repo_tree
-    for path_info in paginate(path=tree_url, headers=headers, params={"recursive": recursive, "expand": expand}):
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/huggingface_hub/utils/_pagination.py", line 44, in paginate
-    r = http_backoff("GET", next_page, headers=headers)
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/huggingface_hub/utils/_http.py", line 559, in http_backoff
-    return next(
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/huggingface_hub/utils/_http.py", line 467, in _http_backoff_base
-    response = client.request(method=method, url=url, **kwargs)
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/httpx/_client.py", line 825, in request
-    return self.send(request, auth=auth, follow_redirects=follow_redirects)
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/httpx/_client.py", line 914, in send
-    response = self._send_handling_auth(
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/httpx/_client.py", line 942, in _send_handling_auth
-    response = self._send_handling_redirects(
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/httpx/_client.py", line 979, in _send_handling_redirects
-    response = self._send_single_request(request)
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/httpx/_client.py", line 1014, in _send_single_request
-    response = transport.handle_request(request)
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/httpx/_transports/default.py", line 249, in handle_request
-    with map_httpcore_exceptions():
-  File "/usr/lib/python3.10/contextlib.py", line 153, in __exit__
-    self.gen.throw(typ, value, traceback)
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/httpx/_transports/default.py", line 118, in map_httpcore_exceptions
-    raise mapped_exc(message) from exc
-httpx.ProxyError: 503 Service Unavailable
-[2026-07-13T11:15:46+00:00] Psi0 checkpoint download attempt after 60s
-Number of files in the repo is unreliable. Using `list_repo_tree` to ensure all files are listed.
-Traceback (most recent call last):
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/httpx/_transports/default.py", line 101, in map_httpcore_exceptions
-    yield
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/httpx/_transports/default.py", line 250, in handle_request
-    resp = self._pool.handle_request(req)
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/httpcore/_sync/connection_pool.py", line 256, in handle_request
-    raise exc from None
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/httpcore/_sync/connection_pool.py", line 236, in handle_request
-    response = connection.handle_request(
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/httpcore/_sync/http_proxy.py", line 297, in handle_request
-    raise ProxyError(msg)
-httpcore.ProxyError: 503 Service Unavailable
-
-The above exception was the direct cause of the following exception:
-
-Traceback (most recent call last):
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/bin/hf", line 6, in <module>
-    sys.exit(main())
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/huggingface_hub/cli/hf.py", line 114, in main
-    app()
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/typer/main.py", line 1152, in __call__
-    raise e
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/typer/main.py", line 1135, in __call__
-    return get_command(self)(*args, **kwargs)
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/click/core.py", line 1524, in __call__
-    return self.main(*args, **kwargs)
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/typer/core.py", line 794, in main
-    return _main(
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/typer/core.py", line 188, in _main
-    rv = self.invoke(ctx)
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/huggingface_hub/cli/_cli_utils.py", line 131, in invoke
-    return super().invoke(ctx)
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/click/core.py", line 1912, in invoke
-    return _process_result(sub_ctx.command.invoke(sub_ctx))
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/click/core.py", line 1308, in invoke
-    return ctx.invoke(self.callback, **ctx.params)
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/click/core.py", line 877, in invoke
-    return callback(*args, **kwargs)
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/typer/main.py", line 1514, in wrapper
-    return callback(**use_params)
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/huggingface_hub/cli/download.py", line 219, in download
-    _print_result(run_download())
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/huggingface_hub/cli/download.py", line 181, in run_download
-    return snapshot_download(
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/huggingface_hub/utils/_validators.py", line 88, in _inner_fn
-    return fn(*args, **kwargs)
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/huggingface_hub/_snapshot_download.py", line 454, in snapshot_download
-    thread_map(
-  File "/usr/local/lib/python3.10/dist-packages/tqdm/contrib/concurrent.py", line 69, in thread_map
-    return _executor_map(ThreadPoolExecutor, fn, *iterables, **tqdm_kwargs)
-  File "/usr/local/lib/python3.10/dist-packages/tqdm/contrib/concurrent.py", line 51, in _executor_map
-    return list(tqdm_class(ex.map(fn, *iterables, chunksize=chunksize), **kwargs))
-  File "/usr/lib/python3.10/concurrent/futures/_base.py", line 610, in map
-    fs = [self.submit(fn, *args) for args in zip(*iterables)]
-  File "/usr/lib/python3.10/concurrent/futures/_base.py", line 610, in <listcomp>
-    fs = [self.submit(fn, *args) for args in zip(*iterables)]
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/huggingface_hub/utils/_paths.py", line 127, in filter_repo_objects
-    for item in items:
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/huggingface_hub/_snapshot_download.py", line 348, in <genexpr>
-    repo_files = (
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/huggingface_hub/hf_api.py", line 3927, in list_repo_tree
-    for path_info in paginate(path=tree_url, headers=headers, params={"recursive": recursive, "expand": expand}):
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/huggingface_hub/utils/_pagination.py", line 44, in paginate
-    r = http_backoff("GET", next_page, headers=headers)
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/huggingface_hub/utils/_http.py", line 559, in http_backoff
-    return next(
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/huggingface_hub/utils/_http.py", line 467, in _http_backoff_base
-    response = client.request(method=method, url=url, **kwargs)
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/httpx/_client.py", line 825, in request
-    return self.send(request, auth=auth, follow_redirects=follow_redirects)
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/httpx/_client.py", line 914, in send
-    response = self._send_handling_auth(
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/httpx/_client.py", line 942, in _send_handling_auth
-    response = self._send_handling_redirects(
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/httpx/_client.py", line 979, in _send_handling_redirects
-    response = self._send_single_request(request)
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/httpx/_client.py", line 1014, in _send_single_request
-    response = transport.handle_request(request)
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/httpx/_transports/default.py", line 249, in handle_request
-    with map_httpcore_exceptions():
-  File "/usr/lib/python3.10/contextlib.py", line 153, in __exit__
-    self.gen.throw(typ, value, traceback)
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/httpx/_transports/default.py", line 118, in map_httpcore_exceptions
-    raise mapped_exc(message) from exc
-httpx.ProxyError: 503 Service Unavailable
-[2026-07-13T11:17:56+00:00] Psi0 checkpoint download attempt after 120s
-Number of files in the repo is unreliable. Using `list_repo_tree` to ensure all files are listed.
-Traceback (most recent call last):
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/httpx/_transports/default.py", line 101, in map_httpcore_exceptions
-    yield
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/httpx/_transports/default.py", line 250, in handle_request
-    resp = self._pool.handle_request(req)
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/httpcore/_sync/connection_pool.py", line 256, in handle_request
-    raise exc from None
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/httpcore/_sync/connection_pool.py", line 236, in handle_request
-    response = connection.handle_request(
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/httpcore/_sync/http_proxy.py", line 297, in handle_request
-    raise ProxyError(msg)
-httpcore.ProxyError: 503 Service Unavailable
-
-The above exception was the direct cause of the following exception:
-
-Traceback (most recent call last):
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/bin/hf", line 6, in <module>
-    sys.exit(main())
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/huggingface_hub/cli/hf.py", line 114, in main
-    app()
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/typer/main.py", line 1152, in __call__
-    raise e
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/typer/main.py", line 1135, in __call__
-    return get_command(self)(*args, **kwargs)
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/click/core.py", line 1524, in __call__
-    return self.main(*args, **kwargs)
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/typer/core.py", line 794, in main
-    return _main(
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/typer/core.py", line 188, in _main
-    rv = self.invoke(ctx)
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/huggingface_hub/cli/_cli_utils.py", line 131, in invoke
-    return super().invoke(ctx)
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/click/core.py", line 1912, in invoke
-    return _process_result(sub_ctx.command.invoke(sub_ctx))
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/click/core.py", line 1308, in invoke
-    return ctx.invoke(self.callback, **ctx.params)
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/click/core.py", line 877, in invoke
-    return callback(*args, **kwargs)
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/typer/main.py", line 1514, in wrapper
-    return callback(**use_params)
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/huggingface_hub/cli/download.py", line 219, in download
-    _print_result(run_download())
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/huggingface_hub/cli/download.py", line 181, in run_download
-    return snapshot_download(
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/huggingface_hub/utils/_validators.py", line 88, in _inner_fn
-    return fn(*args, **kwargs)
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/huggingface_hub/_snapshot_download.py", line 454, in snapshot_download
-    thread_map(
-  File "/usr/local/lib/python3.10/dist-packages/tqdm/contrib/concurrent.py", line 69, in thread_map
-    return _executor_map(ThreadPoolExecutor, fn, *iterables, **tqdm_kwargs)
-  File "/usr/local/lib/python3.10/dist-packages/tqdm/contrib/concurrent.py", line 51, in _executor_map
-    return list(tqdm_class(ex.map(fn, *iterables, chunksize=chunksize), **kwargs))
-  File "/usr/lib/python3.10/concurrent/futures/_base.py", line 610, in map
-    fs = [self.submit(fn, *args) for args in zip(*iterables)]
-  File "/usr/lib/python3.10/concurrent/futures/_base.py", line 610, in <listcomp>
-    fs = [self.submit(fn, *args) for args in zip(*iterables)]
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/huggingface_hub/utils/_paths.py", line 127, in filter_repo_objects
-    for item in items:
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/huggingface_hub/_snapshot_download.py", line 348, in <genexpr>
-    repo_files = (
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/huggingface_hub/hf_api.py", line 3927, in list_repo_tree
-    for path_info in paginate(path=tree_url, headers=headers, params={"recursive": recursive, "expand": expand}):
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/huggingface_hub/utils/_pagination.py", line 44, in paginate
-    r = http_backoff("GET", next_page, headers=headers)
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/huggingface_hub/utils/_http.py", line 559, in http_backoff
-    return next(
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/huggingface_hub/utils/_http.py", line 467, in _http_backoff_base
-    response = client.request(method=method, url=url, **kwargs)
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/httpx/_client.py", line 825, in request
-    return self.send(request, auth=auth, follow_redirects=follow_redirects)
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/httpx/_client.py", line 914, in send
-    response = self._send_handling_auth(
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/httpx/_client.py", line 942, in _send_handling_auth
-    response = self._send_handling_redirects(
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/httpx/_client.py", line 979, in _send_handling_redirects
-    response = self._send_single_request(request)
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/httpx/_client.py", line 1014, in _send_single_request
-    response = transport.handle_request(request)
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/httpx/_transports/default.py", line 249, in handle_request
-    with map_httpcore_exceptions():
-  File "/usr/lib/python3.10/contextlib.py", line 153, in __exit__
-    self.gen.throw(typ, value, traceback)
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/httpx/_transports/default.py", line 118, in map_httpcore_exceptions
-    raise mapped_exc(message) from exc
-httpx.ProxyError: 503 Service Unavailable
-[2026-07-13T11:22:04+00:00] Psi0 checkpoint download attempt after 240s
-Number of files in the repo is unreliable. Using `list_repo_tree` to ensure all files are listed.
-Traceback (most recent call last):
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/httpx/_transports/default.py", line 101, in map_httpcore_exceptions
-    yield
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/httpx/_transports/default.py", line 250, in handle_request
-    resp = self._pool.handle_request(req)
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/httpcore/_sync/connection_pool.py", line 256, in handle_request
-    raise exc from None
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/httpcore/_sync/connection_pool.py", line 236, in handle_request
-    response = connection.handle_request(
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/httpcore/_sync/http_proxy.py", line 297, in handle_request
-    raise ProxyError(msg)
-httpcore.ProxyError: 503 Service Unavailable
-
-The above exception was the direct cause of the following exception:
-
-Traceback (most recent call last):
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/bin/hf", line 6, in <module>
-    sys.exit(main())
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/huggingface_hub/cli/hf.py", line 114, in main
-    app()
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/typer/main.py", line 1152, in __call__
-    raise e
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/typer/main.py", line 1135, in __call__
-    return get_command(self)(*args, **kwargs)
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/click/core.py", line 1524, in __call__
-    return self.main(*args, **kwargs)
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/typer/core.py", line 794, in main
-    return _main(
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/typer/core.py", line 188, in _main
-    rv = self.invoke(ctx)
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/huggingface_hub/cli/_cli_utils.py", line 131, in invoke
-    return super().invoke(ctx)
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/click/core.py", line 1912, in invoke
-    return _process_result(sub_ctx.command.invoke(sub_ctx))
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/click/core.py", line 1308, in invoke
-    return ctx.invoke(self.callback, **ctx.params)
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/click/core.py", line 877, in invoke
-    return callback(*args, **kwargs)
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/typer/main.py", line 1514, in wrapper
-    return callback(**use_params)
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/huggingface_hub/cli/download.py", line 219, in download
-    _print_result(run_download())
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/huggingface_hub/cli/download.py", line 181, in run_download
-    return snapshot_download(
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/huggingface_hub/utils/_validators.py", line 88, in _inner_fn
-    return fn(*args, **kwargs)
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/huggingface_hub/_snapshot_download.py", line 454, in snapshot_download
-    thread_map(
-  File "/usr/local/lib/python3.10/dist-packages/tqdm/contrib/concurrent.py", line 69, in thread_map
-    return _executor_map(ThreadPoolExecutor, fn, *iterables, **tqdm_kwargs)
-  File "/usr/local/lib/python3.10/dist-packages/tqdm/contrib/concurrent.py", line 51, in _executor_map
-    return list(tqdm_class(ex.map(fn, *iterables, chunksize=chunksize), **kwargs))
-  File "/usr/lib/python3.10/concurrent/futures/_base.py", line 610, in map
-    fs = [self.submit(fn, *args) for args in zip(*iterables)]
-  File "/usr/lib/python3.10/concurrent/futures/_base.py", line 610, in <listcomp>
-    fs = [self.submit(fn, *args) for args in zip(*iterables)]
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/huggingface_hub/utils/_paths.py", line 127, in filter_repo_objects
-    for item in items:
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/huggingface_hub/_snapshot_download.py", line 348, in <genexpr>
-    repo_files = (
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/huggingface_hub/hf_api.py", line 3927, in list_repo_tree
-    for path_info in paginate(path=tree_url, headers=headers, params={"recursive": recursive, "expand": expand}):
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/huggingface_hub/utils/_pagination.py", line 44, in paginate
-    r = http_backoff("GET", next_page, headers=headers)
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/huggingface_hub/utils/_http.py", line 559, in http_backoff
-    return next(
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/huggingface_hub/utils/_http.py", line 467, in _http_backoff_base
-    response = client.request(method=method, url=url, **kwargs)
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/httpx/_client.py", line 825, in request
-    return self.send(request, auth=auth, follow_redirects=follow_redirects)
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/httpx/_client.py", line 914, in send
-    response = self._send_handling_auth(
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/httpx/_client.py", line 942, in _send_handling_auth
-    response = self._send_handling_redirects(
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/httpx/_client.py", line 979, in _send_handling_redirects
-    response = self._send_single_request(request)
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/httpx/_client.py", line 1014, in _send_single_request
-    response = transport.handle_request(request)
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/httpx/_transports/default.py", line 249, in handle_request
-    with map_httpcore_exceptions():
-  File "/usr/lib/python3.10/contextlib.py", line 153, in __exit__
-    self.gen.throw(typ, value, traceback)
-  File "/HOME/sysu_xdliang/sysu_xdliang_1/.local/lib/python3.10/site-packages/httpx/_transports/default.py", line 118, in map_httpcore_exceptions
-    raise mapped_exc(message) from exc
-httpx.ProxyError: 503 Service Unavailable
-[2026-07-13T11:28:30+00:00] downloading exact checkpoint files (avoids huge repository tree API)
-  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
-                                 Dload  Upload   Total   Spent    Left  Speed
-  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0100   364  100   364    0     0    610      0 --:--:-- --:--:-- --:--:--   609
-100   707    0   707    0     0    571      0 --:--:--  0:00:01 --:--:--   571
-  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
-                                 Dload  Upload   Total   Spent    Left  Speed
-  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0100   368  100   368    0     0    658      0 --:--:-- --:--:-- --:--:--   658
-100  5292    0  5292    0     0   4394      0 --:--:--  0:00:01 --:--:--  4394100  5292    0  5292    0     0   4383      0 --:--:--  0:00:01 --:--:--     0
-  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
-                                 Dload  Upload   Total   Spent    Left  Speed
-  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0100   352  100   352    0     0    609      0 --:--:-- --:--:-- --:--:--   610
-100  1548    0  1548    0     0   1415      0 --:--:--  0:00:01 --:--:--  1415100  1548    0  1548    0     0   1414      0 --:--:--  0:00:01 --:--:--     0
-  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
-                                 Dload  Upload   Total   Spent    Left  Speed
-  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0100   374  100   374    0     0    695      0 --:--:-- --:--:-- --:--:--   696
-  0     0    0     0    0     0      0      0 --:--:--  0:00:01 --:--:--     0100   213    0   213    0     0    172      0 --:--:--  0:00:01 --:--:--  104k
-  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
-                                 Dload  Upload   Total   Spent    Left  Speed
-  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0100   350  100   350    0     0    367      0 --:--:-- --:--:-- --:--:--   367
-  0     0    0     0    0     0      0      0 --:--:--  0:00:01 --:--:--     0100 1632k    0 1632k    0     0   661k      0 --:--:--  0:00:02 --:--:-- 1759k
-  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
-                                 Dload  Upload   Total   Spent    Left  Speed
-  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0100  1032    0  1032    0     0   1936      0 --:--:-- --:--:-- --:--:--  1936
-  0     0    0     0    0     0      0      0 --:--:--  0:00:01 --:--:--     0  0 4065M    0 1043k    0     0   503k      0  2:17:49  0:00:02  2:17:47 1122k  1 4065M    1 42.7M    0     0  14.0M      0  0:04:48  0:00:03  0:04:45 22.5M  1 4065M    1 69.8M    0     0  17.2M      0  0:03:55  0:00:04  0:03:51 24.0M  1 4065M    1 69.8M    0     0  13.5M      0  0:04:59  0:00:05  0:04:54 17.4M  1 4065M    1 69.8M    0     0  11.4M      0  0:05:53  0:00:06  0:05:47 14.1M  1 4065M    1 69.9M    0     0  9980k      0  0:06:57  0:00:07  0:06:50 13.5M  1 4065M    1 69.9M    0     0  8827k      0  0:07:51  0:00:08  0:07:43 5478k  1 4065M    1 69.9M    0     0  7912k      0  0:08:46  0:00:09  0:08:37  9828  1 4065M    1 69.9M    0     0  7060k      0  0:09:49  0:00:10  0:09:39  9826  1 4065M    1 69.9M    0     0  6463k      0  0:10:44  0:00:11  0:10:33  9826  1 4065M    1 69.9M    0     0  5883k      0  0:11:47  0:00:12  0:11:35  9826  1 4065M    1 69.9M    0     0  5438k      0  0:12:45  0:00:13  0:12:32  6474  2 4065M    2  105M    0     0  7686k      0  0:09:01  0:00:14  0:08:47 7274k  3 4065M    3  133M    0     0  9082k      0  0:07:38  0:00:15  0:07:23 12.9M  3 4065M    3  138M    0     0  8790k      0  0:07:53  0:00:16  0:07:37 13.5M  4 4065M    4  199M    0     0  11.4M      0  0:05:56  0:00:17  0:05:39 24.5M  4 4065M    4  199M    0     0  11.0M      0  0:06:08  0:00:18  0:05:50 26.3M  5 4065M    5  227M    0     0  11.9M      0  0:05:39  0:00:19  0:05:20 24.5M  6 4065M    6  267M    0     0  13.2M      0  0:05:06  0:00:20  0:04:46 26.2M  6 4065M    6  267M    0     0  12.6M      0  0:05:20  0:00:21  0:04:59 26.0M  6 4065M    6  267M    0     0  12.0M      0  0:05:37  0:00:22  0:05:15 14.4M  6 4065M    6  267M    0     0  11.5M      0  0:05:51  0:00:23  0:05:28 13.5M  6 4065M    6  267M    0     0  11.0M      0  0:06:06  0:00:24  0:05:42 7994k  6 4065M    6  278M    0     0  11.1M      0  0:06:05  0:00:25  0:05:40 2291k  7 4065M    7  291M    0     0  11.1M      0  0:06:04  0:00:26  0:05:38 4916k  7 4065M    7  294M    0     0  10.8M      0  0:06:13  0:00:27  0:05:46 5646k  7 4065M    7  295M    0     0  10.5M      0  0:06:25  0:00:28  0:05:57 5830k  7 4065M    7  310M    0     0  10.6M      0  0:06:20  0:00:29  0:05:51 8894k  9 4065M    9  373M    0     0  12.4M      0  0:05:26  0:00:30  0:04:56 19.0M 10 4065M   10  422M    0     0  13.5M      0  0:05:00  0:00:31  0:04:29 25.8M 10 4065M   10  422M    0     0  13.1M      0  0:05:09  0:00:32  0:04:37 25.3M 10 4065M   10  422M    0     0  12.7M      0  0:05:18  0:00:33  0:04:45 25.1M 10 4065M   10  422M    0     0  12.3M      0  0:05:28  0:00:34  0:04:54 21.8M 10 4065M   10  423M    0     0  12.0M      0  0:05:37  0:00:35  0:05:02 9946k 11 4065M   11  476M    0     0  13.2M      0  0:05:07  0:00:36  0:04:31 11.2M 12 4065M   12  488M    0     0  13.1M      0  0:05:09  0:00:37  0:04:32 13.1M 12 4065M   12  488M    0     0  12.8M      0  0:05:17  0:00:38  0:04:39 13.1M 12 4065M   12  488M    0     0  12.4M      0  0:05:26  0:00:39  0:04:47 13.1M 12 4065M   12  488M    0     0  12.1M      0  0:05:33  0:00:40  0:04:53 13.0M 12 4065M   12  488M    0     0  11.8M      0  0:05:41  0:00:41  0:05:00 2428k 12 4065M   12  488M    0     0  11.5M      0  0:05:50  0:00:42  0:05:08  9826 12 4065M   12  488M    0     0  11.3M      0  0:05:58  0:00:43  0:05:15  6550 12 4065M   12  488M    0     0  11.0M      0  0:06:06  0:00:44  0:05:22 10140 12 4065M   12  488M    0     0  10.8M      0  0:06:15  0:00:45  0:05:30  9826 12 4065M   12  488M    0     0  10.5M      0  0:06:23  0:00:46  0:05:37  9715 13 4065M   13  528M    0     0  11.2M      0  0:06:01  0:00:47  0:05:14 8466k 13 4065M   13  567M    0     0  11.7M      0  0:05:44  0:00:48  0:04:56 15.6M 13 4065M   13  567M    0     0  11.5M      0  0:05:51  0:00:49  0:05:02 15.6M 14 4065M   14  584M    0     0  11.6M      0  0:05:47  0:00:50  0:04:57 19.6M 15 4065M   15  644M    0     0  12.6M      0  0:05:22  0:00:51  0:04:31 31.4M 15 4065M   15  644M    0     0  12.3M      0  0:05:28  0:00:52  0:04:36 23.2M 15 4065M   15  644M    0     0  12.1M      0  0:05:34  0:00:53  0:04:41 15.5M 15 4065M   15  644M    0     0  11.9M      0  0:05:40  0:00:54  0:04:46 15.5M 15 4065M   15  645M    0     0  11.6M      0  0:05:47  0:00:55  0:04:52 11.7M 15 4065M   15  645M    0     0  11.4M      0  0:05:53  0:00:56  0:04:57  9828 15 4065M   15  645M    0     0  11.2M      0  0:05:59  0:00:57  0:05:02  9715 16 4065M   16  688M    0     0  11.8M      0  0:05:42  0:00:58  0:04:44 9159k 17 4065M   17  724M    0     0  12.2M      0  0:05:31  0:00:59  0:04:32 15.9M 17 4065M   17  724M    0     0  12.0M      0  0:05:37  0:01:00  0:04:37 15.9M 17 4065M   17  724M    0     0  11.8M      0  0:05:42  0:01:01  0:04:41 15.9M 17 4065M   17  724M    0     0  11.6M      0  0:05:48  0:01:02  0:04:46 15.6M 17 4065M   17  724M    0     0  11.4M      0  0:05:54  0:01:03  0:04:51 7240k 17 4065M   17  724M    0     0  11.3M      0  0:05:59  0:01:04  0:04:55  9826 17 4065M   17  724M    0     0  11.1M      0  0:06:05  0:01:05  0:05:00  9826 17 4065M   17  724M    0     0  10.9M      0  0:06:10  0:01:06  0:05:04  9826 17 4065M   17  724M    0     0  10.7M      0  0:06:16  0:01:07  0:05:09  9826 17 4065M   17  724M    0     0  10.6M      0  0:06:21  0:01:08  0:05:13 10008 19 4065M   19  778M    0     0  11.2M      0  0:06:00  0:01:09  0:04:51 10.6M 19 4065M   19  800M    0     0  11.4M      0  0:05:56  0:01:10  0:04:46 14.9M 19 4065M   19  800M    0     0  11.2M      0  0:06:01  0:01:11  0:04:50 15.0M 19 4065M   19  800M    0     0  11.1M      0  0:06:06  0:01:12  0:04:54 15.4M 19 4065M   19  800M    0     0  10.9M      0  0:06:11  0:01:13  0:04:58 14.7M 19 4065M   19  800M    0     0  10.8M      0  0:06:16  0:01:14  0:05:02 4483k 19 4065M   19  800M    0     0  10.6M      0  0:06:21  0:01:15  0:05:06  9188 19 4065M   19  800M    0     0  10.5M      0  0:06:26  0:01:16  0:05:10  9188 19 4065M   19  800M    0     0  10.3M      0  0:06:31  0:01:17  0:05:14  6550 19 4065M   19  800M    0     0  10.2M      0  0:06:37  0:01:18  0:05:19  9826 19 4065M   19  800M    0     0  10.1M      0  0:06:42  0:01:19  0:05:23  9706 21 4065M   21  856M    0     0  10.7M      0  0:06:19  0:01:20  0:04:59 11.6M 21 4065M   21  870M    0     0  10.7M      0  0:06:18  0:01:21  0:04:57 13.9M 21 4065M   21  870M    0     0  10.6M      0  0:06:23  0:01:22  0:05:01 13.9M 21 4065M   21  870M    0     0  10.4M      0  0:06:28  0:01:23  0:05:05 13.9M 21 4065M   21  870M    0     0  10.3M      0  0:06:32  0:01:24  0:05:08 14.1M 21 4065M   21  870M    0     0  10.2M      0  0:06:37  0:01:25  0:05:12 2798k 21 4065M   21  871M    0     0  10.1M      0  0:06:41  0:01:26  0:05:15  246k 21 4065M   21  871M    0     0  10.0M      0  0:06:46  0:01:27  0:05:19  246k 21 4065M   21  871M    0     0   9.8M      0  0:06:51  0:01:28  0:05:23  246k 21 4065M   21  871M    0     0   9.7M      0  0:06:55  0:01:29  0:05:26  246k 21 4065M   21  871M    0     0  9906k      0  0:07:00  0:01:30  0:05:30  246k 22 4065M   22  927M    0     0  10.1M      0  0:06:39  0:01:31  0:05:08 11.3M 23 4065M   23  947M    0     0  10.2M      0  0:06:35  0:01:32  0:05:03 14.8M 23 4065M   23  947M    0     0  10.1M      0  0:06:39  0:01:33  0:05:06 15.4M 24 4065M   24  980M    0     0  10.4M      0  0:06:30  0:01:34  0:04:56 22.0M 25 4065M   25 1033M    0     0  10.8M      0  0:06:15  0:01:35  0:04:40 30.4M 25 4065M   25 1033M    0     0  10.7M      0  0:06:17  0:01:36  0:04:41 21.1M 26 4065M   26 1058M    0     0  10.9M      0  0:06:12  0:01:37  0:04:35 22.8M 27 4065M   27 1115M    0     0  11.3M      0  0:05:57  0:01:38  0:04:19 33.6M 27 4065M   27 1115M    0     0  11.2M      0  0:06:01  0:01:39  0:04:22 26.3M 27 4065M   27 1115M    0     0  11.1M      0  0:06:04  0:01:40  0:04:24 17.5M 27 4065M   27 1115M    0     0  11.0M      0  0:06:08  0:01:41  0:04:27 16.2M 28 4065M   28 1168M    0     0  11.4M      0  0:05:55  0:01:42  0:04:13 22.0M 29 4065M   29 1190M    0     0  11.5M      0  0:05:51  0:01:43  0:04:08 15.2M 29 4065M   29 1196M    0     0  11.4M      0  0:05:53  0:01:44  0:04:09 16.2M 30 4065M   30 1255M    0     0  11.9M      0  0:05:40  0:01:45  0:03:55 28.3M 31 4065M   31 1267M    0     0  11.9M      0  0:05:40  0:01:46  0:03:54 29.9M 31 4065M   31 1267M    0     0  11.8M      0  0:05:43  0:01:47  0:03:56 19.4M 31 4065M   31 1267M    0     0  11.7M      0  0:05:46  0:01:48  0:03:58 15.2M 31 4065M   31 1267M    0     0  11.6M      0  0:05:50  0:01:49  0:04:01 14.1M 31 4065M   31 1267M    0     0  11.5M      0  0:05:53  0:01:50  0:04:03 2450k 31 4065M   31 1267M    0     0  11.3M      0  0:05:57  0:01:51  0:04:06  9149 31 4065M   31 1268M    0     0  11.3M      0  0:05:59  0:01:52  0:04:07  273k 32 4065M   32 1331M    0     0  11.7M      0  0:05:46  0:01:53  0:03:53 11.9M 32 4065M   32 1331M    0     0  11.6M      0  0:05:48  0:01:54  0:03:54 13.1M 32 4065M   32 1337M    0     0  11.6M      0  0:05:49  0:01:55  0:03:54 14.1M 34 4065M   34 1387M    0     0  11.9M      0  0:05:39  0:01:56  0:03:43 26.8M 34 4065M   34 1421M    0     0  12.1M      0  0:05:34  0:01:57  0:03:37 30.2M 34 4065M   34 1421M    0     0  12.0M      0  0:05:37  0:01:58  0:03:39 18.9M 35 4065M   35 1441M    0     0  12.1M      0  0:05:35  0:01:59  0:03:36 21.9M 36 4065M   36 1494M    0     0  12.4M      0  0:05:26  0:02:00  0:03:26 31.4M 37 4065M   37 1519M    0     0  12.5M      0  0:05:24  0:02:01  0:03:23 25.9M 37 4065M   37 1519M    0     0  12.4M      0  0:05:26  0:02:02  0:03:24 19.7M 38 4065M   38 1556M    0     0  12.6M      0  0:05:21  0:02:03  0:03:18 27.6M 39 4065M   39 1592M    0     0  12.8M      0  0:05:17  0:02:04  0:03:13 29.3M 39 4065M   39 1592M    0     0  12.7M      0  0:05:19  0:02:05  0:03:14 19.2M 39 4065M   39 1595M    0     0  12.6M      0  0:05:21  0:02:06  0:03:15 15.4M 39 4065M   39 1595M    0     0  12.5M      0  0:05:23  0:02:07  0:03:16 14.9M 39 4065M   39 1595M    0     0  12.4M      0  0:05:26  0:02:08  0:03:18 8001k 39 4065M   39 1595M    0     0  12.3M      0  0:05:29  0:02:09  0:03:20  726k 39 4065M   39 1595M    0     0  12.2M      0  0:05:31  0:02:10  0:03:21  722k 39 4065M   39 1595M    0     0  12.1M      0  0:05:33  0:02:11  0:03:22  9826 39 4065M   39 1595M    0     0  12.0M      0  0:05:36  0:02:12  0:03:24  6552 39 4065M   39 1595M    0     0  11.9M      0  0:05:39  0:02:13  0:03:26  9719 40 4065M   40 1636M    0     0  12.2M      0  0:05:32  0:02:14  0:03:18 8637k 41 4065M   41 1670M    0     0  12.3M      0  0:05:28  0:02:15  0:03:13 14.9M 41 4065M   41 1670M    0     0  12.2M      0  0:05:31  0:02:16  0:03:15 14.9M 41 4065M   41 1670M    0     0  12.1M      0  0:05:33  0:02:17  0:03:16 14.9M 41 4065M   41 1670M    0     0  12.0M      0  0:05:36  0:02:18  0:03:18 15.1M 41 4065M   41 1670M    0     0  12.0M      0  0:05:38  0:02:19  0:03:19 6755k 41 4065M   41 1670M    0     0  11.9M      0  0:05:40  0:02:20  0:03:20  9826 41 4065M   41 1670M    0     0  11.8M      0  0:05:43  0:02:21  0:03:22  9826 41 4065M   41 1670M    0     0  11.7M      0  0:05:45  0:02:22  0:03:23  6550 41 4065M   41 1670M    0     0  11.6M      0  0:05:48  0:02:23  0:03:25  9826 41 4065M   41 1670M    0     0  11.5M      0  0:05:50  0:02:24  0:03:26  9988 42 4065M   42 1714M    0     0  11.8M      0  0:05:43  0:02:25  0:03:18 9143k 43 4065M   43 1748M    0     0  11.9M      0  0:05:39  0:02:26  0:03:13 15.2M 43 4065M   43 1748M    0     0  11.8M      0  0:05:42  0:02:27  0:03:15 15.5M 43 4065M   43 1748M    0     0  11.8M      0  0:05:44  0:02:28  0:03:16 15.5M 44 4065M   44 1790M    0     0  12.0M      0  0:05:38  0:02:29  0:03:09 24.3M 44 4065M   44 1826M    0     0  12.1M      0  0:05:34  0:02:30  0:03:04 22.1M 44 4065M   44 1826M    0     0  12.0M      0  0:05:36  0:02:31  0:03:05 15.5M 44 4065M   44 1826M    0     0  12.0M      0  0:05:38  0:02:32  0:03:06 15.7M 44 4065M   44 1826M    0     0  11.9M      0  0:05:40  0:02:33  0:03:07 15.6M 44 4065M   44 1826M    0     0  11.8M      0  0:05:43  0:02:34  0:03:09 7075k 44 4065M   44 1826M    0     0  11.7M      0  0:05:45  0:02:35  0:03:10  9717 46 4065M   46 1880M    0     0  12.0M      0  0:05:37  0:02:36  0:03:01 11.1M 46 4065M   46 1897M    0     0  12.0M      0  0:05:36  0:02:37  0:02:59 14.3M 46 4065M   46 1898M    0     0  12.0M      0  0:05:38  0:02:38  0:03:00 14.4M 47 4065M   47 1938M    0     0  12.1M      0  0:05:33  0:02:39  0:02:54 23.0M 48 4065M   48 1991M    0     0  12.4M      0  0:05:26  0:02:40  0:02:46 33.8M 49 4065M   49 1995M    0     0  12.3M      0  0:05:28  0:02:41  0:02:47 22.7M 49 4065M   49 1999M    0     0  12.3M      0  0:05:29  0:02:42  0:02:47 20.5M 50 4065M   50 2055M    0     0  12.6M      0  0:05:22  0:02:43  0:02:39 31.5M 51 4065M   51 2075M    0     0  12.6M      0  0:05:21  0:02:44  0:02:37 26.9M 51 4065M   51 2075M    0     0  12.5M      0  0:05:23  0:02:45  0:02:38 16.6M 51 4065M   51 2075M    0     0  12.4M      0  0:05:25  0:02:46  0:02:39 16.1M 52 4065M   52 2139M    0     0  12.8M      0  0:05:17  0:02:47  0:02:30 28.1M 52 4065M   52 2147M    0     0  12.7M      0  0:05:18  0:02:48  0:02:30 18.0M 52 4065M   52 2147M    0     0  12.6M      0  0:05:20  0:02:49  0:02:31 14.1M 52 4065M   52 2147M    0     0  12.6M      0  0:05:22  0:02:50  0:02:32 14.1M 52 4065M   52 2147M    0     0  12.5M      0  0:05:23  0:02:51  0:02:32 14.2M 52 4065M   52 2147M    0     0  12.4M      0  0:05:25  0:02:52  0:02:33 1436k 52 4065M   52 2147M    0     0  12.4M      0  0:05:27  0:02:53  0:02:34  9509 52 4065M   52 2147M    0     0  12.3M      0  0:05:29  0:02:54  0:02:35 10140 52 4065M   52 2147M    0     0  12.2M      0  0:05:31  0:02:55  0:02:36  9826 52 4065M   52 2147M    0     0  12.1M      0  0:05:34  0:02:56  0:02:38  9158 53 4065M   53 2160M    0     0  12.2M      0  0:05:33  0:02:57  0:02:36 2825k 54 4065M   54 2217M    0     0  12.4M      0  0:05:27  0:02:58  0:02:29 12.9M 54 4065M   54 2217M    0     0  12.3M      0  0:05:28  0:02:59  0:02:29 14.1M 55 4065M   55 2239M    0     0  12.4M      0  0:05:26  0:03:00  0:02:26 18.7M 56 4065M   56 2287M    0     0  12.6M      0  0:05:21  0:03:01  0:02:20 30.5M 57 4065M   57 2323M    0     0  12.7M      0  0:05:18  0:03:02  0:02:16 32.6M 57 4065M   57 2323M    0     0  12.6M      0  0:05:20  0:03:03  0:02:17 23.2M 57 4065M   57 2323M    0     0  12.6M      0  0:05:22  0:03:04  0:02:18 21.0M 57 4065M   57 2323M    0     0  12.5M      0  0:05:23  0:03:05  0:02:18 16.5M 57 4065M   57 2323M    0     0  12.4M      0  0:05:25  0:03:06  0:02:19 7264k 57 4065M   57 2323M    0     0  12.3M      0  0:05:27  0:03:07  0:02:20  6078 57 4065M   57 2334M    0     0  12.4M      0  0:05:27  0:03:08  0:02:19 2180k 58 4065M   58 2391M    0     0  12.6M      0  0:05:21  0:03:09  0:02:12 13.5M 59 4065M   59 2403M    0     0  12.6M      0  0:05:21  0:03:10  0:02:11 15.9M 59 4065M   59 2403M    0     0  12.5M      0  0:05:23  0:03:11  0:02:12 15.9M 59 4065M   59 2403M    0     0  12.5M      0  0:05:24  0:03:12  0:02:12 17.2M 59 4065M   59 2403M    0     0  12.4M      0  0:05:26  0:03:13  0:02:13 13.5M 59 4065M   59 2403M    0     0  12.3M      0  0:05:28  0:03:14  0:02:14 2554k 59 4065M   59 2403M    0     0  12.3M      0  0:05:30  0:03:15  0:02:15  9511 59 4065M   59 2403M    0     0  12.2M      0  0:05:31  0:03:16  0:02:15  9511 59 4065M   59 2403M    0     0  12.1M      0  0:05:33  0:03:17  0:02:16  9511 59 4065M   59 2403M    0     0  12.1M      0  0:05:35  0:03:18  0:02:17  9398 59 4065M   59 2416M    0     0  12.1M      0  0:05:34  0:03:19  0:02:15 2684k 60 4065M   60 2470M    0     0  12.3M      0  0:05:29  0:03:20  0:02:09 13.5M 60 4065M   60 2477M    0     0  12.3M      0  0:05:30  0:03:21  0:02:09 14.5M 61 4065M   61 2479M    0     0  12.2M      0  0:05:31  0:03:22  0:02:09 15.1M 61 4065M   61 2516M    0     0  12.3M      0  0:05:28  0:03:23  0:02:05 24.1M 63 4065M   63 2571M    0     0  12.6M      0  0:05:22  0:03:24  0:01:58 30.9M 63 4065M   63 2583M    0     0  12.5M      0  0:05:22  0:03:25  0:01:57 22.5M 63 4065M   63 2583M    0     0  12.5M      0  0:05:24  0:03:26  0:01:58 21.5M 63 4065M   63 2583M    0     0  12.4M      0  0:05:25  0:03:27  0:01:58 20.9M 63 4065M   63 2583M    0     0  12.4M      0  0:05:27  0:03:28  0:01:59 13.2M 63 4065M   63 2583M    0     0  12.3M      0  0:05:29  0:03:29  0:02:00 2397k 64 4065M   64 2602M    0     0  12.3M      0  0:05:28  0:03:30  0:01:58 3979k 65 4065M   65 2659M    0     0  12.5M      0  0:05:22  0:03:31  0:01:51 14.9M 65 4065M   65 2659M    0     0  12.5M      0  0:05:24  0:03:32  0:01:52 14.9M 65 4065M   65 2659M    0     0  12.4M      0  0:05:25  0:03:33  0:01:52 14.9M 65 4065M   65 2659M    0     0  12.4M      0  0:05:27  0:03:34  0:01:53 15.6M 65 4065M   65 2659M    0     0  12.3M      0  0:05:28  0:03:35  0:01:53 11.2M 65 4065M   65 2659M    0     0  12.3M      0  0:05:30  0:03:36  0:01:54  7369 65 4065M   65 2659M    0     0  12.2M      0  0:05:31  0:03:37  0:01:54  9826 65 4065M   65 2659M    0     0  12.1M      0  0:05:33  0:03:38  0:01:55  9826 65 4065M   65 2659M    0     0  12.1M      0  0:05:34  0:03:39  0:01:55  9511 65 4065M   65 2659M    0     0  12.0M      0  0:05:36  0:03:40  0:01:56  9117 65 4065M   65 2682M    0     0  12.1M      0  0:05:35  0:03:41  0:01:54 4825k 67 4065M   67 2735M    0     0  12.2M      0  0:05:30  0:03:42  0:01:48 14.0M 67 4065M   67 2735M    0     0  12.2M      0  0:05:31  0:03:43  0:01:48 15.3M 67 4065M   67 2741M    0     0  12.2M      0  0:05:32  0:03:44  0:01:48 16.4M 68 4065M   68 2798M    0     0  12.4M      0  0:05:26  0:03:45  0:01:41 29.0M 69 4065M   69 2816M    0     0  12.4M      0  0:05:26  0:03:46  0:01:40 26.3M 69 4065M   69 2817M    0     0  12.4M      0  0:05:27  0:03:47  0:01:40 17.9M 70 4065M   70 2852M    0     0  12.5M      0  0:05:24  0:03:48  0:01:36 23.9M 71 4065M   71 2903M    0     0  12.6M      0  0:05:21  0:03:49  0:01:32 30.6M 71 4065M   71 2903M    0     0  12.6M      0  0:05:22  0:03:50  0:01:32 20.5M 71 4065M   71 2905M    0     0  12.5M      0  0:05:23  0:03:51  0:01:32 17.8M 73 4065M   73 2968M    0     0  12.7M      0  0:05:17  0:03:52  0:01:25 30.4M 73 4065M   73 2983M    0     0  12.7M      0  0:05:17  0:03:53  0:01:24 25.4M 73 4065M   73 2983M    0     0  12.7M      0  0:05:18  0:03:54  0:01:24 16.9M 73 4065M   73 2983M    0     0  12.6M      0  0:05:20  0:03:55  0:01:25 16.4M 73 4065M   73 2983M    0     0  12.6M      0  0:05:21  0:03:56  0:01:25 15.5M 73 4065M   73 2983M    0     0  12.5M      0  0:05:23  0:03:57  0:01:26 3122k 73 4065M   73 2983M    0     0  12.5M      0  0:05:24  0:03:58  0:01:26  9747 73 4065M   73 2983M    0     0  12.4M      0  0:05:25  0:03:59  0:01:26  6787 73 4065M   73 2983M    0     0  12.4M      0  0:05:27  0:04:00  0:01:27 10062 73 4065M   73 2983M    0     0  12.3M      0  0:05:29  0:04:01  0:01:28  8996 73 4065M   73 2986M    0     0  12.3M      0  0:05:29  0:04:02  0:01:27  615k 74 4065M   74 3044M    0     0  12.5M      0  0:05:24  0:04:03  0:01:21 12.6M 75 4065M   75 3057M    0     0  12.5M      0  0:05:24  0:04:04  0:01:20 14.6M 75 4065M   75 3059M    0     0  12.4M      0  0:05:25  0:04:05  0:01:20 14.9M 76 4065M   76 3090M    0     0  12.5M      0  0:05:23  0:04:06  0:01:17 23.6M 77 4065M   77 3140M    0     0  12.7M      0  0:05:19  0:04:07  0:01:12 30.5M 77 4065M   77 3140M    0     0  12.6M      0  0:05:21  0:04:08  0:01:13 18.6M 77 4065M   77 3169M    0     0  12.7M      0  0:05:19  0:04:09  0:01:10 22.9M 79 4065M   79 3225M    0     0  12.8M      0  0:05:15  0:04:10  0:01:05 33.7M 79 4065M   79 3236M    0     0  12.8M      0  0:05:15  0:04:11  0:01:04 28.5M 79 4065M   79 3236M    0     0  12.8M      0  0:05:17  0:04:12  0:01:05 17.8M 79 4065M   79 3243M    0     0  12.8M      0  0:05:17  0:04:13  0:01:04 21.1M 81 4065M   81 3304M    0     0  12.9M      0  0:05:13  0:04:14  0:00:59 24.9M 81 4065M   81 3304M    0     0  12.9M      0  0:05:13  0:04:15  0:00:58 15.7M 81 4065M   81 3323M    0     0  12.9M      0  0:05:13  0:04:16  0:00:57 17.9M 82 4065M   82 3372M    0     0  13.1M      0  0:05:09  0:04:17  0:00:52 29.6M 83 4065M   83 3406M    0     0  13.1M      0  0:05:07  0:04:18  0:00:49 32.4M 83 4065M   83 3406M    0     0  13.1M      0  0:05:09  0:04:19  0:00:50 21.7M 84 4065M   84 3436M    0     0  13.2M      0  0:05:07  0:04:20  0:00:47 26.6M 85 4065M   85 3482M    0     0  13.3M      0  0:05:04  0:04:21  0:00:43 30.5M 85 4065M   85 3483M    0     0  13.2M      0  0:05:05  0:04:22  0:00:43 21.6M 85 4065M   85 3491M    0     0  13.2M      0  0:05:06  0:04:23  0:00:43 16.8M 87 4065M   87 3544M    0     0  13.4M      0  0:05:02  0:04:24  0:00:38 28.2M 87 4065M   87 3559M    0     0  13.4M      0  0:05:02  0:04:25  0:00:37 24.3M 87 4065M   87 3559M    0     0  13.3M      0  0:05:03  0:04:26  0:00:37 15.5M 87 4065M   87 3559M    0     0  13.3M      0  0:05:05  0:04:27  0:00:38 15.4M 87 4065M   87 3560M    0     0  13.2M      0  0:05:06  0:04:28  0:00:38 13.6M 87 4065M   87 3560M    0     0  13.2M      0  0:05:07  0:04:29  0:00:38 3168k 87 4065M   87 3560M    0     0  13.1M      0  0:05:08  0:04:30  0:00:38  255k 87 4065M   87 3560M    0     0  13.1M      0  0:05:09  0:04:31  0:00:38  252k 87 4065M   87 3560M    0     0  13.0M      0  0:05:10  0:04:32  0:00:38  252k 87 4065M   87 3560M    0     0  13.0M      0  0:05:11  0:04:33  0:00:38  6550 87 4065M   87 3560M    0     0  12.9M      0  0:05:13  0:04:34  0:00:39  9733 88 4065M   88 3598M    0     0  13.0M      0  0:05:10  0:04:35  0:00:35 7761k 89 4065M   89 3654M    0     0  13.2M      0  0:05:07  0:04:36  0:00:31 17.7M 89 4065M   89 3654M    0     0  13.1M      0  0:05:08  0:04:37  0:00:31 18.8M 90 4065M   90 3660M    0     0  13.1M      0  0:05:08  0:04:38  0:00:30 20.5M 90 4065M   90 3696M    0     0  13.2M      0  0:05:06  0:04:39  0:00:27 27.9M 92 4065M   92 3751M    0     0  13.3M      0  0:05:03  0:04:40  0:00:23 30.6M 92 4065M   92 3771M    0     0  13.4M      0  0:05:03  0:04:41  0:00:22 24.8M 92 4065M   92 3771M    0     0  13.3M      0  0:05:04  0:04:42  0:00:22 23.3M 93 4065M   93 3793M    0     0  13.4M      0  0:05:03  0:04:43  0:00:20 26.5M 94 4065M   94 3822M    0     0  13.4M      0  0:05:02  0:04:44  0:00:18 25.1M 94 4065M   94 3848M    0     0  13.4M      0  0:05:01  0:04:45  0:00:16 19.2M 96 4065M   96 3905M    0     0  13.6M      0  0:04:57  0:04:46  0:00:11 27.3M 96 4065M   96 3905M    0     0  13.6M      0  0:04:58  0:04:47  0:00:11 26.3M 96 4065M   96 3905M    0     0  13.5M      0  0:04:59  0:04:48  0:00:11 22.1M 96 4065M   96 3905M    0     0  13.5M      0  0:05:00  0:04:49  0:00:11 16.7M 96 4065M   96 3905M    0     0  13.4M      0  0:05:01  0:04:50  0:00:11 11.3M 96 4065M   96 3905M    0     0  13.4M      0  0:05:02  0:04:51  0:00:11  9826 96 4065M   96 3905M    0     0  13.3M      0  0:05:04  0:04:52  0:00:12  9826 96 4065M   96 3905M    0     0  13.3M      0  0:05:05  0:04:53  0:00:12  9826 96 4065M   96 3905M    0     0  13.2M      0  0:05:06  0:04:54  0:00:12  9826 96 4065M   96 3905M    0     0  13.2M      0  0:05:07  0:04:55  0:00:12  6247 96 4065M   96 3921M    0     0  13.2M      0  0:05:06  0:04:56  0:00:10 3168k 97 4065M   97 3978M    0     0  13.3M      0  0:05:03  0:04:57  0:00:06 14.9M 97 4065M   97 3982M    0     0  13.3M      0  0:05:04  0:04:58  0:00:06 15.1M 97 4065M   97 3983M    0     0  13.3M      0  0:05:05  0:04:59  0:00:06 15.3M 99 4065M   99 4024M    0     0  13.4M      0  0:05:03  0:05:00  0:00:03 25.6M100 4065M  100 4065M    0     0  13.5M      0  0:05:00  0:05:00 --:--:-- 31.2M
-  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
-                                 Dload  Upload   Total   Spent    Left  Speed
-  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0100   378  100   378    0     0    691      0 --:--:-- --:--:-- --:--:--   691
-100   782    0   782    0     0    619      0 --:--:--  0:00:01 --:--:--   619
-  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
-                                 Dload  Upload   Total   Spent    Left  Speed
-  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0  0     0    0     0    0     0      0      0 --:--:--  0:00:01 --:--:--     0100   376  100   376    0     0    190      0  0:00:01  0:00:01 --:--:--   190
-100   613    0   613    0     0    240      0 --:--:--  0:00:02 --:--:--   240100   613    0   613    0     0    240      0 --:--:--  0:00:02 --:--:--     0
-  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
-                                 Dload  Upload   Total   Spent    Left  Speed
-  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0100  1071    0  1071    0     0    878      0 --:--:--  0:00:01 --:--:--   878
-  0     0    0     0    0     0      0      0 --:--:--  0:00:01 --:--:--     0  2 10.8M    2  320k    0     0   129k      0  0:01:26  0:00:02  0:01:24  334k100 10.8M  100 10.8M    0     0  3401k      0  0:00:03  0:00:03 --:--:-- 6338k
-  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
-                                 Dload  Upload   Total   Spent    Left  Speed
-  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0100   372  100   372    0     0    693      0 --:--:-- --:--:-- --:--:--   692
-100  5445    0  5445    0     0   4286      0 --:--:--  0:00:01 --:--:--  4286100  5445    0  5445    0     0   4267      0 --:--:--  0:00:01 --:--:--     0
-  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
-                                 Dload  Upload   Total   Spent    Left  Speed
-  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0100   390  100   390    0     0    776      0 --:--:-- --:--:-- --:--:--   778
-100   817    0   817    0     0    780      0 --:--:--  0:00:01 --:--:--   780100   817    0   817    0     0    779      0 --:--:--  0:00:01 --:--:--     0
-  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
-                                 Dload  Upload   Total   Spent    Left  Speed
-  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0100   350  100   350    0     0    655      0 --:--:-- --:--:-- --:--:--   656
-  0     0    0     0    0     0      0      0 --:--:--  0:00:01 --:--:--     0100 98304    0 98304    0     0  54554      0 --:--:--  0:00:01 --:--:--  261k100 2711k    0 2711k    0     0  1013k      0 --:--:--  0:00:02 --:--:-- 2186k
-  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
-                                 Dload  Upload   Total   Spent    Left  Speed
-  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0100  1050    0  1050    0     0    878      0 --:--:--  0:00:01 --:--:--   877100  1050    0  1050    0     0    877      0 --:--:--  0:00:01 --:--:--   877
-  0 1898M    0 82217    0     0  39095      0 14:08:42  0:00:02 14:08:40 39095  0 1898M    0 7167k    0     0  2309k      0  0:14:01  0:00:03  0:13:58 7087k  3 1898M    3 73.1M    0     0  17.3M      0  0:01:49  0:00:04  0:01:45 34.6M  3 1898M    3 73.1M    0     0  14.2M      0  0:02:13  0:00:05  0:02:08 24.0M  3 1898M    3 73.1M    0     0  11.7M      0  0:02:41  0:00:06  0:02:35 17.7M  3 1898M    3 73.1M    0     0  10.2M      0  0:03:05  0:00:07  0:02:58 14.4M  3 1898M    3 73.1M    0     0  9101k      0  0:03:33  0:00:08  0:03:25 12.9M  3 1898M    3 73.1M    0     0  8180k      0  0:03:57  0:00:09  0:03:48  9939  3 1898M    3 73.1M    0     0  7317k      0  0:04:25  0:00:10  0:04:15  9639  3 1898M    3 73.1M    0     0  6709k      0  0:04:49  0:00:11  0:04:38  9939  3 1898M    3 73.1M    0     0  6118k      0  0:05:17  0:00:12  0:05:05  9639  3 1898M    3 73.1M    0     0  5688k      0  0:05:41  0:00:13  0:05:28  6626  3 1898M    3 73.2M    0     0  5291k      0  0:06:07  0:00:14  0:05:53  9816  6 1898M    6  120M    0     0  8188k      0  0:03:57  0:00:15  0:03:42  9.7M  7 1898M    7  144M    0     0  9150k      0  0:03:32  0:00:16  0:03:16 14.2M  7 1898M    7  144M    0     0  8655k      0  0:03:44  0:00:17  0:03:27 14.6M  7 1898M    7  144M    0     0  8141k      0  0:03:58  0:00:18  0:03:40 14.2M  7 1898M    7  144M    0     0  7748k      0  0:04:10  0:00:19  0:03:51 14.3M  7 1898M    7  144M    0     0  7333k      0  0:04:25  0:00:20  0:04:05 4814k  7 1898M    7  144M    0     0  7012k      0  0:04:37  0:00:21  0:04:16  9935  7 1898M    7  144M    0     0  6671k      0  0:04:51  0:00:22  0:04:29  6426  7 1898M    7  144M    0     0  6405k      0  0:05:03  0:00:23  0:04:40  9939  7 1898M    7  144M    0     0  6120k      0  0:05:17  0:00:24  0:04:53  9639  7 1898M    7  144M    0     0  5878k      0  0:05:30  0:00:25  0:05:05 13065 10 1898M   10  204M    0     0  8011k      0  0:04:02  0:00:26  0:03:36 11.9M 11 1898M   11  209M    0     0  7885k      0  0:04:06  0:00:27  0:03:39 12.9M 11 1898M   11  209M    0     0  7625k      0  0:04:14  0:00:28  0:03:46 12.9M 11 1898M   11  209M    0     0  7343k      0  0:04:24  0:00:29  0:03:55 12.9M 11 1898M   11  209M    0     0  7117k      0  0:04:33  0:00:30  0:04:03 13.1M 11 1898M   11  209M    0     0  6871k      0  0:04:42  0:00:31  0:04:11 1064k 11 1898M   11  209M    0     0  6673k      0  0:04:51  0:00:32  0:04:19  6625 11 1898M   11  209M    0     0  6456k      0  0:05:01  0:00:33  0:04:28  9639 11 1898M   11  209M    0     0  6282k      0  0:05:09  0:00:34  0:04:35  9937 11 1898M   11  209M    0     0  6089k      0  0:05:19  0:00:35  0:04:44  9639 11 1898M   11  209M    0     0  5920k      0  0:05:28  0:00:36  0:04:52  9787 14 1898M   14  268M    0     0  7404k      0  0:04:22  0:00:37  0:03:45 11.8M 14 1898M   14  272M    0     0  7298k      0  0:04:26  0:00:38  0:03:48 12.5M 14 1898M   14  283M    0     0  7409k      0  0:04:22  0:00:39  0:03:43 14.7M 17 1898M   17  336M    0     0  8563k      0  0:03:47  0:00:40  0:03:07 25.3M 17 1898M   17  336M    0     0  8370k      0  0:03:52  0:00:41  0:03:11 25.7M 17 1898M   17  336M    0     0  8156k      0  0:03:58  0:00:42  0:03:16 13.2M 17 1898M   17  336M    0     0  7981k      0  0:04:03  0:00:43  0:03:20 12.9M 17 1898M   17  336M    0     0  7813k      0  0:04:08  0:00:44  0:03:24 10.7M 17 1898M   17  336M    0     0  7627k      0  0:04:14  0:00:45  0:03:29  9939 17 1898M   17  336M    0     0  7473k      0  0:04:20  0:00:46  0:03:34  9939 17 1898M   17  336M    0     0  7315k      0  0:04:25  0:00:47  0:03:38 10099 20 1898M   20  391M    0     0  8321k      0  0:03:53  0:00:48  0:03:05 10.9M 20 1898M   20  391M    0     0  8164k      0  0:03:58  0:00:49  0:03:09 10.9M 20 1898M   20  391M    0     0  7988k      0  0:04:03  0:00:50  0:03:13 10.9M 20 1898M   20  391M    0     0  7844k      0  0:04:07  0:00:51  0:03:16 10.9M 20 1898M   20  391M    0     0  7681k      0  0:04:13  0:00:52  0:03:21 10.7M 20 1898M   20  391M    0     0  7548k      0  0:04:17  0:00:53  0:03:24  9937 20 1898M   20  391M    0     0  7397k      0  0:04:22  0:00:54  0:03:28  9637 20 1898M   20  391M    0     0  7273k      0  0:04:27  0:00:55  0:03:32  9937 20 1898M   20  391M    0     0  7153k      0  0:04:31  0:00:56  0:03:35  6625 20 1898M   20  391M    0     0  6973k      0  0:04:38  0:00:57  0:03:41  9254 21 1898M   21  401M    0     0  7072k      0  0:04:34  0:00:58  0:03:36 1939k 24 1898M   24  458M    0     0  7939k      0  0:04:04  0:00:59  0:03:05 13.6M 24 1898M   24  463M    0     0  7883k      0  0:04:06  0:01:00  0:03:06 14.2M 24 1898M   24  463M    0     0  7763k      0  0:04:10  0:01:01  0:03:09 14.2M 24 1898M   24  463M    0     0  7628k      0  0:04:14  0:01:02  0:03:12 15.3M 24 1898M   24  463M    0     0  7517k      0  0:04:18  0:01:03  0:03:15 12.3M 24 1898M   24  463M    0     0  7390k      0  0:04:23  0:01:04  0:03:19 1066k 24 1898M   24  463M    0     0  7285k      0  0:04:26  0:01:05  0:03:21  9935 24 1898M   24  463M    0     0  7166k      0  0:04:31  0:01:06  0:03:25  6425 24 1898M   24  463M    0     0  7067k      0  0:04:35  0:01:07  0:03:28  9937 24 1898M   24  463M    0     0  6933k      0  0:04:40  0:01:08  0:03:32  9230 25 1898M   25  478M    0     0  7094k      0  0:04:34  0:01:09  0:03:25 3201k 28 1898M   28  536M    0     0  7833k      0  0:04:08  0:01:10  0:02:58 14.7M 28 1898M   28  538M    0     0  7758k      0  0:04:10  0:01:11  0:02:59 15.4M 28 1898M   28  541M    0     0  7681k      0  0:04:13  0:01:12  0:03:01 15.5M 31 1898M   31  603M    0     0  8448k      0  0:03:50  0:01:13  0:02:37 30.1M 31 1898M   31  604M    0     0  8337k      0  0:03:53  0:01:14  0:02:39 24.7M 31 1898M   31  604M    0     0  8234k      0  0:03:56  0:01:15  0:02:41 13.5M 31 1898M   31  604M    0     0  8117k      0  0:03:59  0:01:16  0:02:43 12.8M 31 1898M   31  604M    0     0  8020k      0  0:04:02  0:01:17  0:02:45 12.6M 31 1898M   31  604M    0     0  7909k      0  0:04:05  0:01:18  0:02:47  183k 31 1898M   31  604M    0     0  7795k      0  0:04:09  0:01:19  0:02:50  7131 33 1898M   33  627M    0     0  8017k      0  0:04:02  0:01:20  0:02:42 4755k 35 1898M   35  671M    0     0  8451k      0  0:03:50  0:01:21  0:02:29 13.1M 35 1898M   35  672M    0     0  8371k      0  0:03:52  0:01:22  0:02:30 13.3M 38 1898M   38  726M    0     0  8949k      0  0:03:37  0:01:23  0:02:14 24.9M 38 1898M   38  734M    0     0  8927k      0  0:03:37  0:01:24  0:02:13 26.7M 38 1898M   38  734M    0     0  8830k      0  0:03:40  0:01:25  0:02:15 21.2M 38 1898M   38  735M    0     0  8733k      0  0:03:42  0:01:26  0:02:16 13.0M 38 1898M   38  735M    0     0  8640k      0  0:03:45  0:01:27  0:02:18 12.8M 38 1898M   38  735M    0     0  8534k      0  0:03:47  0:01:28  0:02:19 1812k 38 1898M   38  735M    0     0  8445k      0  0:03:50  0:01:29  0:02:21  245k 38 1898M   38  735M    0     0  8339k      0  0:03:53  0:01:30  0:02:23  238k 40 1898M   40  763M    0     0  8581k      0  0:03:46  0:01:31  0:02:15 5918k 41 1898M   41  785M    0     0  8723k      0  0:03:42  0:01:32  0:02:10  9.9M 41 1898M   41  785M    0     0  8643k      0  0:03:44  0:01:33  0:02:11 10.3M 41 1898M   41  792M    0     0  8618k      0  0:03:45  0:01:34  0:02:11 11.4M 41 1898M   41  792M    0     0  8534k      0  0:03:47  0:01:35  0:02:12 11.9M 41 1898M   41  793M    0     0  8443k      0  0:03:50  0:01:36  0:02:14 5958k 41 1898M   41  793M    0     0  8363k      0  0:03:52  0:01:37  0:02:15 1650k 41 1898M   41  793M    0     0  8271k      0  0:03:55  0:01:38  0:02:17 1470k 41 1898M   41  793M    0     0  8193k      0  0:03:57  0:01:39  0:02:18  113k 41 1898M   41  793M    0     0  8105k      0  0:03:59  0:01:40  0:02:19  103k 41 1898M   41  793M    0     0  8027k      0  0:04:02  0:01:41  0:02:21  9517 43 1898M   43  823M    0     0  8254k      0  0:03:55  0:01:42  0:02:13 6143k 45 1898M   45  860M    0     0  8532k      0  0:03:47  0:01:43  0:02:04 13.2M 45 1898M   45  860M    0     0  8456k      0  0:03:49  0:01:44  0:02:05 13.2M 45 1898M   45  860M    0     0  8369k      0  0:03:52  0:01:45  0:02:07 13.2M 45 1898M   45  860M    0     0  8296k      0  0:03:54  0:01:46  0:02:08 13.4M 45 1898M   45  860M    0     0  8224k      0  0:03:56  0:01:47  0:02:09 7613k 45 1898M   45  860M    0     0  8142k      0  0:03:58  0:01:48  0:02:10  9937 45 1898M   45  860M    0     0  8073k      0  0:04:00  0:01:49  0:02:11  9939 45 1898M   45  860M    0     0  7994k      0  0:04:03  0:01:50  0:02:13  9937 45 1898M   45  860M    0     0  7927k      0  0:04:05  0:01:51  0:02:14  6626 45 1898M   45  860M    0     0  7858k      0  0:04:07  0:01:52  0:02:15  9830 47 1898M   47  892M    0     0  8082k      0  0:04:00  0:01:53  0:02:07 6752k 48 1898M   48  924M    0     0  8297k      0  0:03:54  0:01:54  0:02:00 12.8M 48 1898M   48  925M    0     0  8226k      0  0:03:56  0:01:55  0:02:01 12.9M 50 1898M   50  966M    0     0  8521k      0  0:03:48  0:01:56  0:01:52 21.2M 51 1898M   51  985M    0     0  8613k      0  0:03:45  0:01:57  0:01:48 24.7M 51 1898M   51  985M    0     0  8534k      0  0:03:47  0:01:58  0:01:49 18.0M 51 1898M   51  985M    0     0  8468k      0  0:03:49  0:01:59  0:01:50 12.0M 51 1898M   51  985M    0     0  8403k      0  0:03:51  0:02:00  0:01:51 12.2M 51 1898M   51  985M    0     0  8328k      0  0:03:53  0:02:01  0:01:52 3931k 51 1898M   51  985M    0     0  8265k      0  0:03:55  0:02:02  0:01:53  6625 51 1898M   51  985M    0     0  8189k      0  0:03:57  0:02:03  0:01:54  9830 54 1898M   54 1032M    0     0  8521k      0  0:03:48  0:02:04  0:01:44 9794k 55 1898M   55 1048M    0     0  8573k      0  0:03:46  0:02:05  0:01:41 12.2M 55 1898M   55 1050M    0     0  8521k      0  0:03:48  0:02:06  0:01:42 12.9M 57 1898M   57 1100M    0     0  8864k      0  0:03:39  0:02:07  0:01:32 22.9M 58 1898M   58 1114M    0     0  8896k      0  0:03:38  0:02:08  0:01:30 25.8M 58 1898M   58 1115M    0     0  8843k      0  0:03:39  0:02:09  0:01:30 16.3M 61 1898M   61 1170M    0     0  9213k      0  0:03:31  0:02:10  0:01:21 25.1M 62 1898M   62 1181M    0     0  9222k      0  0:03:30  0:02:11  0:01:19 26.3M 62 1898M   62 1181M    0     0  9147k      0  0:03:32  0:02:12  0:01:20 15.7M 62 1898M   62 1181M    0     0  9083k      0  0:03:34  0:02:13  0:01:21 13.6M 62 1898M   62 1181M    0     0  9017k      0  0:03:35  0:02:14  0:01:21 13.2M 65 1898M   65 1235M    0     0  9362k      0  0:03:27  0:02:15  0:01:12 12.9M 65 1898M   65 1244M    0     0  9363k      0  0:03:27  0:02:16  0:01:11 12.7M 65 1898M   65 1247M    0     0  9310k      0  0:03:28  0:02:17  0:01:11 13.3M 68 1898M   68 1300M    0     0  9645k      0  0:03:21  0:02:18  0:01:03 24.1M 69 1898M   69 1311M    0     0  9647k      0  0:03:21  0:02:19  0:01:02 25.7M 69 1898M   69 1311M    0     0  9583k      0  0:03:22  0:02:20  0:01:02 15.1M 69 1898M   69 1311M    0     0  9509k      0  0:03:24  0:02:21  0:01:03 13.1M 69 1898M   69 1311M    0     0  9447k      0  0:03:25  0:02:22  0:01:03 12.9M 69 1898M   69 1311M    0     0  9376k      0  0:03:27  0:02:23  0:01:04 2110k 69 1898M   69 1311M    0     0  9316k      0  0:03:28  0:02:24  0:01:04  9937 69 1898M   69 1311M    0     0  9252k      0  0:03:30  0:02:25  0:01:05  6543 71 1898M   71 1365M    0     0  9550k      0  0:03:23  0:02:26  0:00:57 10.3M 71 1898M   71 1365M    0     0  9500k      0  0:03:24  0:02:27  0:00:57 10.7M 73 1898M   73 1387M    0     0  9593k      0  0:03:22  0:02:28  0:00:54 15.5M 75 1898M   75 1434M    0     0  9845k      0  0:03:17  0:02:29  0:00:48 24.4M 75 1898M   75 1434M    0     0  9774k      0  0:03:18  0:02:30  0:00:48 24.0M 75 1898M   75 1434M    0     0  9715k      0  0:03:20  0:02:31  0:00:49 14.4M 75 1898M   75 1434M    0     0  9646k      0  0:03:21  0:02:32  0:00:49 13.5M 75 1898M   75 1434M    0     0  9587k      0  0:03:22  0:02:33  0:00:49 9417k 75 1898M   75 1434M    0     0  9530k      0  0:03:24  0:02:34  0:00:50  6625 75 1898M   75 1434M    0     0  9463k      0  0:03:25  0:02:35  0:00:50  9937 75 1898M   75 1434M    0     0  9403k      0  0:03:26  0:02:36  0:00:50  9812 78 1898M   78 1487M    0     0  9681k      0  0:03:20  0:02:37  0:00:43 10.5M 78 1898M   78 1487M    0     0  9626k      0  0:03:21  0:02:38  0:00:43 10.5M 79 1898M   79 1500M    0     0  9653k      0  0:03:21  0:02:39  0:00:42 13.1M 81 1898M   81 1551M    0     0  9917k      0  0:03:16  0:02:40  0:00:36 23.4M 81 1898M   81 1551M    0     0  9860k      0  0:03:17  0:02:41  0:00:36 23.7M 81 1898M   81 1551M    0     0  9795k      0  0:03:18  0:02:42  0:00:36 13.1M 81 1898M   81 1551M    0     0  9739k      0  0:03:19  0:02:43  0:00:36 13.0M 81 1898M   81 1551M    0     0  9675k      0  0:03:20  0:02:44  0:00:36 10.1M 81 1898M   81 1551M    0     0  9621k      0  0:03:22  0:02:45  0:00:37  9937 81 1898M   81 1551M    0     0  9537k      0  0:03:23  0:02:46  0:00:37  8993 82 1898M   82 1556M    0     0  9541k      0  0:03:23  0:02:47  0:00:36 1132k 82 1898M   82 1567M    0     0  9545k      0  0:03:23  0:02:48  0:00:35 3254k 86 1898M   86 1638M    0     0  9915k      0  0:03:16  0:02:49  0:00:27 17.3M 86 1898M   86 1638M    0     0  9861k      0  0:03:17  0:02:50  0:00:27 17.3M 86 1898M   86 1638M    0     0  9799k      0  0:03:18  0:02:51  0:00:27 18.7M 86 1898M   86 1638M    0     0  9746k      0  0:03:19  0:02:52  0:00:27 16.1M 86 1898M   86 1638M    0     0  9685k      0  0:03:20  0:02:53  0:00:27 13.9M 86 1898M   86 1638M    0     0  9634k      0  0:03:21  0:02:54  0:00:27  9937 86 1898M   86 1638M    0     0  9583k      0  0:03:22  0:02:55  0:00:27  9937 86 1898M   86 1638M    0     0  9524k      0  0:03:24  0:02:56  0:00:28  9937 86 1898M   86 1638M    0     0  9454k      0  0:03:25  0:02:57  0:00:28  9223 87 1898M   87 1653M    0     0  9507k      0  0:03:24  0:02:58  0:00:26 3175k 89 1898M   89 1704M    0     0  9740k      0  0:03:19  0:02:59  0:00:20 13.1M 89 1898M   89 1704M    0     0  9690k      0  0:03:20  0:03:00  0:00:20 13.1M 89 1898M   89 1704M    0     0  9629k      0  0:03:21  0:03:01  0:00:20 12.9M 89 1898M   89 1707M    0     0  9601k      0  0:03:22  0:03:02  0:00:20 14.9M 93 1898M   93 1781M    0     0  9951k      0  0:03:15  0:03:03  0:00:12 24.6M 93 1898M   93 1781M    0     0  9901k      0  0:03:16  0:03:04  0:00:12 15.2M 93 1898M   93 1781M    0     0  9851k      0  0:03:17  0:03:05  0:00:12 15.2M 93 1898M   93 1781M    0     0  9794k      0  0:03:18  0:03:06  0:00:12 15.4M 93 1898M   93 1781M    0     0  9745k      0  0:03:19  0:03:07  0:00:12 14.5M 93 1898M   93 1781M    0     0  9678k      0  0:03:20  0:03:08  0:00:12  6346 94 1898M   94 1796M    0     0  9728k      0  0:03:19  0:03:09  0:00:10 3255k 97 1898M   97 1842M    0     0  9920k      0  0:03:15  0:03:10  0:00:05 12.1M 97 1898M   97 1842M    0     0  9872k      0  0:03:16  0:03:11  0:00:05 12.5M 97 1898M   97 1842M    0     0  9816k      0  0:03:18  0:03:12  0:00:06 12.1M 97 1898M   97 1842M    0     0  9769k      0  0:03:18  0:03:13  0:00:05 13.1M 97 1898M   97 1842M    0     0  9715k      0  0:03:20  0:03:14  0:00:06 9221k 97 1898M   97 1842M    0     0  9669k      0  0:03:21  0:03:15  0:00:06  9937 97 1898M   97 1842M    0     0  9616k      0  0:03:22  0:03:16  0:00:06  9637 97 1898M   97 1842M    0     0  9570k      0  0:03:23  0:03:17  0:00:06  9937 97 1898M   97 1842M    0     0  9518k      0  0:03:24  0:03:18  0:00:06  9635 97 1898M   97 1842M    0     0  9463k      0  0:03:25  0:03:19  0:00:06  9510 98 1898M   98 1862M    0     0  9528k      0  0:03:24  0:03:20  0:00:04 4031k100 1898M  100 1898M    0     0  9686k      0  0:03:20  0:03:20 --:--:-- 12.4M

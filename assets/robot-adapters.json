@@ -17,7 +17,7 @@
     "urdf": "assets/models/unitree_g1/g1_29dof_with_hand.urdf",
     "status": "remote_urdf_available_pending_copy_retry",
     "retarget_route": "GVHMR/GMR/OmniRetarget -> G1 29DoF -> GR00T",
-    "videos": ["omni_new_task2_g1_render.mp4", "gr00t_ep0038_gt_vs_pred.mp4"]
+    "videos": ["omni_new_task2_g1_render.mp4", "gmr_g1_walk_retarget.mp4"]
   },
   "unitree_go2_b2": {
     "label": "Unitree Go2 / B2",

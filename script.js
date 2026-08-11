@@ -1,4 +1,4 @@
-﻿const robots = [
+const robots = [
   {
     name: "松延 N2 / N2 EDU",
     tag: "目标平台",
@@ -32,10 +32,10 @@
     sketch: "humanoid",
     color: "#2f8f61",
     clips: {
-      teleop: "simple_bend_handover_teleop.mp4",
+      teleop: "pico_teleop_translate_rotate.mp4",
       retarget: "gmr_g1_walk_retarget.mp4",
       finetune: "omni_new_task2_g1_render.mp4",
-      evaluate: "omni_new_task2_g1_render.mp4",
+      evaluate: "gmr_g1_walk_retarget.mp4",
       resample: "simple_locomotion_pick_between_tables.mp4"
     }
   },
@@ -52,10 +52,10 @@
     sketch: "dog",
     color: "#bd7a22",
     clips: {
-      teleop: "soccer_mosc_step3000.mp4",
-      retarget: "soccer_mosc_step3000.mp4",
+      teleop: "keyboard_teleop.mp4",
+      retarget: "isaaclab_g1_velocity_rough.mp4",
       finetune: "ep0030_quality_replay.mp4",
-      evaluate: "ep0030_quality_replay.mp4",
+      evaluate: "soccer_mosc_step3000.mp4",
       resample: "soccer_mosc_step3000.mp4"
     }
   },
@@ -72,11 +72,11 @@
     sketch: "hand",
     color: "#7952b3",
     clips: {
-      teleop: "rh56dftp_bc_rnn_eval.mp4",
+      teleop: "dexterous_hand_grasp.mp4",
       retarget: "dex_retarget_allegro.mp4",
       finetune: "rh56dftp_bc_rnn_eval.mp4",
       evaluate: "rh56dftp_ppo_eval.mp4",
-      resample: "rh56dftp_bc_rnn_eval.mp4"
+      resample: "dexterous_hand_grasp.mp4"
     }
   }
 ];
@@ -130,7 +130,7 @@ const stages = [
     short: "失败归因与价值评分",
     title: "Evaluation and Failure Diagnosis",
     clip: {
-      title: "Episode 0030 质量审计",
+      title: "阶段评估回放",
       privacy: "可公开展示",
       desc: "评估结果回放 GT vs Pred，自动定位异常片段、阶段失败原因和模型不确定区域。"
     },
@@ -355,4 +355,3 @@ renderRobots();
 renderPipeline();
 updateRobot();
 setStage(0);
-

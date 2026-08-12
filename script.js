@@ -12,11 +12,11 @@ const robots = [
     sketch: "n2",
     color: "#0b8a92",
     clips: {
-      teleop: "simple_bend_handover_teleop.mp4",
-      retarget: "n2_gvhmr_gmr_retarget.mp4",
-      finetune: "simple_open_faucet_teleop.mp4",
-      evaluate: "n2_gvhmr_gmr_retarget.mp4",
-      resample: "simple_locomotion_pick_between_tables.mp4"
+      teleop: "dexterous_hand_grasp.mp4",
+      retarget: "n2_jntm_gvhmr_gmr_retarget.mp4",
+      finetune: "n2_jntm_gvhmr_gmr_retarget.mp4",
+      evaluate: "n2_tennis_gvhmr_gmr_diagnosis.mp4",
+      resample: "simple_bend_handover_teleop.mp4"
     }
   },
   {
@@ -238,13 +238,21 @@ function setStage(index) {
   const stage = stages[index];
   const robot = robots[currentRobot];
   const clipFile = robot.clips[stage.key];
+  const n2StageNotes = {
+    teleop: "以 Manus 手套/因时灵巧手遥操片段作为数据入口，进入跨构型数据飞轮；该阶段强调真实人手遥操采集，而非 N2 仿真回放。",
+    retarget: "GVHMR demo/jntm 的 hmr4d_results.pt 经 GMR(noetix_n2) 映射到 N2 18DoF，并录制为同动作的 N2 重定向结果，可与 G1 的重定向阶段对照。",
+    finetune: "N2 重定向后的 motion.pkl 被整理为训练样本版本，进入 LeRobot/GR00T 兼容数据集；此处播放入库前的 N2 轨迹复核回放。",
+    evaluate: "GVHMR demo/tennis 经同一 GMR(noetix_n2) 链路转换为 N2，作为评估诊断中的问题动作片段，用于标注 IK 偏差、关节限位和末端跟踪误差。",
+    resample: "将遥操采样片段作为下一轮回采任务，补齐 N2 与灵巧手在长尾场景中的覆盖。"
+  };
   stageName.textContent = stage.name;
   stageTitle.textContent = stage.title;
-  stageDesc.textContent = stage.desc;
+  stageDesc.textContent = robot.name.includes("松延") ? n2StageNotes[stage.key] : stage.desc;
   clipTitle.textContent = `${robot.name} · ${stage.clip.title}`;
   const assetNote =
-    robot.name.includes("松延") ? "当前接入 N2 官方公开参数派生 URDF 预览，可点击“查看当前 URDF”检查 joints/limits；若获得 SDK 交付包，可直接替换为官方 n2.urdf。" : `当前目标构型由 ${robot.asset} 提供 DoF、关节限位、末端和安全约束。`;
-  clipDesc.textContent = `${stage.clip.desc} 当前目标构型为 ${robot.name}，${assetNote}`;
+    robot.name.includes("松延") ? "当前接入松延/Noetix 官方 N2 URDF 与 MJCF，GMR 已注册 noetix_n2 RobotAdapter，可点击“查看当前 URDF”检查 joints/limits。" : `当前目标构型由 ${robot.asset} 提供 DoF、关节限位、末端和安全约束。`;
+  const clipNote = robot.name.includes("松延") ? n2StageNotes[stage.key] : stage.clip.desc;
+  clipDesc.textContent = `${clipNote} 当前目标构型为 ${robot.name}，${assetNote}`;
   privacyBadge.textContent = stage.clip.privacy;
   sourceAsset.textContent = `source: ${robot.source}`;
   smoothBar.style.setProperty("--w", `${42 + index * 11}%`);

@@ -7,8 +7,8 @@ const robots = [
     safety: "关节限位+跌倒保护",
     asset: "assets/models/noetix_n2/urdf/N2.urdf",
     assetState: "松延/Noetix 官方 N2 URDF 已导入",
-    route: "GVHMR/GMR → N2 官方 URDF RobotAdapter → LeRobot/GR00T",
-    source: "songyan_n2_task_episode.npz",
+    route: "GVHMR hmr4d_results.pt → GMR(noetix_n2) → N2 18DoF motion.pkl → LeRobot/GR00T",
+    source: "GVHMR/new_task2/hmr4d_results.pt",
     sketch: "n2",
     color: "#0b8a92",
     clips: {

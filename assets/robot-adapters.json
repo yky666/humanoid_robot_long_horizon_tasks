@@ -4,12 +4,12 @@
     "role": "target_platform",
     "urdf": "assets/models/noetix_n2/urdf/N2.urdf",
     "status": "official_noetix_n2_urdf_imported",
-    "retarget_route": "GVHMR monocular pose -> GMR -> official N2 URDF RobotAdapter -> LeRobot/GR00T",
+    "retarget_route": "GVHMR hmr4d_results.pt -> GMR(noetix_n2) -> N2 18DoF motion.pkl -> LeRobot/GR00T",
     "official_sources": [
       "https://en.noetixrobotics.com/n2",
       "https://en.noetixrobotics.com/download/document"
     ],
-    "notes": "Imported from Noetix-Robotics/noetix_n2_gym resources/robots/N2/urdf/N2.urdf. Retargeting demo video shows the GVHMR/GMR/N2 RobotAdapter path.",
+    "notes": "Imported from Noetix-Robotics/noetix_n2_gym resources/robots/N2/urdf/N2.urdf. GMR was patched with robot id noetix_n2 and smplx_to_n2.json; demo video is rendered from outputs/n2_new_task2_motion.pkl.",
     "videos": ["simple_bend_handover_teleop.mp4", "n2_gvhmr_gmr_retarget.mp4"]
   },
   "unitree_g1": {

@@ -13,9 +13,9 @@ const robots = [
     color: "#0b8a92",
     clips: {
       teleop: "simple_bend_handover_teleop.mp4",
-      retarget: "simple_bend_pick_teleop.mp4",
+      retarget: "n2_gvhmr_gmr_retarget.mp4",
       finetune: "simple_open_faucet_teleop.mp4",
-      evaluate: "simple_locomotion_pick_between_tables.mp4",
+      evaluate: "n2_gvhmr_gmr_retarget.mp4",
       resample: "simple_locomotion_pick_between_tables.mp4"
     }
   },

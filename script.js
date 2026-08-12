@@ -154,6 +154,33 @@ const stages = [
   }
 ];
 
+const extraDemos = [
+  {
+    title: "全身遥操作数采",
+    tag: "Whole-body Teleop",
+    file: "extra_whole_body_teleop.mp4",
+    desc: "PSI/Locomanip 全身遥操作流程，用于补充主链路中的多源遥操采集能力。"
+  },
+  {
+    title: "Manus 手套接入",
+    tag: "Manus SDK",
+    file: "extra_manus_glove_sdk.mp4",
+    desc: "Manus 手套 SDK 与手部姿态输入，作为因时 RH56DFTP 遥操和手部数据采集入口。"
+  },
+  {
+    title: "语音对话交互",
+    tag: "Voice Interaction",
+    file: "extra_voice_interaction.mp4",
+    desc: "语音指令与机器人交互 demo，展示数据飞轮可接入自然语言任务和人机协同控制。"
+  },
+  {
+    title: "G1 低层控制样例",
+    tag: "G1 Control",
+    file: "extra_g1_low_level.mp4",
+    desc: "G1 低层控制与执行样例，补充验证平台的控制接口和 sim/real 执行能力。"
+  }
+];
+
 let currentRobot = 1;
 let currentStage = 0;
 let timer = null;
@@ -185,6 +212,7 @@ const assetPath = document.querySelector("#assetPath");
 const retargetRoute = document.querySelector("#retargetRoute");
 const viewUrdf = document.querySelector("#viewUrdf");
 const urdfPreview = document.querySelector("#urdfPreview");
+const extraDemoGrid = document.querySelector("#extraDemoGrid");
 
 function renderRobots() {
   robotGrid.innerHTML = "";
@@ -212,6 +240,33 @@ function renderPipeline() {
       setStage(index);
     });
     pipeline.appendChild(button);
+  });
+}
+
+function renderExtraDemos() {
+  extraDemoGrid.innerHTML = "";
+  extraDemos.forEach((demo) => {
+    const card = document.createElement("button");
+    card.className = "extra-demo";
+    card.type = "button";
+    card.innerHTML = `<span>${demo.tag}</span><strong>${demo.title}</strong><p>${demo.desc}</p>`;
+    card.addEventListener("click", () => {
+      stopAutoRun();
+      video.src = `./assets/videos/${demo.file}`;
+      video.play().catch(() => {});
+      stageName.textContent = demo.title;
+      stageTitle.textContent = demo.tag;
+      stageDesc.textContent = demo.desc;
+      clipTitle.textContent = demo.title;
+      clipDesc.textContent = demo.desc;
+      privacyBadge.textContent = "附加展示";
+      sourceAsset.textContent = `source: assets/videos/${demo.file}`;
+      targetRobot.textContent = "target: 扩展能力";
+      document.querySelectorAll(".stage-button, .flywheel-node").forEach((node) => {
+        node.classList.remove("active");
+      });
+    });
+    extraDemoGrid.appendChild(card);
   });
 }
 
@@ -361,5 +416,6 @@ viewUrdf.addEventListener("click", async () => {
 
 renderRobots();
 renderPipeline();
+renderExtraDemos();
 updateRobot();
 setStage(0);

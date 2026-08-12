@@ -453,6 +453,76 @@ video {
   color: #fff;
 }
 
+.extras {
+  margin-top: 16px;
+  padding: 16px;
+  border: 1px solid var(--line);
+  background: #fff;
+}
+
+.section-head {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 12px;
+}
+
+.section-head h3 {
+  margin: 0;
+  font-size: 20px;
+}
+
+.section-head span {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.extras-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.extra-demo {
+  min-height: 132px;
+  border: 1px solid var(--line);
+  padding: 12px;
+  background: #f8fafc;
+  color: var(--ink);
+  text-align: left;
+  cursor: pointer;
+}
+
+.extra-demo:hover {
+  border-color: var(--teal);
+  background: #eefafa;
+}
+
+.extra-demo span,
+.extra-demo strong,
+.extra-demo p {
+  display: block;
+}
+
+.extra-demo span {
+  margin-bottom: 8px;
+  color: var(--teal);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.extra-demo strong {
+  margin-bottom: 8px;
+}
+
+.extra-demo p {
+  margin-bottom: 0;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.45;
+}
+
 @media (max-width: 1120px) {
   .console,
   .workbench {
@@ -472,6 +542,10 @@ video {
   .metric-strip {
     min-width: 0;
   }
+
+  .extras-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
 @media (max-width: 720px) {
@@ -482,8 +556,14 @@ video {
 
   .pipeline,
   .flywheel,
+  .extras-grid,
   .metric-strip {
     grid-template-columns: 1fr;
+  }
+
+  .section-head {
+    align-items: stretch;
+    flex-direction: column;
   }
 
   .video-panel,

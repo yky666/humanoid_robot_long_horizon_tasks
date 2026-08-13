@@ -12,11 +12,11 @@ const robots = [
     sketch: "n2",
     color: "#0b8a92",
     clips: {
-      teleop: "dexterous_hand_grasp.mp4",
+      teleop: "extra_whole_body_teleop.mp4",
       retarget: "n2_jntm_gvhmr_gmr_retarget.mp4",
-      finetune: "n2_jntm_gvhmr_gmr_retarget.mp4",
+      finetune: "n2_failure_as_recovery.mp4",
       evaluate: "n2_tennis_gvhmr_gmr_diagnosis.mp4",
-      resample: "simple_bend_handover_teleop.mp4"
+      resample: "n2_resample_guided_recovery.mp4"
     }
   },
   {
@@ -35,28 +35,28 @@ const robots = [
       teleop: "pico_teleop_translate_rotate.mp4",
       retarget: "gmr_g1_walk_retarget.mp4",
       finetune: "omni_new_task2_g1_render.mp4",
-      evaluate: "gmr_g1_walk_retarget.mp4",
+      evaluate: "g1_tactile_eval.mp4",
       resample: "simple_locomotion_pick_between_tables.mp4"
     }
   },
   {
-    name: "Unitree Go2 / B2",
-    tag: "四足平台",
-    dof: "12 DoF",
-    eef: "四足运动底盘",
-    safety: "足端接触+姿态约束",
-    asset: "assets/models/unitree_quadruped/go2_or_b2.urdf",
-    assetState: "SDK/URDF 待接入",
-    route: "运动轨迹 → Go2/B2 足端约束 → 四足数据集",
-    source: "go2_b2_locomotion_episode.npz",
-    sketch: "dog",
+    name: "Franka / Panda",
+    tag: "后续补充",
+    dof: "7 DoF + Gripper",
+    eef: "夹爪末端",
+    safety: "关节限位+夹爪接触",
+    asset: "assets/models/franka/franka_panda.urdf",
+    assetState: "Franka 资产待补充",
+    route: "轨迹片段 → Franka/Panda RobotAdapter → Manipulation dataset",
+    source: "franka_pick_place_episode.npz",
+    sketch: "arm",
     color: "#bd7a22",
     clips: {
-      teleop: "keyboard_teleop.mp4",
-      retarget: "isaaclab_g1_velocity_rough.mp4",
+      teleop: "psi0_bend_pick_bin_demo.mp4",
+      retarget: "psi0_bend_pick_bin_demo.mp4",
       finetune: "ep0030_quality_replay.mp4",
-      evaluate: "soccer_mosc_step3000.mp4",
-      resample: "soccer_mosc_step3000.mp4"
+      evaluate: "ep0030_quality_replay.mp4",
+      resample: "psi0_bend_pick_bin_demo.mp4"
     }
   },
   {
@@ -72,11 +72,11 @@ const robots = [
     sketch: "hand",
     color: "#7952b3",
     clips: {
-      teleop: "dexterous_hand_grasp.mp4",
-      retarget: "inspire_hand_retarget.mp4",
+      teleop: "extra_manus_glove_sdk.mp4",
+      retarget: "inspire_hand_rh56ftp_retarget.mp4",
       finetune: "rh56dftp_bc_rnn_eval.mp4",
       evaluate: "rh56dftp_ppo_eval.mp4",
-      resample: "dexterous_hand_grasp.mp4"
+      resample: "inspire_hand_rh56ftp_retarget.mp4"
     }
   }
 ];
@@ -178,6 +178,12 @@ const extraDemos = [
     tag: "G1 Control",
     file: "extra_g1_low_level.mp4",
     desc: "G1 低层控制与执行样例，补充验证平台的控制接口和 sim/real 执行能力。"
+  },
+  {
+    title: "G1 触觉评估",
+    tag: "Tactile Eval",
+    file: "g1_tactile_eval.mp4",
+    desc: "G1 搭载触觉/灵巧手反馈的评估回放，用于定位抓取接触、滑移和末端偏差。"
   }
 ];
 
@@ -253,6 +259,7 @@ function renderExtraDemos() {
     card.addEventListener("click", () => {
       stopAutoRun();
       video.src = `./assets/videos/${demo.file}`;
+      video.load();
       video.play().catch(() => {});
       stageName.textContent = demo.title;
       stageTitle.textContent = demo.tag;
@@ -294,11 +301,11 @@ function setStage(index) {
   const robot = robots[currentRobot];
   const clipFile = robot.clips[stage.key];
   const n2StageNotes = {
-    teleop: "以 Manus 手套/因时灵巧手遥操片段作为数据入口，进入跨构型数据飞轮；该阶段强调真实人手遥操采集，而非 N2 仿真回放。",
-    retarget: "GVHMR demo/jntm 的 hmr4d_results.pt 经 GMR(noetix_n2) 映射到 N2 18DoF，并录制为同动作的 N2 重定向结果，可与 G1 的重定向阶段对照。",
-    finetune: "N2 重定向后的 motion.pkl 被整理为训练样本版本，进入 LeRobot/GR00T 兼容数据集；此处播放入库前的 N2 轨迹复核回放。",
+    teleop: "多源遥操输入首先进入统一 Episode：PICO/全身遥操、手套和语音任务都被转成可追溯的 TaskSpec，不绑定单一机器人。",
+    retarget: "GVHMR demo/jntm 的 hmr4d_results.pt 经 GMR(noetix_n2) 映射到 N2 18DoF，并录制为同动作的 N2 重定向结果，可与 G1 的同源重定向阶段对照。",
+    finetune: "传统流程会丢弃失败片段；数据飞轮把失败条件转成 recovery sample、训练权重和对比样本，让后训练微调知道下一轮该补哪里。",
     evaluate: "GVHMR demo/tennis 经同一 GMR(noetix_n2) 链路转换为 N2，作为评估诊断中的问题动作片段，用于标注 IK 偏差、关节限位和末端跟踪误差。",
-    resample: "将遥操采样片段作为下一轮回采任务，补齐 N2 与灵巧手在长尾场景中的覆盖。"
+    resample: "评估热区会自动生成 N2 下一轮回采队列：保留失败条件，调整场景变量，再进入遥操/仿真采样。"
   };
   stageName.textContent = stage.name;
   stageTitle.textContent = stage.title;
@@ -309,9 +316,17 @@ function setStage(index) {
   const clipNote = robot.name.includes("松延") ? n2StageNotes[stage.key] : stage.clip.desc;
   clipDesc.textContent = `${clipNote} 当前目标构型为 ${robot.name}，${assetNote}`;
   privacyBadge.textContent = stage.clip.privacy;
-  sourceAsset.textContent = `source: ${robot.source}`;
+  const stageSources = {
+    teleop: robot.name.includes("松延") ? "multi_source_teleop_episode.json" : robot.source,
+    retarget: robot.name.includes("松延") ? "GVHMR/demo/jntm/hmr4d_results.pt" : robot.source,
+    finetune: robot.name.includes("松延") ? "failure_as_recovery_trainset.parquet" : robot.source,
+    evaluate: robot.name.includes("松延") ? "GVHMR/demo/tennis/hmr4d_results.pt" : robot.source,
+    resample: robot.name.includes("松延") ? "n2_resample_queue.csv" : robot.source
+  };
+  sourceAsset.textContent = `source: ${stageSources[stage.key]}`;
   smoothBar.style.setProperty("--w", `${42 + index * 11}%`);
   video.src = `./assets/videos/${clipFile}`;
+  video.load();
   artifactList.innerHTML = stage.artifacts
     .map((item) => `<div class="artifact"><b>✓</b><span>${item}</span></div>`)
     .join("");
@@ -322,7 +337,6 @@ function setStage(index) {
   document.querySelectorAll(".flywheel-node").forEach((node) => {
     node.classList.toggle("active", node.dataset.node === stage.key);
   });
-  video.play().catch(() => {});
 }
 
 function drawRobotSketch(robot) {
@@ -366,8 +380,18 @@ function drawRobotSketch(robot) {
     <circle cx="260" cy="74" r="6" fill="${c}"/><circle cx="278" cy="52" r="7" fill="${c}"/>
     <circle cx="140" cy="142" r="6" fill="${c}"/><circle cx="112" cy="136" r="7" fill="${c}"/>
   `;
+  const arm = `
+    ${common}
+    <path d="M122 210 L156 168 L198 142 L246 112 L294 92" fill="none" stroke="#dce8f4" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="122" cy="210" r="20" fill="none" stroke="${c}" stroke-width="6"/>
+    <circle cx="156" cy="168" r="14" fill="#0b1520" stroke="${c}" stroke-width="5"/>
+    <circle cx="198" cy="142" r="14" fill="#0b1520" stroke="${c}" stroke-width="5"/>
+    <circle cx="246" cy="112" r="14" fill="#0b1520" stroke="${c}" stroke-width="5"/>
+    <path d="M294 92 L326 72 M294 92 L332 104" fill="none" stroke="#dce8f4" stroke-width="8" stroke-linecap="round"/>
+    <circle cx="326" cy="72" r="7" fill="${c}"/><circle cx="332" cy="104" r="7" fill="${c}"/>
+  `;
   robotSketch.innerHTML =
-    robot.sketch === "dog" ? dog : robot.sketch === "quadruped" ? quadruped : robot.sketch === "hand" ? hand : robot.sketch === "n2" ? n2 : humanoid;
+    robot.sketch === "dog" ? dog : robot.sketch === "quadruped" ? quadruped : robot.sketch === "hand" ? hand : robot.sketch === "arm" ? arm : robot.sketch === "n2" ? n2 : humanoid;
 }
 
 function stepForward() {

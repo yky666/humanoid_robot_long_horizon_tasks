@@ -9,8 +9,8 @@
       "https://en.noetixrobotics.com/n2",
       "https://en.noetixrobotics.com/download/document"
     ],
-    "notes": "Imported from Noetix-Robotics/noetix_n2_gym resources/robots/N2/urdf/N2.urdf. GMR was patched with robot id noetix_n2 and smplx_to_n2.json. Stage 2 uses outputs/n2_jntm_motion_upright.pkl; stage 4 uses outputs/n2_tennis_motion_upright.pkl as a diagnosis segment.",
-    "videos": ["dexterous_hand_grasp.mp4", "n2_jntm_gvhmr_gmr_retarget.mp4", "n2_tennis_gvhmr_gmr_diagnosis.mp4", "simple_bend_handover_teleop.mp4"]
+    "notes": "Imported from Noetix-Robotics/noetix_n2_gym resources/robots/N2/urdf/N2.urdf. GMR was patched with robot id noetix_n2 and smplx_to_n2.json. Stage 2 uses outputs/n2_jntm_motion_upright.pkl; stage 4 uses outputs/n2_tennis_motion_upright.pkl as a diagnosis segment; stage 3/5 present failure-as-recovery and guided resampling views.",
+    "videos": ["extra_whole_body_teleop.mp4", "n2_jntm_gvhmr_gmr_retarget.mp4", "n2_failure_as_recovery.mp4", "n2_tennis_gvhmr_gmr_diagnosis.mp4", "n2_resample_guided_recovery.mp4"]
   },
   "unitree_g1": {
     "label": "Unitree G1",
@@ -18,14 +18,15 @@
     "urdf": "assets/models/unitree_g1/g1_29dof_with_hand.urdf",
     "status": "remote_urdf_available_pending_copy_retry",
     "retarget_route": "GVHMR/GMR/OmniRetarget -> G1 29DoF -> GR00T",
-    "videos": ["omni_new_task2_g1_render.mp4", "gmr_g1_walk_retarget.mp4"]
+    "videos": ["omni_new_task2_g1_render.mp4", "gmr_g1_walk_retarget.mp4", "g1_tactile_eval.mp4"]
   },
-  "unitree_go2_b2": {
-    "label": "Unitree Go2 / B2",
-    "role": "quadruped_platform",
-    "urdf": "assets/models/unitree_quadruped/go2_or_b2.urdf",
-    "status": "waiting_urdf_or_description_asset",
-    "retarget_route": "locomotion trajectory -> Go2/B2 foot-contact constraints -> quadruped dataset"
+  "franka_panda": {
+    "label": "Franka / Panda",
+    "role": "manipulation_platform_pending_assets",
+    "urdf": "assets/models/franka/franka_panda.urdf",
+    "status": "placeholder_urdf_for_future_real_asset",
+    "retarget_route": "trajectory segments -> Franka/Panda RobotAdapter -> manipulation dataset",
+    "notes": "Go2/B2 was removed from the public demo because no matching quadruped assets are ready yet. Franka/Panda is kept as a future manipulator adapter slot."
   },
   "inspire_rh56dftp": {
     "label": "因时灵巧手 RH56DFTP",
@@ -33,6 +34,6 @@
     "urdf": "assets/models/inspire_hand/rh56dftp_hand.urdf",
     "status": "inspire_hand_videos_connected",
     "retarget_route": "MANO/glove skeleton -> Inspire RH56DFTP finger joints -> BC/RL fine-tuning",
-    "videos": ["rh56dftp_bc_rnn_eval.mp4", "rh56dftp_ppo_eval.mp4"]
+    "videos": ["extra_manus_glove_sdk.mp4", "inspire_hand_rh56ftp_retarget.mp4", "rh56dftp_bc_rnn_eval.mp4", "rh56dftp_ppo_eval.mp4"]
   }
 }
